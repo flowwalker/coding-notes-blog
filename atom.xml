@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <author>
+    <name>flowwalker</name>
+  </author>
+  <generator uri="https://hexo.io/">Hexo</generator>
+  <id>https://flowwalker.github.io/coding-notes-blog/</id>
+  <link href="https://flowwalker.github.io/coding-notes-blog/" rel="alternate"/>
+  <link href="https://flowwalker.github.io/coding-notes-blog/atom.xml" rel="self"/>
+  <rights>All rights reserved 2026, flowwalker</rights>
+  <subtitle>编程语言 · 算法 · 开发实践</subtitle>
+  <title>编程笔记</title>
+  <updated>2026-07-19T15:14:29.497Z</updated>
+  <entry>
+    <author>
+      <name>flowwalker</name>
+    </author>
+    <category term="站务" scheme="https://flowwalker.github.io/coding-notes-blog/categories/%E7%AB%99%E5%8A%A1/"/>
+    <category term="开篇" scheme="https://flowwalker.github.io/coding-notes-blog/tags/%E5%BC%80%E7%AF%87/"/>
+    <content>
+      <![CDATA[<p>这里是我的编程学习笔记博客，用来记录编程语言、算法和开发实践中踩过的坑。</p><p>计划覆盖的内容：</p><ul><li>Python / C / C++ 等语言笔记</li><li>数据结构与算法</li><li>工具链与开发环境配置</li><li>小项目实践记录</li></ul><pre><code class="hljs python"><span class="hljs-built_in">print</span>(<span class="hljs-string">"hello, notes"</span>)</code></pre><p>主博客请访问 <a href="https://flowwalker.top/">flowwalker.top</a>。</p>]]>
+    </content>
+    <id>https://flowwalker.github.io/coding-notes-blog/posts/54a4/</id>
+    <link href="https://flowwalker.github.io/coding-notes-blog/posts/54a4/"/>
+    <published>2026-07-19T15:30:00.000Z</published>
+    <summary>
+      <![CDATA[<p>这里是我的编程学习笔记博客，用来记录编程语言、算法和开发实践中踩过的坑。</p>
+<p>计划覆盖的内容：</p>
+<ul>
+<li>Python / C / C++]]>
+    </summary>
+    <title>编程笔记开张</title>
+    <updated>2026-07-19T15:14:29.497Z</updated>
+  </entry>
+</feed>
