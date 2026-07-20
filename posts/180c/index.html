@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="">
+<head>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>Python修养1 | 码艺Blog</title>
+
+<meta name="description" content="flowwalker 的编程学习与实践笔记">
+
+
+<meta name="author" content="flowwalker">
+<link rel="alternate" href="/coding-notes-blog/atom.xml" title="码艺Blog" type="application/atom+xml">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="/coding-notes-blog/css/style.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+
+
+<link rel="icon" href="/coding-notes-blog/img/favicon.png">
+
+<script>
+(function() {
+  var saved = localStorage.getItem('dawn-theme');
+  if (saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+    document.documentElement.classList.add('dark');
+  }
+})();
+</script>
+
+
+<meta name="generator" content="Hexo 8.1.2"></head>
+<body>
+  <div class="site-wrapper">
+    <aside class="site-sidebar" id="sidebar">
+  <button class="sidebar-collapse-btn" id="sidebar-collapse-btn" title="折叠侧边栏" aria-label="折叠侧边栏">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+  </button>
+  <div class="sidebar-inner">
+    
+    
+    <div class="sidebar-toc sidebar-toc--full">
+      <div class="sidebar-toc-header">
+        <h3 class="sidebar-toc-title">目录</h3>
+        <button class="toc-expand-all-btn" id="toc-expand-all-btn" title="展开全部目录" aria-label="展开全部目录">
+          <svg class="toc-expand-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+      </div>
+      <div class="sidebar-toc-content">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Python%E4%BF%AE%E5%85%BB1"><span class="toc-text">Python修养1</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9B%AE%E5%BD%95"><span class="toc-text">目录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E4%BA%8E%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="toc-text">关于运算符</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E4%BA%8E%E5%BE%AA%E7%8E%AF"><span class="toc-text">关于循环</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E4%BA%8Eprint"><span class="toc-text">关于print</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E4%BA%8Eis%E5%92%8C-%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-text">关于is和&#x3D;&#x3D;的区别</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E4%BA%8E%E6%95%B4%E6%95%B0%E7%B1%BB%E5%9E%8B"><span class="toc-text">关于整数类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E4%BA%8E%E6%B5%AE%E7%82%B9%E6%95%B0%E7%9B%B8%E7%AD%89%E7%9A%84%E5%88%A4%E6%96%AD"><span class="toc-text">关于浮点数相等的判断</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E4%BA%8E%E8%BE%93%E5%85%A5%E5%92%8C%E8%BE%93%E5%87%BA"><span class="toc-text">关于输入和输出</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E4%BA%8E%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="toc-text">关于字符串</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B5%8B%E5%80%BC"><span class="toc-text">赋值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%BF%E9%97%AE"><span class="toc-text">访问</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BE%93%E5%87%BA%E4%B8%8D%E8%BD%AC%E4%B9%89%E5%AD%97%E7%AC%A6"><span class="toc-text">输出不转义字符</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%A4%E6%96%AD%E5%AD%90%E4%B8%B2"><span class="toc-text">判断子串</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%87%BD%E6%95%B0"><span class="toc-text">字符串函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%A8%E5%A4%9A%E4%B8%AA%E5%AD%97%E7%AC%A6%E5%88%86%E5%89%B2"><span class="toc-text">用多个字符分割</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%A0%BC%E5%BC%8F%E5%8C%96"><span class="toc-text">字符串格式化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B3%E4%BA%8E%E5%AD%97%E7%AC%A6%E7%BC%96%E7%A0%81"><span class="toc-text">关于字符编码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B3%E4%BA%8E%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B8%8E%E5%AD%97%E8%8A%82%E6%B5%81"><span class="toc-text">关于字符串与字节流</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B3%E4%BA%8E%E6%BA%90%E7%A8%8B%E5%BA%8F%E7%BC%96%E7%A0%81"><span class="toc-text">关于源程序编码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#C-%E4%B8%8EPython%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%AF%B9%E6%AF%94"><span class="toc-text">C++与Python字符串对比</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E4%BA%8E%E9%94%99%E8%AF%AF%E6%97%A5%E5%BF%97"><span class="toc-text">关于错误日志</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F"><span class="toc-text">lambda表达式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E5%90%88map"><span class="toc-text">配合map</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E5%90%88reduce"><span class="toc-text">配合reduce</span></a></li></ol></li></ol></li></ol>
+      </div>
+    </div>
+    
+  </div>
+</aside>
+
+    <main class="main-content">
+      <header class="site-header">
+  <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+  <nav class="header-nav animate-stagger-50">
+    
+      <a href="/coding-notes-blog/" class="nav-item animate-entry">首页</a>
+    
+      <a href="/coding-notes-blog/about/" class="nav-item animate-entry">此地一二</a>
+    
+      <a href="/coding-notes-blog/archives/" class="nav-item animate-entry">时光长河</a>
+    
+      <a href="/coding-notes-blog/categories/" class="nav-item animate-entry">卷宗总览</a>
+    
+      <a href="/coding-notes-blog/tags/" class="nav-item animate-entry">签注归集</a>
+    
+      <a href="/coding-notes-blog/links/" class="nav-item animate-entry">四处仙山</a>
+    
+      <a href="https://flowwalker.top" class="nav-item animate-entry">归返本山</a>
+    
+  </nav>
+</header>
+
+      <div class="content-area">
+        <article class="post-full">
+  <header class="post-header">
+    <h1 class="post-title animate-entry animate-delay-0">Python修养1</h1>
+    <div class="post-meta animate-entry animate-delay-80">
+      
+      <span class="meta-item">
+        <i class="fa fa-calendar"></i>
+        <time datetime="2026-05-06">发布于 2026-05-06</time>
+      </span>
+      
+      
+      <span class="meta-item">
+        <i class="fa fa-edit"></i>
+        <time datetime="2026-07-20">更新于 2026-07-20</time>
+      </span>
+      
+      
+      <span class="meta-item">
+        <i class="fa fa-folder"></i>
+        
+          <a href="/coding-notes-blog/categories/%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%AC%94%E8%AE%B0-Python/">程序设计笔记--Python</a>
+        
+      </span>
+      
+    </div>
+    
+    <div class="post-tags animate-entry animate-delay-80">
+      
+        <a href="/coding-notes-blog/tags/OOP/" class="tag-badge">#OOP</a>
+      
+        <a href="/coding-notes-blog/tags/Python/" class="tag-badge">#Python</a>
+      
+        <a href="/coding-notes-blog/tags/%E7%A8%8B%E8%AE%BE/" class="tag-badge">#程设</a>
+      
+    </div>
+    
+  </header>
+
+  
+  <div class="post-cover animate-entry animate-delay-80">
+    <img src="https://gcore.jsdelivr.net/gh/flowwalker/PicGo-based-image-host@main/da1027148c363d37230f81f18fb82a6f.jpg" alt="Python修养1">
+  </div>
+  
+
+  <div class="post-content">
+    <h1 id="Python修养1"><a href="#Python修养1" class="headerlink" title="Python修养1"></a>Python修养1</h1><ul>
+<li><p>思想:</p>
+<ul>
+<li><p>换行当<code>;</code></p>
+</li>
+<li><p>缩进当{}</p>
+</li>
+<li><p>对象三属性</p>
+<ul>
+<li>值: 可变&#x2F;不可变</li>
+<li>身份: 内存唯一地址,严格只读</li>
+<li>类型( 可用<code>type(you_want)</code>来读取)</li>
+</ul>
+</li>
+<li><p><strong>每个变量都相当于指向某个对象的引用</strong></p>
+<blockquote>
+<p>引用对象可变, 则可以通过变量修改</p>
+<p>引用对象<strong>不可变</strong>,则<strong>只能让变量指向另一个新对象</strong></p>
+</blockquote>
+<p><img src="https://cdn.jsdelivr.net/gh/flowwalker/PicGo-based-image-host@main/image-20260506195354560.png" alt="image-20260506195354560"></p>
+</li>
+</ul>
+</li>
+<li><p>⚠️python里的<code>=</code><strong>永远是指向对象操作</strong>而非拷贝</p>
+<ul>
+<li><p><code>a=b</code> 指向同一个对象</p>
+</li>
+<li><p><strong>对象可变且做原地修改</strong>, 原地改动</p>
+</li>
+<li><p>🌊对象不可变且做了”修改”操作, <strong>必须创建新的对象</strong></p>
+<p><code>a=a+b</code>创建新对象, a然后指向他</p>
+<p><code>a+=b</code>原地修改,a不指向新对象</p>
+</li>
+</ul>
+</li>
+<li><p>关于注释: </p>
+<ul>
+<li>单行<code>#</code></li>
+<li>多行<code>command</code>+<code>/</code></li>
+</ul>
+</li>
+<li><p>关于赋值的随意性</p>
+<p><code>s1,s2,s4,s3=s4,s3,s2,s1</code></p>
+</li>
+<li><p>关于变量</p>
+<ul>
+<li><p>不需声明, 使用前必须赋值</p>
+</li>
+<li><p><strong>类型可变</strong></p>
+</li>
+<li><p>没有<code>double</code>（ 或者说<code>double</code>就叫<code>float</code>）, 多了<code>complex</code>和<code>tuple</code>和<code>dict</code>, <code>string</code>叫<code>str</code>, 列表叫<code>list</code> ——类型名相当于类名</p>
+<pre><code class="hljs python">a=<span class="hljs-built_in">str</span>()
+b=<span class="hljs-number">1</span>+<span class="hljs-number">2j</span></code></pre>
+</li>
+<li><p>元组本身<strong>不可变</strong>, 但是⚠️<strong>其中可变对象元素仍可变</strong></p>
+</li>
+</ul>
+</li>
+<li><p>关于运算符</p>
+<p><code>**</code>表示幂运算</p>
+</li>
+<li><p>关于布尔类型</p>
+<ul>
+<li><p>注意是<code>True</code>和<code>False</code>, 大小写有规范</p>
+</li>
+<li><p><code>0</code> 空 <code>str</code> <code>tuple</code> <code>list</code> <code>dist</code>都<strong>相当于</strong><code>False</code> ( 但<strong>不是等于</strong>)</p>
+<pre><code class="hljs Python"><span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> ():
+	<span class="hljs-built_in">print</span> (<span class="hljs-string">&quot;ok&quot;</span>) <span class="hljs-comment"># ok</span>
+<span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> &#123;&#125;:
+	<span class="hljs-built_in">print</span> (<span class="hljs-string">&quot;ok&quot;</span>) <span class="hljs-comment"># ok</span>
+<span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> <span class="hljs-string">&quot;&quot;</span>:
+	<span class="hljs-built_in">print</span> (<span class="hljs-string">&quot;ok&quot;</span>) <span class="hljs-comment"># ok</span>
+<span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> []:
+	<span class="hljs-built_in">print</span> (<span class="hljs-string">&quot;ok&quot;</span>) <span class="hljs-comment"># ok</span></code></pre>
+</li>
+<li><p><code>True</code>可以看作<code>1</code>, <code>False</code>可以看作<code>0</code></p>
+</li>
+</ul>
+<pre><code class="hljs Python"><span class="hljs-literal">True</span> == <span class="hljs-number">1</span> <span class="hljs-comment">#True</span>
+<span class="hljs-literal">False</span> == <span class="hljs-number">0</span> <span class="hljs-comment">#True</span>
+<span class="hljs-string">&quot;&quot;</span> == <span class="hljs-literal">False</span> <span class="hljs-comment">#False</span>
+<span class="hljs-number">2</span> == <span class="hljs-literal">True</span> <span class="hljs-comment">#False</span>
+[] == <span class="hljs-literal">False</span> <span class="hljs-comment">#False</span>
+[<span class="hljs-number">2</span>,<span class="hljs-number">3</span>] == <span class="hljs-literal">True</span> <span class="hljs-comment">#False</span></code></pre>
+</li>
+<li><p>关于逻辑运算符</p>
+<p>注意是<code>and</code> 和 <code>or</code> 和 <code>not</code></p>
+</li>
+<li><p>关于类型转换函数</p>
+<ul>
+<li><p>⚠️<code>repr(x)</code>将x转换为<strong>字符串表达式</strong>, 注意类型是<strong>字符串</strong></p>
+</li>
+<li><p><code>chr(x)</code>将x转换为对应ASCII码字符</p>
+<blockquote>
+<p><code>ord(x)</code>将字符转换为整数编码值(16位)</p>
+<pre><code class="hljs Python"><span class="hljs-built_in">print</span>(<span class="hljs-built_in">repr</span>(<span class="hljs-number">12.334</span>)) <span class="hljs-comment"># 12.334 </span>
+<span class="hljs-built_in">print</span>(<span class="hljs-built_in">str</span>(<span class="hljs-string">&quot;hello&quot;</span>)) <span class="hljs-comment"># hello </span>
+<span class="hljs-built_in">print</span>(<span class="hljs-built_in">repr</span>(<span class="hljs-string">&quot;hello&quot;</span>)) <span class="hljs-comment"># &#x27;hello&#x27;</span></code></pre></blockquote>
+</li>
+<li><p>列表和字符串的转换</p>
+<p>语法: <code>&lt;str&gt; = &lt;separator&gt;.join(&lt;list&gt;)</code></p>
+<pre><code class="hljs Python">newstr = <span class="hljs-built_in">list</span>(<span class="hljs-string">&#x27;abcdafg&#x27;</span>)
+<span class="hljs-built_in">print</span>(newstr) <span class="hljs-comment"># [&#x27;a&#x27;, &#x27;b&#x27;, &#x27;c&#x27;, &#x27;d&#x27;, &#x27;a&#x27;, &#x27;f&#x27;, &#x27;g&#x27;]</span>
+newstr[<span class="hljs-number">4</span>] = <span class="hljs-string">&#x27;e&#x27;</span>
+<span class="hljs-built_in">str</span> = <span class="hljs-string">&#x27;&#x27;</span>.join(newstr) <span class="hljs-comment">#列表到字符串转换</span>
+<span class="hljs-built_in">print</span>(<span class="hljs-built_in">str</span>) <span class="hljs-comment"># abcdefg</span></code></pre>
+</li>
+<li><p><code>int(x)</code>不会把x变成整数</p>
+</li>
+<li><p>⚠️<code>eval(x)</code>把字符串x看做一个表达式求其值</p>
+<blockquote>
+<p>理想情况下</p>
+<p><code>eval(repr(x))=x</code></p>
+</blockquote>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><p>[TOC]</p>
+<h2 id="关于运算符"><a href="#关于运算符" class="headerlink" title="关于运算符"></a>关于运算符</h2><ul>
+<li><p>运算符中<strong>只要有一个操作数是小数</strong>结果就是<strong>小数</strong>, 若需要结果整数, 需要<strong>额外强制转换</strong></p>
+</li>
+<li><p>使用<code>/</code>即使整除也是<strong>浮点数</strong></p>
+</li>
+<li><p><code>//</code>整除向下取整,而非<del>向零</del>(c++向0)</p>
+</li>
+</ul>
+<h2 id="关于循环"><a href="#关于循环" class="headerlink" title="关于循环"></a>关于循环</h2><pre><code class="hljs python"><span class="hljs-keyword">for</span> &lt;变量&gt; <span class="hljs-keyword">in</span> &lt;序列&gt;:
+    &lt;语句组&gt;
+<span class="hljs-keyword">else</span>:
+    &lt;语句组&gt;</code></pre>
+
+<pre><code class="hljs Python"><span class="hljs-keyword">while</span> &lt;逻辑表达式&gt;:
+    &lt;语句组&gt;
+<span class="hljs-keyword">else</span>:
+    &lt;语句组&gt;</code></pre>
+
+<ul>
+<li>没有<code>switch</code></li>
+<li>&lt;序列&gt;可用<code>range</code>生成</li>
+<li><code>pass</code>表示什么都不做, 占位; <code>continue</code>和<code>break</code>同用</li>
+</ul>
+<h2 id="关于print"><a href="#关于print" class="headerlink" title="关于print"></a>关于print</h2><p><code>print(s,end=&quot; &quot;)</code>  缺省情况<code>end=&#39;\n&#39;</code></p>
+<p>简单构造字符串: “xxxx %s xxxx %(s)”</p>
+<h2 id="关于is和-的区别"><a href="#关于is和-的区别" class="headerlink" title="关于is和&#x3D;&#x3D;的区别"></a>关于is和&#x3D;&#x3D;的区别</h2><ul>
+<li><code>a is b</code>为<code>True</code>说明a和b<strong>指向同一个地方</strong></li>
+<li><code>a==b</code>为<code>True</code>则说明<strong>放的东西相同</strong>,不一定指向同一个地方</li>
+</ul>
+<blockquote>
+<p><code>a=b</code>使得a和b指向同一个地方</p>
+</blockquote>
+<p>⚠️一般需要:</p>
+<ul>
+<li><p>用<code>==</code>比较值</p>
+</li>
+<li><p>用<code>is</code>比较是否同一个对象</p>
+<blockquote>
+<p><code>=</code>会导致变量别名, ⚠️一个赋值给另一个, 两个变量将<strong>指向同一个对象</strong>, <strong>修改任何一个都会影响另一个</strong></p>
+</blockquote>
+</li>
+</ul>
+<blockquote>
+<p>为了复用同一个对象, 常常有驻留, <code>is</code>难预测→对于**不可变类型只需关注<code>==</code>, 不得用<code>is</code>判断值是否相等 **</p>
+<blockquote>
+<p>推荐使用<code>is</code>的场景</p>
+<p><code>if x is None</code></p>
+</blockquote>
+</blockquote>
+<blockquote>
+<p>小整数有缓存机制, 元组一般没有驻留( 小整数可能会)</p>
+</blockquote>
+<h2 id="关于整数类型"><a href="#关于整数类型" class="headerlink" title="关于整数类型"></a>关于整数类型</h2><p><strong>任意长</strong></p>
+<ul>
+<li>0b前缀表示<strong>二</strong>进制</li>
+<li>0o前缀表示<strong>八</strong>进制</li>
+<li>0x前缀表示<strong>十六</strong>进制</li>
+</ul>
+<p>可以使用例如<code>12.99.is_integer()</code>来判断是否整数</p>
+<blockquote>
+<p>查询是否是某个类型</p>
+<p><code>isinstance(&lt;变量名&gt;,&lt;type&gt;)</code></p>
+</blockquote>
+<h2 id="关于浮点数相等的判断"><a href="#关于浮点数相等的判断" class="headerlink" title="关于浮点数相等的判断"></a>关于浮点数相等的判断</h2><p>⚠️用<code>equal_float</code>判断</p>
+<pre><code class="hljs Python"><span class="hljs-keyword">import</span> sys
+<span class="hljs-keyword">def</span> <span class="hljs-title function_">equal_float</span>(<span class="hljs-params">a,b</span>):
+	<span class="hljs-keyword">return</span> <span class="hljs-built_in">abs</span>(a-b) &lt;= sys.float_info.epsilon
+	<span class="hljs-comment">#最小浮点数间隔,32位机为 2e-16</span>
+<span class="hljs-built_in">print</span>(equal_float(<span class="hljs-number">0.3</span>,<span class="hljs-number">0.1</span>+<span class="hljs-number">0.2</span>))</code></pre>
+
+<blockquote>
+<p>想看看<code>sys.float_info</code></p>
+<p>可以</p>
+<pre><code class="hljs python"><span class="hljs-keyword">import</span> sys
+<span class="hljs-built_in">print</span>(sys.float_info)</code></pre>
+
+<p>此外</p>
+<pre><code class="hljs python"><span class="hljs-keyword">import</span> math
+x = <span class="hljs-number">123.50</span>
+<span class="hljs-built_in">print</span>(<span class="hljs-built_in">round</span>(x)) <span class="hljs-comment">#不精确，如print(round(119.49999999999999999)) =&gt; 120</span>
+<span class="hljs-built_in">print</span>(math.floor(x))
+<span class="hljs-built_in">print</span>(math.ceil(x))
+<span class="hljs-built_in">print</span>(<span class="hljs-number">12.3</span>.is_integer())</code></pre>
+</blockquote>
+<h2 id="关于输入和输出"><a href="#关于输入和输出" class="headerlink" title="关于输入和输出"></a>关于输入和输出</h2><ul>
+<li><p>关于<code>input(&lt;问候语&gt;)</code></p>
+<ul>
+<li>输出问候语, 读取输入的<strong>字符串</strong>, 需要<strong>强制类型转换才能当数字用</strong></li>
+</ul>
+</li>
+<li><p>一行多输入</p>
+<pre><code class="hljs Python">lst=<span class="hljs-built_in">input</span>().split()
+x,y,z=<span class="hljs-built_in">int</span>(lst[<span class="hljs-number">0</span>]),lst[<span class="hljs-number">1</span>],<span class="hljs-built_in">int</span>(lst[<span class="hljs-number">2</span>])
+<span class="hljs-comment"># x,z是整数,y是字符串</span>
+<span class="hljs-comment"># ...</span>
+<span class="hljs-comment"># split函数内部可以指定分割符如&quot;,.&quot;表示以&quot;,.&quot;为分割符而⚠️不是其中任意字符</span></code></pre>
+
+<p><code>split(s)</code>开头和结尾有<strong>非缺省</strong>分割符的<strong>字符串列表</strong>会额外输出空串</p>
+<p>( <strong>缺省</strong>情况下智能<strong>合并连续分割符</strong>并<strong>忽略开头和结尾分割符</strong>)</p>
+</li>
+<li><p>输入输出的重定向</p>
+<pre><code class="hljs Python"><span class="hljs-keyword">import</span> sys
+f=<span class="hljs-built_in">open</span>(<span class="hljs-string">&quot;t.txt&quot;</span>,<span class="hljs-string">&quot;r&quot;</span>)
+g=<span class="hljs-built_in">open</span>(<span class="hljs-string">&quot;d.txt&quot;</span>,<span class="hljs-string">&quot;w&quot;</span>)
+sys.stdin=f
+sys.stdout=g
+s=<span class="hljs-built_in">input</span>()
+<span class="hljs-built_in">print</span>(s)
+f.close()
+g.close()</code></pre>
+</li>
+<li><p><code>x.split()</code>的值是一个列表, 包含字符串经过<strong>空格, 制表符, 换行符</strong>分隔得到的所有子串, 但是<strong>input默认情况下只读一行</strong></p>
+</li>
+</ul>
+<h2 id="关于字符串"><a href="#关于字符串" class="headerlink" title="关于字符串"></a>关于字符串</h2><ul>
+<li><code>*</code>可以构成重复字符串</li>
+</ul>
+<p>⚠️重点</p>
+<h3 id="赋值"><a href="#赋值" class="headerlink" title="赋值"></a>赋值</h3><p>单引号\双引号\三引号 皆可</p>
+<p>其中<strong>三双引号可以包含换行符\制表符\特殊符号</strong></p>
+<ul>
+<li><p>字符串太长</p>
+<pre><code class="hljs python"><span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;this \</span>
+<span class="hljs-string">		is \</span>
+<span class="hljs-string">		good&quot;</span>)</code></pre>
+
+<blockquote>
+<p>太长了使用<code>()</code>或<code>\</code></p>
+<pre><code class="hljs Python"><span class="hljs-keyword">if</span> a&gt;<span class="hljs-number">3</span> <span class="hljs-keyword">and</span> \
+	a&lt;<span class="hljs-number">9</span>:
+    <span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;ok&#x27;</span>)
+<span class="hljs-keyword">if</span>(a&gt;<span class="hljs-number">3</span> <span class="hljs-keyword">and</span>
+  		a&lt;<span class="hljs-number">9</span>):
+    <span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;ok&#x27;</span>)</code></pre></blockquote>
+</li>
+</ul>
+<h3 id="访问"><a href="#访问" class="headerlink" title="访问"></a>访问</h3><p><code>变量[序号或切片]</code>访问子串</p>
+<p>完成切片语法</p>
+<p><code>x[start:stop:step]</code></p>
+<pre><code class="hljs Python">x=<span class="hljs-string">&quot;aggfdfd&quot;</span>
+<span class="hljs-built_in">print</span>(x[-<span class="hljs-number">3</span>:-<span class="hljs-number">1</span>])
+<span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;hhh&quot;</span>[<span class="hljs-number">2</span>])
+<span class="hljs-built_in">print</span>(x[-<span class="hljs-number">1</span>:])
+<span class="hljs-built_in">print</span>(x[:])
+<span class="hljs-built_in">print</span>(::-<span class="hljs-number">1</span>) <span class="hljs-comment"># 反转字符串</span></code></pre>
+
+<p>⚠️字符串是不可修改的</p>
+<blockquote>
+<p>如果确实需要,应先转换为列表</p>
+<pre><code class="hljs Python">s = <span class="hljs-built_in">list</span>(<span class="hljs-string">&quot;abc&quot;</span>)   <span class="hljs-comment"># [&#x27;a&#x27;, &#x27;b&#x27;, &#x27;c&#x27;]</span>
+s[<span class="hljs-number">0</span>] = <span class="hljs-string">&quot;z&quot;</span>        <span class="hljs-comment"># 可以改</span>
+<span class="hljs-string">&quot;&quot;</span>.join(s)        <span class="hljs-comment"># &quot;zbc&quot;</span>
+
+<span class="hljs-comment">#否则</span>
+s=<span class="hljs-string">&quot;kskksk&quot;</span>
+s[<span class="hljs-number">1</span>]=<span class="hljs-string">&quot;d&quot;</span> <span class="hljs-comment">#error</span></code></pre>
+
+</blockquote>
+<h3 id="输出不转义字符"><a href="#输出不转义字符" class="headerlink" title="输出不转义字符"></a>输出不转义字符</h3><p><code>print(r&#39;ab\ncd&#39;)</code></p>
+<h3 id="判断子串"><a href="#判断子串" class="headerlink" title="判断子串"></a>判断子串</h3><p><code>in</code></p>
+<p><code>not in</code> </p>
+<p>正常语言即可</p>
+<p>print(<code>&quot;hello&quot; in s</code>)</p>
+<h3 id="字符串函数"><a href="#字符串函数" class="headerlink" title="字符串函数"></a>字符串函数</h3><ul>
+<li><p><code>count</code>求解子串出现次数</p>
+</li>
+<li><p><code>len</code>求解字符串长度</p>
+</li>
+<li><p>其他的</p>
+<ul>
+<li><code>s.upper()</code>, <code>s.lower()</code>, <code>s.isdigit()</code>(是否全为数字)</li>
+<li><code>s.startwith()</code>, <code>s.endwith()</code></li>
+<li><code>s.find(want)</code>找不到返回<code>-1</code>,<code>s.index(want)</code>抛出异常</li>
+<li><code>s.replace(target_index,replacement)</code></li>
+</ul>
+</li>
+<li><p><code>s.strip(s)</code> 除去两端空格, <code>\r</code> , <code>\t</code> , <code>\n</code> </p>
+<ul>
+<li><p><code>s.lstrip(s)</code>除左端</p>
+</li>
+<li><p><code>s.rstrip(s)</code>除右端</p>
+<p><code>s</code>缺省情况下为空白字符, 指定情况下为s中的<strong>所有字符</strong></p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="用多个字符分割"><a href="#用多个字符分割" class="headerlink" title="用多个字符分割"></a>用多个字符分割</h3><p>格式:</p>
+<p><code>re.split(pattern,string)</code></p>
+<p>pattern: 匹配的正则表达式</p>
+<p>string: 要匹配的字符串</p>
+<pre><code class="hljs Python"><span class="hljs-keyword">import</span> re
+a=<span class="hljs-string">&quot;Beautiful, is; better*than\nugly&quot;</span>
+<span class="hljs-built_in">print</span>(re.split(<span class="hljs-string">&#x27;;| |,|\*|\n&#x27;</span>,a))
+<span class="hljs-comment"># [&#x27;Beautiful&#x27;, &#x27;&#x27;, &#x27;is&#x27;, &#x27;&#x27;, &#x27;better&#x27;, &#x27;than&#x27;, &#x27;ugly&#x27;]</span></code></pre>
+
+<blockquote>
+<p>正则 <code>;| |,|\*|\n</code> 表示遇到 <strong>分号、空格、逗号、星号、换行</strong> 都要切一刀。</p>
+<p>字符串的编码在内存中的编码是unicode的。没有字符类型</p>
+<pre><code class="hljs Python"><span class="hljs-built_in">print</span>(<span class="hljs-built_in">ord</span>(<span class="hljs-string">&quot;a&quot;</span>))
+<span class="hljs-built_in">print</span>(<span class="hljs-built_in">ord</span>(<span class="hljs-string">&quot;好&quot;</span>))
+<span class="hljs-built_in">print</span>(<span class="hljs-built_in">chr</span>(<span class="hljs-number">22900</span>))
+<span class="hljs-built_in">print</span>(<span class="hljs-built_in">chr</span>(<span class="hljs-number">97</span>))</code></pre></blockquote>
+<p>🌊以下为AI整理, 若有时间需勤加复习</p>
+<h3 id="字符串格式化"><a href="#字符串格式化" class="headerlink" title="字符串格式化"></a>字符串格式化</h3><pre><code class="hljs python"><span class="hljs-comment"># % 格式化: %s字符串 %d整数 %f浮点数 %.nf保留n位小数</span>
+<span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;My name is %s, I am %.2fm tall.&quot;</span> % (<span class="hljs-string">&quot;tom&quot;</span>, <span class="hljs-number">1.746</span>))
+<span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;My age is %d.&quot;</span> % <span class="hljs-number">18</span>)
+<span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;%d%s&quot;</span> % (<span class="hljs-number">18</span>, <span class="hljs-string">&quot;hello&quot;</span>))
+
+<span class="hljs-comment"># format方法: &#123;序号:宽度.精度.类型&#125;</span>
+x = <span class="hljs-string">&quot;Hello &#123;0&#125; &#123;1:10&#125;, you get $&#123;2:0.4f&#125;&quot;</span>.<span class="hljs-built_in">format</span>(<span class="hljs-string">&quot;Mr.&quot;</span>, <span class="hljs-string">&quot;Jack&quot;</span>, <span class="hljs-number">3.2</span>)
+<span class="hljs-comment"># &gt; 右对齐, &lt; 左对齐, ^ 中对齐</span>
+x = <span class="hljs-string">&quot;Hello &#123;0&#125; &#123;1:&gt;10&#125;, you get $&#123;2:0.4f&#125;&quot;</span>.<span class="hljs-built_in">format</span>(<span class="hljs-string">&quot;Mr.&quot;</span>, <span class="hljs-string">&quot;Jack&quot;</span>, <span class="hljs-number">3.2</span>)
+x = <span class="hljs-string">&quot;Hello &#123;0&#125; &#123;1:^10&#125;, you get $&#123;2:0.4f&#125;&quot;</span>.<span class="hljs-built_in">format</span>(<span class="hljs-string">&quot;Mr.&quot;</span>, <span class="hljs-string">&quot;Jack&quot;</span>, <span class="hljs-number">3.2</span>)</code></pre>
+
+<p>⚠️**<code>%.nf</code> 不是四舍五入，是”四舍六入五成双”**</p>
+<ul>
+<li>≤4 舍去，≥6 进一</li>
+<li>5 看前面数字奇偶：前为奇则进，前为偶则舍；5后面还有有效数字则一定进</li>
+</ul>
+<pre><code class="hljs python"><span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;%.2f, %.2f&quot;</span> % (<span class="hljs-number">5.225</span>, <span class="hljs-number">5.325</span>))  <span class="hljs-comment"># 5.22, 5.33</span>
+<span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;%.1f&quot;</span> % <span class="hljs-number">1.15</span>)  <span class="hljs-comment"># 1.2</span>
+<span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;%.1f&quot;</span> % <span class="hljs-number">1.25</span>)  <span class="hljs-comment"># 1.2  (2是偶数，舍)</span>
+<span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;%.1f&quot;</span> % <span class="hljs-number">1.25012</span>)  <span class="hljs-comment"># 1.3  (5后面还有数，进)</span></code></pre>
+
+<hr>
+<h3 id="关于字符编码"><a href="#关于字符编码" class="headerlink" title="关于字符编码"></a>关于字符编码</h3><ul>
+<li><strong>ASCII</strong>：1字节，只表示英文、数字、标点（如 <code>&#39;a&#39;</code> 是 <code>0x61</code>）</li>
+<li><strong>GB2312&#x2F;GBK</strong>：兼容ASCII，中文用<strong>2个最高位为1的字节</strong>表示</li>
+<li><strong>Unicode</strong>：内存编码，几乎涵盖所有文字，每个字符2字节（个别4字节）；Python字符串即Unicode</li>
+<li><strong>UTF-8</strong>：<strong>可变长</strong>（1-6字节），英文1字节、中文通常3字节；<strong>文件存储&#x2F;网络传输一般用UTF-8</strong></li>
+</ul>
+<pre><code class="hljs python"><span class="hljs-built_in">print</span>(<span class="hljs-built_in">ord</span>(<span class="hljs-string">&#x27;好&#x27;</span>))   <span class="hljs-comment"># 22920  Unicode码点</span>
+<span class="hljs-built_in">print</span>(<span class="hljs-built_in">ord</span>(<span class="hljs-string">&#x27;a&#x27;</span>))    <span class="hljs-comment"># 97</span>
+<span class="hljs-built_in">print</span>(<span class="hljs-built_in">chr</span>(<span class="hljs-number">22920</span>))  <span class="hljs-comment"># 好</span></code></pre>
+
+<p>⚠️UTF-8文件开头可能有3字节标记 <strong>BOM</strong>（<code>EF BB BF</code>），记事本能正常显示，但C++用 <code>cin</code> 读取会出错。C++需用 <code>_wfopen(L&quot;utf8.txt&quot;, L&quot;r,ccs=utf-8&quot;)</code> 之类方式读取。</p>
+<hr>
+<h3 id="关于字符串与字节流"><a href="#关于字符串与字节流" class="headerlink" title="关于字符串与字节流"></a>关于字符串与字节流</h3><p>Python字符串是Unicode，要保存到文件或发送需<strong>编码</strong>为字节流；读取时自动&#x2F;手动<strong>解码</strong>：</p>
+<pre><code class="hljs python">s = <span class="hljs-string">&#x27;ABC好的&#x27;</span>
+
+<span class="hljs-comment"># 编码为字节流</span>
+bs = s.encode(<span class="hljs-string">&#x27;utf-8&#x27;</span>)
+<span class="hljs-built_in">print</span>(bs)        <span class="hljs-comment"># b&#x27;ABC\xe5\xa5\xbd\xe7\x9a\x84&#x27;</span>
+<span class="hljs-built_in">print</span>(<span class="hljs-built_in">len</span>(bs))   <span class="hljs-comment"># 9  (中文3字节×2 + 英文1字节×3)</span>
+
+bs = s.encode(<span class="hljs-string">&#x27;gbk&#x27;</span>)
+<span class="hljs-built_in">print</span>(<span class="hljs-built_in">len</span>(bs))   <span class="hljs-comment"># 7  (中文2字节×2 + 英文1字节×3)</span>
+
+<span class="hljs-comment"># 另一种写法</span>
+bs = <span class="hljs-built_in">bytes</span>(<span class="hljs-string">&#x27;ABC好的&#x27;</span>, encoding=<span class="hljs-string">&#x27;gbk&#x27;</span>)
+
+<span class="hljs-comment"># 解码回字符串</span>
+s = <span class="hljs-built_in">str</span>(bs, encoding=<span class="hljs-string">&#x27;utf-8&#x27;</span>)   <span class="hljs-comment"># ABC好的</span>
+<span class="hljs-built_in">print</span>(<span class="hljs-built_in">str</span>(<span class="hljs-string">b&#x27;abc\xe5\xa5\xbd\xe7\x9a\x84&#x27;</span>, encoding=<span class="hljs-string">&#x27;utf-8&#x27;</span>))  <span class="hljs-comment"># abc好的</span></code></pre>
+
+<hr>
+<h3 id="关于源程序编码"><a href="#关于源程序编码" class="headerlink" title="关于源程序编码"></a>关于源程序编码</h3><p>Python 3 默认认为 <code>.py</code> 源文件是 <strong>UTF-8</strong> 编码（且期望有BOM）。如果源文件实际是GBK且无编码声明，运行报错：</p>
+<pre><code class="hljs clean">SyntaxError: Non-UTF<span class="hljs-number">-8</span> <span class="hljs-keyword">code</span> starting <span class="hljs-keyword">with</span> <span class="hljs-string">&#x27;\xb7&#x27;</span> <span class="hljs-keyword">in</span> file testansi.py...</code></pre>
+
+<p>解决办法：在源文件<strong>第一行或第二行</strong>加声明</p>
+<pre><code class="hljs python"><span class="hljs-comment"># -*- coding: GBK -*-</span></code></pre>
+
+<blockquote>
+<p>PyCharm编写的 <code>.py</code> 文件默认就是UTF-8，一般无需额外声明。</p>
+</blockquote>
+<hr>
+<h3 id="C-与Python字符串对比"><a href="#C-与Python字符串对比" class="headerlink" title="C++与Python字符串对比"></a>C++与Python字符串对比</h3><table>
+<thead>
+<tr>
+<th align="left">特性</th>
+<th align="left">C++ <code>std::string</code></th>
+<th align="left">Python <code>str</code></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">可变性</td>
+<td align="left"><strong>可变</strong>（可直接改 <code>s[0]=&#39;H&#39;</code>）</td>
+<td align="left"><strong>不可变</strong>（修改需创建新对象）</td>
+</tr>
+<tr>
+<td align="left">越界访问</td>
+<td align="left">需手动注意，可能崩溃</td>
+<td align="left">自动抛异常</td>
+</tr>
+<tr>
+<td align="left">引号</td>
+<td align="left">双引号（单引号是<code>char</code>）</td>
+<td align="left">单&#x2F;双&#x2F;三引号均可</td>
+</tr>
+<tr>
+<td align="left">Unicode</td>
+<td align="left">需<code>std::wstring</code>或第三方库</td>
+<td align="left"><strong>原生支持</strong></td>
+</tr>
+<tr>
+<td align="left">空值</td>
+<td align="left"><code>&quot;&quot;</code></td>
+<td align="left"><code>&quot;&quot;</code> 或 <code>None</code></td>
+</tr>
+<tr>
+<td align="left">性能</td>
+<td align="left">直接操作内存，快</td>
+<td align="left">因不可变性+GC稍慢，但开发效率高</td>
+</tr>
+</tbody></table>
+<p><strong>操作语法差异：</strong></p>
+<pre><code class="hljs python"><span class="hljs-comment"># 初始化</span>
+s1 = <span class="hljs-string">&quot;hello&quot;</span>
+s2 = <span class="hljs-string">&#x27;a&#x27;</span> * <span class="hljs-number">5</span>          <span class="hljs-comment"># C++: string s2(5, &#x27;a&#x27;)</span>
+
+<span class="hljs-comment"># 长度</span>
+len1 = <span class="hljs-built_in">len</span>(s1)        <span class="hljs-comment"># C++: s1.size() 或 s1.length()</span>
+
+<span class="hljs-comment"># 拼接</span>
+s3 = s1 + <span class="hljs-string">&quot; &quot;</span> + s2    <span class="hljs-comment"># 同C++，但Python不可变，结果是新对象</span>
+
+<span class="hljs-comment"># 访问</span>
+c = s1[<span class="hljs-number">0</span>]             <span class="hljs-comment"># 同C++，但 s1[0] = &#x27;H&#x27; 会报错！</span>
+
+<span class="hljs-comment"># 比较</span>
+is_equal = (s1 == s2) <span class="hljs-comment"># 同C++</span>
+is_less = (s1 &gt; s2)   <span class="hljs-comment"># 同C++，按字典序</span>
+result = (s1 &gt; s2) - (s1 &lt; s2)  <span class="hljs-comment"># C++: s1.compare(s2) 返回1/0/-1</span>
+
+<span class="hljs-comment"># 交换</span>
+s1, s2 = s2, s1       <span class="hljs-comment"># C++: swap(s1, s2)</span>
+
+<span class="hljs-comment"># 切片/子串</span>
+sub = s1[<span class="hljs-number">1</span>:<span class="hljs-number">4</span>]         <span class="hljs-comment"># &quot;ell&quot;  左闭右开；C++: s1.substr(1, 3)</span>
+
+<span class="hljs-comment"># 查找</span>
+pos = s1.find(<span class="hljs-string">&quot;ell&quot;</span>)  <span class="hljs-comment"># 返回索引或-1；C++: 返回索引或 string::npos</span>
+
+<span class="hljs-comment"># 替换</span>
+s1 = s1.replace(<span class="hljs-string">&quot;ell&quot;</span>, <span class="hljs-string">&quot;ipp&quot;</span>)  <span class="hljs-comment"># ⚠️返回新字符串！C++: s1.replace(1,3,&quot;ipp&quot;)原地改</span>
+
+<span class="hljs-comment"># 字符串↔数字</span>
+num = <span class="hljs-built_in">int</span>(<span class="hljs-string">&quot;123&quot;</span>)      <span class="hljs-comment"># C++: stoi(s)</span>
+s1 = <span class="hljs-built_in">str</span>(<span class="hljs-number">123</span>)         <span class="hljs-comment"># C++: to_string(num)</span>
+f = <span class="hljs-built_in">float</span>(<span class="hljs-string">&quot;3.14&quot;</span>)     <span class="hljs-comment"># C++: stof(s)</span>
+s1 = <span class="hljs-built_in">str</span>(<span class="hljs-number">3.14</span>)        <span class="hljs-comment"># C++: to_string(f)</span></code></pre>
+
+<h2 id="关于错误日志"><a href="#关于错误日志" class="headerlink" title="关于错误日志"></a>关于错误日志</h2><pre><code class="hljs python"><span class="hljs-keyword">try</span>:
+    <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;ok&quot;</span>)
+<span class="hljs-keyword">except</span> Exception <span class="hljs-keyword">as</span> e:
+    <span class="hljs-built_in">print</span>(e)
+<span class="hljs-comment">#如果报错打印错误报告</span></code></pre>
+
+<h2 id="lambda表达式"><a href="#lambda表达式" class="headerlink" title="lambda表达式"></a>lambda表达式</h2><p><code>lambda 参数1,参数2,...: 返回值</code></p>
+<h3 id="配合map"><a href="#配合map" class="headerlink" title="配合map"></a>配合map</h3><p><code>ls=list(map(lambda x:x*2,ls))</code></p>
+<h3 id="配合reduce"><a href="#配合reduce" class="headerlink" title="配合reduce"></a>配合reduce</h3><p><code>result=reduce(lambda x,y:x+y,ls)</code></p>
+
+  </div>
+
+  
+  <div class="post-copyright animate-entry animate-delay-300">
+    <p><strong>本文作者：</strong>flowwalker</p>
+    <p><strong>本文链接：</strong><a href="/coding-notes-blog/posts/180c/">/coding-notes-blog/posts/180c/</a></p>
+    <p><strong>版权声明：</strong>本文采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> 许可协议</p>
+  </div>
+  
+</article>
+
+
+<nav class="post-navigation animate-entry animate-delay-300">
+  
+    <a href="/coding-notes-blog/posts/194c/" class="post-nav-item prev" title="Python修养2">
+      <span class="nav-arrow">←</span>
+      <span class="nav-text">Python修养2</span>
+    </a>
+  
+  
+    <a href="/coding-notes-blog/posts/f9a7/" class="post-nav-item next" title="c++11特性">
+      <span class="nav-text">c++11特性</span>
+      <span class="nav-arrow">→</span>
+    </a>
+  
+</nav>
+
+
+
+
+
+      </div>
+      <footer class="site-footer">
+  <div class="footer-inner">
+    
+    <div class="footer-copyright">
+      &copy; 2026–2026 flowwalker
+    </div>
+    
+    
+    <div class="footer-powered">
+      Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <span>Dawn</span>
+    </div>
+    
+  </div>
+</footer>
+
+
+    </main>
+  </div>
+  <button class="sidebar-expand-btn" id="sidebar-expand-btn" title="展开侧边栏" aria-label="展开侧边栏">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+  </button>
+  <div class="floating-actions">
+    
+    <div class="back-to-top-wrap" id="back-to-top-wrap">
+      <svg class="progress-ring" width="52" height="52" viewBox="0 0 52 52">
+        <circle class="progress-ring-bg" cx="26" cy="26" r="23"/>
+        <circle class="progress-ring-fill" id="progress-ring-fill" cx="26" cy="26" r="23"/>
+      </svg>
+      <button class="back-to-top" id="back-to-top" aria-label="回到顶部">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+      </button>
+    </div>
+    
+    <button class="search-toggle-float" id="search-toggle-btn" title="搜索" aria-label="搜索">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    </button>
+    
+    <a href="/coding-notes-blog/" class="floating-home" aria-label="回到主页" title="回到主页">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    </a>
+    
+    
+    <button class="dark-toggle-float" id="dark-toggle-btn" title="暗色模式" aria-label="暗色模式">
+      <svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    </button>
+    
+    
+    <button class="immersive-toggle" id="immersive-toggle-btn" title="沉浸式阅读" aria-label="沉浸式阅读">
+      <svg class="icon-enter" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
+      <svg class="icon-exit" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 8 3 3 8 3"/><polyline points="20 16 21 21 16 21"/><line x1="14" y1="14" x2="21" y2="21"/><line x1="3" y1="3" x2="10" y2="10"/></svg>
+    </button>
+    
+  </div>
+  <div class="search-overlay" id="search-overlay">
+    <div class="search-modal">
+      <div class="search-modal-header">
+        <input type="text" id="search-input" class="search-input" placeholder="输入关键词搜索文章..." autocomplete="off">
+        <button class="search-close-btn" id="search-close-btn" aria-label="关闭搜索">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="search-results" id="search-results"></div>
+    </div>
+  </div>
+  <script>
+(function() {
+  var STORAGE_KEY = 'dawn-theme';
+  var html = document.documentElement;
+
+  function getLabel(dark) {
+    return dark ? '亮色模式' : '暗色模式';
+  }
+
+  function updateUI(dark) {
+    var btn = document.getElementById('dark-toggle-btn');
+    if (!btn) return;
+    btn.setAttribute('title', getLabel(dark));
+    btn.setAttribute('aria-label', getLabel(dark));
+  }
+
+  var saved = localStorage.getItem(STORAGE_KEY);
+  if (saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+    html.classList.add('dark');
+    updateUI(true);
+  } else {
+    html.classList.remove('dark');
+    updateUI(false);
+  }
+
+  function setTheme(dark) {
+    if (dark) {
+      html.classList.add('dark');
+    } else {
+      html.classList.remove('dark');
+    }
+    localStorage.setItem(STORAGE_KEY, dark ? 'dark' : 'light');
+    updateUI(dark);
+    updateGiscus(dark);
+  }
+
+  function updateGiscus(dark) {
+    var frame = document.querySelector('.giscus-frame');
+    if (frame) {
+      frame.contentWindow.postMessage({
+        giscus: { setConfig: { theme: dark ? 'dark' : 'light' } }
+      }, 'https://giscus.app');
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    var btn = document.getElementById('dark-toggle-btn');
+    if (btn) {
+      btn.addEventListener('click', function() {
+        setTheme(!html.classList.contains('dark'));
+      });
+    }
+  });
+
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
+    if (localStorage.getItem(STORAGE_KEY) === null) {
+      setTheme(e.matches);
+    }
+  });
+})();
+</script>
+
+  <script src="/coding-notes-blog/js/main.js"></script>
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        processEscapes: true
+      },
+      options: {
+        ignoreHtmlClass: 'no-mathjax',
+        processHtmlClass: 'mathjax-process'
+      }
+    };
+  }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+
+
+
+</body>
+</html>

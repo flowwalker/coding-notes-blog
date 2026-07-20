@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="">
+<head>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>输入输出与文件操作 | 码艺Blog</title>
+
+<meta name="description" content="flowwalker 的编程学习与实践笔记">
+
+
+<meta name="author" content="flowwalker">
+<link rel="alternate" href="/coding-notes-blog/atom.xml" title="码艺Blog" type="application/atom+xml">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="/coding-notes-blog/css/style.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+
+
+<link rel="icon" href="/coding-notes-blog/img/favicon.png">
+
+<script>
+(function() {
+  var saved = localStorage.getItem('dawn-theme');
+  if (saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+    document.documentElement.classList.add('dark');
+  }
+})();
+</script>
+
+
+<meta name="generator" content="Hexo 8.1.2"></head>
+<body>
+  <div class="site-wrapper">
+    <aside class="site-sidebar" id="sidebar">
+  <button class="sidebar-collapse-btn" id="sidebar-collapse-btn" title="折叠侧边栏" aria-label="折叠侧边栏">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+  </button>
+  <div class="sidebar-inner">
+    
+    
+    <div class="sidebar-toc sidebar-toc--full">
+      <div class="sidebar-toc-header">
+        <h3 class="sidebar-toc-title">目录</h3>
+        <button class="toc-expand-all-btn" id="toc-expand-all-btn" title="展开全部目录" aria-label="展开全部目录">
+          <svg class="toc-expand-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+      </div>
+      <div class="sidebar-toc-content">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E4%B8%8E%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C"><span class="toc-text">输入输出与文件操作</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%9B%AE%E5%BD%95"><span class="toc-text">目录</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%AF%94%E8%BE%83%E9%87%8D%E8%A6%81%E7%9A%84%E5%86%85%E5%AE%B9"><span class="toc-text">比较重要的内容</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81C-IO%E6%B5%81%E7%B1%BB%E4%BD%93%E7%B3%BB%EF%BC%88%E5%9F%BA%E7%A1%80%E6%A0%B8%E5%BF%83%EF%BC%89"><span class="toc-text">一、C++ IO流类体系（基础核心）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E6%B5%81%E7%B1%BB%E7%BB%A7%E6%89%BF%E5%85%B3%E7%B3%BB%EF%BC%88%E6%A0%B9%E7%B1%BB%EF%BC%9Aios%EF%BC%89"><span class="toc-text">1. 流类继承关系（根类：ios）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E6%A0%87%E5%87%86%E6%B5%81%E5%AF%B9%E8%B1%A1%E6%A0%B8%E5%BF%83%E8%AF%B4%E6%98%8E"><span class="toc-text">2. 标准流对象核心说明</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E6%A0%87%E5%87%86IO%E6%A0%B8%E5%BF%83%E6%93%8D%E4%BD%9C"><span class="toc-text">二、标准IO核心操作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E8%BE%93%E5%85%A5-%E8%BE%93%E5%87%BA%E9%87%8D%E5%AE%9A%E5%90%91"><span class="toc-text">1. 输入&#x2F;输出重定向</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E5%87%BD%E6%95%B0%EF%BC%9Afreopen%EF%BC%88%E5%A4%B4%E6%96%87%E4%BB%B6%EF%BC%89"><span class="toc-text">核心函数：freopen（头文件&lt;iostream&gt;）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9C%80%E7%AE%80%E7%A4%BA%E4%BE%8B"><span class="toc-text">最简示例</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E8%BE%93%E5%85%A5%E6%B5%81%E7%BB%93%E6%9D%9F%E5%88%A4%E6%96%AD"><span class="toc-text">2. 输入流结束判断</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%A0%87%E5%87%86%E5%86%99%E6%B3%95%EF%BC%9Awhile-cin-x"><span class="toc-text">标准写法：while(cin &gt;&gt; x)</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-%E5%8F%98%E9%87%8F%E5%BC%95%E7%94%A8%E7%9A%84%E6%9C%AC%E8%B4%A8"><span class="toc-text">1. 变量引用的本质</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-%E6%97%A7%E7%89%88%E9%80%BB%E8%BE%91%E5%A4%B1%E6%95%88%E5%8E%9F%E5%9B%A0%EF%BC%9A%E6%97%B6%E5%BA%8F%E9%94%99%E4%BD%8D"><span class="toc-text">2. 旧版逻辑失效原因：时序错位</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3-%E9%93%BE%E5%BC%8F%E8%B0%83%E7%94%A8%E7%9A%84%E2%80%9C%E6%83%AF%E6%80%A7%E2%80%9D%E4%B8%8E%E2%80%9C%E7%86%94%E6%96%AD%E2%80%9D"><span class="toc-text">3. 链式调用的“惯性”与“熔断”</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#4-%E6%AD%A3%E7%A1%AE%E7%9A%84%E9%80%BB%E8%BE%91%E6%9E%84%E9%80%A0%EF%BC%9A%E5%85%88%E5%81%9A%E5%90%8E%E7%9C%8B"><span class="toc-text">4. 正确的逻辑构造：先做后看</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-istream%E6%A0%B8%E5%BF%83%E6%88%90%E5%91%98%E5%87%BD%E6%95%B0%EF%BC%88%E9%AB%98%E9%A2%91%E8%80%83%E7%82%B9%EF%BC%89"><span class="toc-text">3. istream核心成员函数（高频考点）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%881%EF%BC%89getline%EF%BC%9A%E6%8C%89%E8%A1%8C%E8%AF%BB%E5%8F%96%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="toc-text">（1）getline：按行读取字符串</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%87%BD%E6%95%B0%E5%8E%9F%E5%9E%8B"><span class="toc-text">函数原型</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E8%A7%84%E5%88%99"><span class="toc-text">核心规则</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E9%94%99%E8%AF%AF%E5%88%A4%E6%96%AD%EF%BC%9Aif-cin-getline-%E2%86%92-%E8%AF%BB%E5%8F%96%E5%A4%B1%E8%B4%A5-%E6%B5%81%E7%BB%93%E6%9D%9F%E6%97%B6%E8%BF%94%E5%9B%9Etrue"><span class="toc-text">错误判断：if(!cin.getline(...)) → 读取失败&#x2F;流结束时返回true</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%882%EF%BC%89%E5%85%B6%E4%BB%96%E5%B8%B8%E7%94%A8%E6%88%90%E5%91%98%E5%87%BD%E6%95%B0"><span class="toc-text">（2）其他常用成员函数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%883%EF%BC%89getline%E9%AB%98%E9%A2%91%E5%9D%91%E7%82%B9"><span class="toc-text">（3）getline高频坑点</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E6%B5%81%E6%93%8D%E7%BA%B5%E7%AE%97%E5%AD%90%EF%BC%88%E6%A0%BC%E5%BC%8F%E5%8C%96%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%EF%BC%89"><span class="toc-text">三、流操纵算子（格式化输入输出）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E6%95%B4%E6%95%B0%E5%9F%BA%E6%95%B0%E6%8E%A7%E5%88%B6"><span class="toc-text">1. 整数基数控制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E6%B5%AE%E7%82%B9%E6%95%B0%E7%B2%BE%E5%BA%A6%E6%8E%A7%E5%88%B6%EF%BC%88%E6%A0%B8%E5%BF%83%E8%80%83%E7%82%B9%EF%BC%89"><span class="toc-text">2. 浮点数精度控制（核心考点）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E5%B7%A5%E5%85%B7"><span class="toc-text">核心工具</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%B2%BE%E5%BA%A6%E5%90%AB%E4%B9%89%E8%A7%84%E5%88%99%EF%BC%88%E4%B8%8E%E8%BE%93%E5%87%BA%E6%A0%BC%E5%BC%8F%E5%BC%BA%E7%BB%91%E5%AE%9A%EF%BC%89"><span class="toc-text">精度含义规则（与输出格式强绑定）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E8%A7%84%E5%88%99-1"><span class="toc-text">核心规则</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E5%9F%9F%E5%AE%BD%E8%AE%BE%E7%BD%AE%EF%BC%88setw-width%EF%BC%89"><span class="toc-text">3. 域宽设置（setw &#x2F; width）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E7%94%A8%E6%B3%95"><span class="toc-text">核心用法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E8%A7%84%E5%88%99-2"><span class="toc-text">核心规则</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E7%94%A8%E6%88%B7%E8%87%AA%E5%AE%9A%E4%B9%89%E6%B5%81%E6%93%8D%E7%BA%B5%E7%AE%97%E5%AD%90"><span class="toc-text">4. 用户自定义流操纵算子</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%9A%E4%B9%89%E8%A7%84%E5%88%99"><span class="toc-text">定义规则</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86"><span class="toc-text">底层原理</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E6%96%87%E4%BB%B6IO%E6%93%8D%E4%BD%9C%EF%BC%88%E6%A0%B8%E5%BF%83%E5%BA%94%E7%94%A8%EF%BC%89"><span class="toc-text">四、文件IO操作（核心应用）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E6%96%87%E4%BB%B6%E6%89%93%E5%BC%80%E4%B8%8E%E5%85%B3%E9%97%AD"><span class="toc-text">1. 文件打开与关闭</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%881%EF%BC%89%E4%B8%A4%E7%A7%8D%E6%89%93%E5%BC%80%E6%96%B9%E5%BC%8F"><span class="toc-text">（1）两种打开方式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%882%EF%BC%89%E5%B8%B8%E7%94%A8%E6%89%93%E5%BC%80%E6%A8%A1%E5%BC%8F"><span class="toc-text">（2）常用打开模式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%883%EF%BC%89%E6%89%93%E5%BC%80%E6%88%90%E5%8A%9F%E5%88%A4%E6%96%AD"><span class="toc-text">（3）打开成功判断</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%884%EF%BC%89%E6%96%87%E4%BB%B6%E5%85%B3%E9%97%AD"><span class="toc-text">（4）文件关闭</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E6%96%87%E4%BB%B6%E8%AF%BB%E5%86%99%E6%8C%87%E9%92%88%E6%93%8D%E4%BD%9C"><span class="toc-text">2. 文件读写指针操作</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9F%BA%E5%87%86%E4%BD%8D%E7%BD%AE%E5%8F%82%E6%95%B0"><span class="toc-text">基准位置参数</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E6%96%87%E6%9C%AC%E6%96%87%E4%BB%B6%E8%AF%BB%E5%86%99"><span class="toc-text">3. 文本文件读写</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E4%BA%8C%E8%BF%9B%E5%88%B6%E6%96%87%E4%BB%B6%E8%AF%BB%E5%86%99%EF%BC%88%E6%A0%B8%E5%BF%83%E8%80%83%E7%82%B9%EF%BC%89"><span class="toc-text">4. 二进制文件读写（核心考点）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E5%87%BD%E6%95%B0"><span class="toc-text">核心函数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BE%85%E5%8A%A9%E5%87%BD%E6%95%B0"><span class="toc-text">辅助函数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E7%89%B9%E6%80%A7"><span class="toc-text">核心特性</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-%E6%96%87%E6%9C%AC%E6%96%87%E4%BB%B6-vs-%E4%BA%8C%E8%BF%9B%E5%88%B6%E6%96%87%E4%BB%B6%EF%BC%88%E9%AB%98%E9%A2%91%E8%80%83%E7%82%B9%EF%BC%89"><span class="toc-text">5. 文本文件 vs 二进制文件（高频考点）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%8D%A2%E8%A1%8C%E7%AC%A6%E7%B3%BB%E7%BB%9F%E5%B7%AE%E5%BC%82"><span class="toc-text">换行符系统差异</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%89%93%E5%BC%80%E6%A8%A1%E5%BC%8F%E5%B7%AE%E5%BC%82"><span class="toc-text">打开模式差异</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E6%B3%A8%E6%84%8F%E7%82%B9"><span class="toc-text">五、注意点</span></a></li></ol></li></ol>
+      </div>
+    </div>
+    
+  </div>
+</aside>
+
+    <main class="main-content">
+      <header class="site-header">
+  <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+  <nav class="header-nav animate-stagger-50">
+    
+      <a href="/coding-notes-blog/" class="nav-item animate-entry">首页</a>
+    
+      <a href="/coding-notes-blog/about/" class="nav-item animate-entry">此地一二</a>
+    
+      <a href="/coding-notes-blog/archives/" class="nav-item animate-entry">时光长河</a>
+    
+      <a href="/coding-notes-blog/categories/" class="nav-item animate-entry">卷宗总览</a>
+    
+      <a href="/coding-notes-blog/tags/" class="nav-item animate-entry">签注归集</a>
+    
+      <a href="/coding-notes-blog/links/" class="nav-item animate-entry">四处仙山</a>
+    
+      <a href="https://flowwalker.top" class="nav-item animate-entry">归返本山</a>
+    
+  </nav>
+</header>
+
+      <div class="content-area">
+        <article class="post-full">
+  <header class="post-header">
+    <h1 class="post-title animate-entry animate-delay-0">输入输出与文件操作</h1>
+    <div class="post-meta animate-entry animate-delay-80">
+      
+      <span class="meta-item">
+        <i class="fa fa-calendar"></i>
+        <time datetime="2026-03-27">发布于 2026-03-27</time>
+      </span>
+      
+      
+      <span class="meta-item">
+        <i class="fa fa-edit"></i>
+        <time datetime="2026-07-20">更新于 2026-07-20</time>
+      </span>
+      
+      
+      <span class="meta-item">
+        <i class="fa fa-folder"></i>
+        
+          <a href="/coding-notes-blog/categories/%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%AC%94%E8%AE%B0-c-OOP/">程序设计笔记--c++OOP</a>
+        
+      </span>
+      
+    </div>
+    
+    <div class="post-tags animate-entry animate-delay-80">
+      
+        <a href="/coding-notes-blog/tags/OOP/" class="tag-badge">#OOP</a>
+      
+        <a href="/coding-notes-blog/tags/%E7%A8%8B%E8%AE%BE/" class="tag-badge">#程设</a>
+      
+        <a href="/coding-notes-blog/tags/c/" class="tag-badge">#c++</a>
+      
+        <a href="/coding-notes-blog/tags/%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C/" class="tag-badge">#文件操作</a>
+      
+        <a href="/coding-notes-blog/tags/%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA/" class="tag-badge">#输入输出</a>
+      
+    </div>
+    
+  </header>
+
+  
+  <div class="post-cover animate-entry animate-delay-80">
+    <img src="https://gcore.jsdelivr.net/gh/flowwalker/PicGo-based-image-host@main/348b81e24f2068a6743b22811a23459e.jpg" alt="输入输出与文件操作">
+  </div>
+  
+
+  <div class="post-content">
+    <h1 id="输入输出与文件操作"><a href="#输入输出与文件操作" class="headerlink" title="输入输出与文件操作"></a>输入输出与文件操作</h1><h1 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h1><p>[TOC]</p>
+<hr>
+<h2 id="比较重要的内容"><a href="#比较重要的内容" class="headerlink" title="比较重要的内容"></a>比较重要的内容</h2><pre><code class="hljs c++"><span class="hljs-type">int</span> x;
+<span class="hljs-keyword">while</span>(cin&gt;&gt;x)&#123;&#125;</code></pre>
+
+<p>可见<code>istream</code>在其基类内重载了<code>operator bool</code></p>
+<pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span>
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">MyCin</span>&#123;
+    <span class="hljs-type">bool</span> stop;
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-comment">// 重要的,初始值不停</span>
+    <span class="hljs-built_in">MyCin</span>() : <span class="hljs-built_in">stop</span>(<span class="hljs-literal">false</span>) &#123;&#125;
+    <span class="hljs-comment">// 重载bool</span>
+    <span class="hljs-function"><span class="hljs-keyword">operator</span> <span class="hljs-title">bool</span><span class="hljs-params">()</span></span>&#123;
+        <span class="hljs-keyword">return</span> !stop;
+    &#125;
+    <span class="hljs-comment">// 传入i引用,重载&gt;&gt;读取这个i</span>
+    MyCin&amp; <span class="hljs-keyword">operator</span>&gt;&gt;(<span class="hljs-type">int</span> &amp;i)&#123;
+        <span class="hljs-keyword">if</span>(stop) <span class="hljs-keyword">return</span> *<span class="hljs-keyword">this</span>;
+        cin&gt;&gt;i;
+        <span class="hljs-keyword">if</span>(i==<span class="hljs-number">100</span>) stop=<span class="hljs-literal">true</span>;
+        <span class="hljs-keyword">return</span> *<span class="hljs-keyword">this</span>;
+    &#125;
+&#125;;
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;
+    MyCin m;
+    <span class="hljs-type">int</span> x;
+    <span class="hljs-keyword">while</span>(m&gt;&gt;x)&#123;
+        cout&lt;&lt;x&lt;&lt;endl;
+    &#125;
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+&#125;</code></pre>
+
+<p><strong>getline</strong></p>
+<p><code>istream &amp; getline(char* buf,int bufsize,char delim);</code></p>
+<p><code>delim</code>缺省,默认为<code>\n</code>,从输入流中读取(bufsize-1)个字符到缓冲区,或读到delim</p>
+<ul>
+<li>delim不会读入缓冲区,但会被输入流取走</li>
+<li>达到或超出bufsize报错</li>
+</ul>
+<pre><code class="hljs c++"><span class="hljs-comment">// ■ getline读入字符个数超过了bufSize个</span>
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;
+    <span class="hljs-type">char</span> buf1[<span class="hljs-number">5</span>], buf2[<span class="hljs-number">5</span>];
+    <span class="hljs-comment">// 第一次读取</span>
+    cin.<span class="hljs-built_in">getline</span>(buf1, <span class="hljs-number">5</span>, <span class="hljs-string">&#x27;\n&#x27;</span>);  <span class="hljs-comment">// 输入 &quot;abcdef\n&quot;</span>
+    <span class="hljs-comment">// 结果: buf1 = &quot;abcd&quot;, 流的状态标志 failbit 被置位</span>
+    <span class="hljs-comment">// 第二次读取 - 会失败!</span>
+    cin.<span class="hljs-built_in">getline</span>(buf2, <span class="hljs-number">5</span>, <span class="hljs-string">&#x27;\n&#x27;</span>);
+    <span class="hljs-comment">// 因为 failbit 已设置, 这次读取立即返回, 不读取任何内容</span>
+    <span class="hljs-comment">// buf2 内容不变, 可能保持未定义状态</span>
+    cout &lt;&lt; buf1 &lt;&lt; endl &lt;&lt; buf2 &lt;&lt; endl;
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+&#125;
+
+<span class="hljs-comment">// 输入:</span>
+<span class="hljs-comment">// abcdef</span>
+<span class="hljs-comment">// 输出:</span>
+<span class="hljs-comment">// abcd</span>
+
+<span class="hljs-comment">// 输入:</span>
+<span class="hljs-comment">// abc</span>
+<span class="hljs-comment">// def</span>
+<span class="hljs-comment">// 输出:</span>
+<span class="hljs-comment">// abc</span>
+<span class="hljs-comment">// def</span>
+</code></pre>
+
+<pre><code class="hljs c++"><span class="hljs-comment">// ■ 可以用 if(!cin.getline(...)) 判断输入是否结束</span>
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;
+    <span class="hljs-type">char</span> name[<span class="hljs-number">10</span>];
+    cout &lt;&lt; <span class="hljs-string">&quot;请输入姓名: &quot;</span>;
+    <span class="hljs-keyword">if</span>(!cin.<span class="hljs-built_in">getline</span>(name, <span class="hljs-number">10</span>)) &#123;
+        cout &lt;&lt; <span class="hljs-string">&quot;读取失败! &quot;</span> &lt;&lt; endl;
+        cout &lt;&lt; <span class="hljs-string">&quot;可能原因: 输入过长或流出错&quot;</span> &lt;&lt; endl;
+    &#125; <span class="hljs-keyword">else</span> &#123;
+        cout &lt;&lt; <span class="hljs-string">&quot;读取成功, 姓名: &quot;</span> &lt;&lt; name &lt;&lt; endl;
+    &#125;
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+&#125;</code></pre>
+
+<pre><code class="hljs c++"><span class="hljs-comment">// 现代</span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;string&gt;</span></span>
+std::string line;
+std::<span class="hljs-built_in">getline</span>(cin, line);           <span class="hljs-comment">// 没有长度限制，自动管理内存</span>
+std::<span class="hljs-built_in">getline</span>(cin, line, <span class="hljs-string">&#x27;,&#x27;</span>);      <span class="hljs-comment">// 自定义分隔符</span></code></pre>
+
+<blockquote>
+<p><strong>istream 类的成员函数</strong></p>
+<ul>
+<li><code>bool eof();</code> — 判断输入流是否结束</li>
+<li><code>int peek();</code> — 返回下一个字符，但不从流中去掉</li>
+<li><code>istream &amp; putback(char c);</code> — 将字符 <code>c</code> 放回输入流</li>
+<li><code>istream &amp; ignore(int nCount = 1, int delim = EOF);</code> — 从流中删掉最多 <code>nCount</code> 个字符，遇到 <code>EOF</code> 时结束</li>
+</ul>
+<hr>
+<p><strong>getline 读到留在流中的 <code>&#39;\n&#39;</code> 就会返回</strong></p>
+<pre><code class="hljs cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span>
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;
+    <span class="hljs-type">int</span> x;
+    <span class="hljs-type">char</span> buf[<span class="hljs-number">100</span>];
+    cin &gt;&gt; x;
+    cin.<span class="hljs-built_in">getline</span>(buf, <span class="hljs-number">90</span>);
+    cout &lt;&lt; buf &lt;&lt; endl;
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+&#125;</code></pre>
+
+<p>输入：</p>
+<pre><code class="hljs basic"><span class="hljs-symbol">12 </span>abcd</code></pre>
+<p>输出：</p>
+<pre><code class="hljs ebnf"><span class="hljs-attribute">abcd</span></code></pre>
+<p>（前面有一个空格，因为 <code>&gt;&gt;</code> 留下的空格还在流里）</p>
+<p>输入：</p>
+<pre><code class="hljs">12</code></pre>
+<p>程序立即结束，无输出。（<code>getline</code> 直接读到了 <code>12</code> 后面的 <code>&#39;\n&#39;</code>）</p>
+<blockquote>
+<p><strong>istream 类的成员函数</strong></p>
+<ul>
+<li><code>bool eof();</code> — 判断输入流是否结束</li>
+<li><code>int peek();</code> — 返回下一个字符，但不从流中去掉</li>
+<li><code>istream &amp; putback(char c);</code> — 将字符 <code>c</code> 放回输入流</li>
+<li><code>istream &amp; ignore(int nCount = 1, int delim = EOF);</code> — 从流中删掉最多 <code>nCount</code> 个字符，遇到 <code>EOF</code> 时结束</li>
+</ul>
+<hr>
+<p><strong>getline 读到留在流中的 <code>&#39;\n&#39;</code> 就会返回</strong></p>
+<pre><code class="hljs cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span>
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;
+    <span class="hljs-type">int</span> x;
+    <span class="hljs-type">char</span> buf[<span class="hljs-number">100</span>];
+    cin &gt;&gt; x;
+    cin.<span class="hljs-built_in">getline</span>(buf, <span class="hljs-number">90</span>);
+    cout &lt;&lt; buf &lt;&lt; endl;
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+&#125;</code></pre>
+
+<p>输入：</p>
+<pre><code class="hljs basic"><span class="hljs-symbol">12 </span>abcd</code></pre>
+<p>输出：</p>
+<pre><code class="hljs ebnf"><span class="hljs-attribute">abcd</span></code></pre>
+<p><strong>（前面有一个空格，因为 <code>&gt;&gt;</code> 留下的空格还在流里）</strong></p>
+<p>输入：</p>
+<pre><code class="hljs">12</code></pre>
+<p>程序立即结束，无输出。（<code>getline</code> 直接读到了 <code>12</code> 后面的 <code>&#39;\n&#39;</code>）</p>
+</blockquote>
+</blockquote>
+<ul>
+<li><p>cin.width():  最大读取n-1个字符</p>
+</li>
+<li><p>cout默认右对齐</p>
+</li>
+<li><p>设置宽度是一次性的</p>
+</li>
+<li><p>流操纵器:</p>
+<ul>
+<li><p><code>cout &lt;&lt; tab</code> 不是把 <code>tab</code> 的”返回值”传给 <code>cout</code>，而是把 <code>tab</code> 这个”函数本身”传给 <code>cout</code>，让 <code>cout</code> 内部再调用它。</p>
+</li>
+<li><pre><code class="language-c++">ostream&amp; tab(ostream&amp; output) {
+    return output &lt;&lt; &#39;\t&#39;;
+}
+//重载内部等价于return (*p)(*this);   // 也就是 tab(cout)
+ostream&amp; operator&lt;&lt;(ostream&amp; (*p)(ostream&amp;));
+//                     ^^^^^^^^^^^^^^^^^
+//                     函数指针：接受ostream&amp;，返回ostream&amp;
+<pre><code class="hljs applescript">
+  - `cout &lt;&lt; <span class="hljs-string">&quot;aa&quot;</span> &lt;&lt; <span class="hljs-literal">tab</span> &lt;&lt; <span class="hljs-string">&quot;bb&quot;</span>;`
+
+- 默认是总有效位数, fixed是小数点后有效位数, scientific是科学计数法上小数点后有效位数
+
+<span class="hljs-comment">## 总览</span>
+
+
+```mermaid
+graph LR
+    Root[C++ 输入输出与文件操作] <span class="hljs-comment">--&gt; S[标准IO流]</span>
+    Root <span class="hljs-comment">--&gt; M[流操纵算子]</span>
+    Root <span class="hljs-comment">--&gt; F[文件操作]</span>
+    
+    %% 标准IO流
+    S <span class="hljs-comment">--&gt; C1[流类体系]</span>
+    S <span class="hljs-comment">--&gt; C2[标准流对象]</span>
+    S <span class="hljs-comment">--&gt; C3[重定向]</span>
+    C1 <span class="hljs-comment">--&gt; C11[ios -&gt; istream/ostream]</span>
+    C1 <span class="hljs-comment">--&gt; C12[cin ifstream / cout ofstream]</span>
+    C2 <span class="hljs-comment">--&gt; C21[cin  cout  cerr  clog]</span>
+    C3 <span class="hljs-comment">--&gt; C31[freopen 输入/输出重定向]</span>
+    
+    %% 流操纵算子
+    M <span class="hljs-comment">--&gt; M1[头文件 iomanip]</span>
+    M <span class="hljs-comment">--&gt; M2[进制: dec hex oct]</span>
+    M <span class="hljs-comment">--&gt; M3[精度: fixed setprecision]</span>
+    M <span class="hljs-comment">--&gt; M4[域宽: setw 单次有效]</span>
+    
+    %% 文件操作
+    F <span class="hljs-comment">--&gt; F1[头文件 fstream]</span>
+    F <span class="hljs-comment">--&gt; F2[打开模式: in out app binary]</span>
+    F <span class="hljs-comment">--&gt; F3[指针操作: seekg tellg seekp tellp]</span>
+    F <span class="hljs-comment">--&gt; F4[文本文件: &gt;&gt; &lt;&lt; 读写]</span>
+    F <span class="hljs-comment">--&gt; F5[二进制文件: read write 读写]</span></code></pre>
+</code></pre>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="一、C-IO流类体系（基础核心）"><a href="#一、C-IO流类体系（基础核心）" class="headerlink" title="一、C++ IO流类体系（基础核心）"></a>一、C++ IO流类体系（基础核心）</h2><h3 id="1-流类继承关系（根类：ios）"><a href="#1-流类继承关系（根类：ios）" class="headerlink" title="1. 流类继承关系（根类：ios）"></a>1. 流类继承关系（根类：ios）</h3><pre><code class="hljs mermaid">graph TD
+    ios[&quot;ios（流基类）&quot;]
+    istream[&quot;istream（输入流类）&quot;]
+    ifstream[&quot;ifstream（文件输入流类，专用于读文件）&quot;]
+    ostream[&quot;ostream（输出流类）&quot;]
+    ofstream[&quot;ofstream（文件输出流类，专用于写文件）&quot;]
+    iostream[&quot;iostream（输入输出流类，同时继承istream+ostream）&quot;]
+    fstream[&quot;fstream（文件读写流类，可同时读写文件）&quot;]
+    
+    ios --&gt; istream
+    istream --&gt;|&quot;全局对象cin&quot;| ifstream
+    ios --&gt; ostream
+    ostream --&gt;|&quot;全局对象cout/cerr/clog&quot;| ofstream
+    ios --&gt; iostream
+    iostream --&gt; fstream</code></pre>
+
+<h3 id="2-标准流对象核心说明"><a href="#2-标准流对象核心说明" class="headerlink" title="2. 标准流对象核心说明"></a>2. 标准流对象核心说明</h3><table>
+<thead>
+<tr>
+<th>对象</th>
+<th>绑定设备</th>
+<th>缓冲机制</th>
+<th>核心用途</th>
+<th>能否重定向</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>cin</td>
+<td>标准输入（键盘）</td>
+<td>有缓冲</td>
+<td>常规数据输入</td>
+<td>可重定向到文件读取</td>
+</tr>
+<tr>
+<td>cout</td>
+<td>标准输出（屏幕）</td>
+<td>有缓冲</td>
+<td>常规数据输出</td>
+<td>可重定向到文件写入</td>
+</tr>
+<tr>
+<td>cerr</td>
+<td>标准错误输出</td>
+<td><strong>无缓冲</strong></td>
+<td>紧急错误信息（程序崩溃也能正常输出）</td>
+<td>不可重定向</td>
+</tr>
+<tr>
+<td>clog</td>
+<td>标准错误输出</td>
+<td><strong>有缓冲</strong></td>
+<td>非紧急运行日志（减少IO次数，性能更高）</td>
+<td>不可重定向</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="二、标准IO核心操作"><a href="#二、标准IO核心操作" class="headerlink" title="二、标准IO核心操作"></a>二、标准IO核心操作</h2><h3 id="1-输入-输出重定向"><a href="#1-输入-输出重定向" class="headerlink" title="1. 输入&#x2F;输出重定向"></a>1. 输入&#x2F;输出重定向</h3><h4 id="核心函数：freopen（头文件）"><a href="#核心函数：freopen（头文件）" class="headerlink" title="核心函数：freopen（头文件&lt;iostream&gt;）"></a>核心函数：<code>freopen</code>（头文件<code>&lt;iostream&gt;</code>）</h4><table>
+<thead>
+<tr>
+<th>用法</th>
+<th>核心功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>freopen(&quot;文件名&quot;, &quot;r&quot;, stdin);</code></td>
+<td>将标准输入cin重定向到指定文件，从文件读取数据</td>
+</tr>
+<tr>
+<td><code>freopen(&quot;文件名&quot;, &quot;w&quot;, stdout);</code></td>
+<td>将标准输出cout重定向到指定文件，向文件写入数据</td>
+</tr>
+</tbody></table>
+<h4 id="最简示例"><a href="#最简示例" class="headerlink" title="最简示例"></a>最简示例</h4><pre><code class="hljs cpp"><span class="hljs-comment">// 输入重定向：从in.txt读取数据</span>
+<span class="hljs-built_in">freopen</span>(<span class="hljs-string">&quot;in.txt&quot;</span>, <span class="hljs-string">&quot;r&quot;</span>, stdin); 
+cin &gt;&gt; x &gt;&gt; y;
+
+<span class="hljs-comment">// 输出重定向：向out.txt写入数据</span>
+<span class="hljs-built_in">freopen</span>(<span class="hljs-string">&quot;out.txt&quot;</span>, <span class="hljs-string">&quot;w&quot;</span>, stdout);
+cout &lt;&lt; x &lt;&lt; <span class="hljs-string">&quot; &quot;</span> &lt;&lt; y;</code></pre>
+
+<h3 id="2-输入流结束判断"><a href="#2-输入流结束判断" class="headerlink" title="2. 输入流结束判断"></a>2. 输入流结束判断</h3><h4 id="标准写法：while-cin-x"><a href="#标准写法：while-cin-x" class="headerlink" title="标准写法：while(cin &gt;&gt; x)"></a>标准写法：<code>while(cin &gt;&gt; x)</code></h4><ul>
+<li>底层原理：<code>&gt;&gt;</code>运算符返回istream对象，istream类重载了<code>operator bool</code>，流无效&#x2F;结束时返回false</li>
+<li>结束触发条件：<ol>
+<li>键盘输入：<strong>单独一行输入Ctrl+Z</strong>，标记输入流结束</li>
+<li>文件输入：读取到文件末尾（EOF），流自动标记为结束</li>
+</ol>
+</li>
+<li>扩展：可通过重载<code>operator&gt;&gt;</code>和<code>operator bool</code>实现自定义流的结束判断</li>
+</ul>
+<blockquote>
+<h5 id="1-变量引用的本质"><a href="#1-变量引用的本质" class="headerlink" title="1. 变量引用的本质"></a>1. 变量引用的本质</h5><ul>
+<li><strong>地址传递</strong>：<code>int &amp;n</code> 传入的是内存地址。函数获得了修改 <code>n1</code>、<code>n2</code> 的<strong>权限</strong>，但并不具备<strong>预知</strong>未来输入内容的能力。</li>
+<li><strong>初始值陷阱</strong>：在执行 <code>cin &gt;&gt; n</code> 这一行指令之前，<code>n</code> 指向的内存空间里存放的是<strong>旧数据</strong>（上一次循环留下的值或随机值）。</li>
+</ul>
+<h5 id="2-旧版逻辑失效原因：时序错位"><a href="#2-旧版逻辑失效原因：时序错位" class="headerlink" title="2. 旧版逻辑失效原因：时序错位"></a>2. 旧版逻辑失效原因：时序错位</h5><p>C++</p>
+<pre><code class="hljs scss">&gt;<span class="hljs-built_in">if</span>(n != -<span class="hljs-number">1</span>)  <span class="hljs-comment">// 步骤 A：判断旧数据</span>
+   cin &gt;&gt; n; <span class="hljs-comment">// 步骤 B：覆盖新数据</span></code></pre>
+
+<ul>
+<li><strong>逻辑断层</strong>：当输入 <code>-1</code> 时，由于步骤 A 使用的是旧值（非 <code>-1</code>），程序会执行步骤 B 将 <code>-1</code> 读入内存。但此时判断已经结束，<code>else</code> 分支里的 <code>stop = true</code> 无法被触发。</li>
+<li><strong>滞后效应</strong>：<code>stop</code> 标志位的更新比输入流的变化<strong>慢了一个周期</strong>。</li>
+</ul>
+<h5 id="3-链式调用的“惯性”与“熔断”"><a href="#3-链式调用的“惯性”与“熔断”" class="headerlink" title="3. 链式调用的“惯性”与“熔断”"></a>3. 链式调用的“惯性”与“熔断”</h5><p>在 <code>while(m &gt;&gt; n1 &gt;&gt; n2)</code> 执行时：</p>
+<ul>
+<li><strong>惯性读取</strong>：读入 <code>n1 = -1</code> 后，因为 <code>stop</code> 仍为 <code>false</code>，程序会顺着指令链继续执行 <code>m &gt;&gt; n2</code>。</li>
+<li><strong>输出溢出</strong>：当这一轮 <code>while</code> 条件执行完毕时，<code>n1</code> 和 <code>n2</code> 都已被新值覆盖，随后被 <code>cout</code> 打印，导致输出了本该拦截的 <code>-1</code> 和随后的数字。</li>
+</ul>
+<h5 id="4-正确的逻辑构造：先做后看"><a href="#4-正确的逻辑构造：先做后看" class="headerlink" title="4. 正确的逻辑构造：先做后看"></a>4. 正确的逻辑构造：先做后看</h5><p>严谨的实现必须确保：<strong>修改动作</strong>发生在<strong>状态判定</strong>之前。</p>
+<ul>
+<li><strong>逻辑顺序</strong>：</li>
+</ul>
+<ol>
+<li><strong>检查熔断</strong>：<code>if(stop) return *this;</code>（若前一步已停止，立即拦截）。</li>
+<li><strong>执行修改</strong>：<code>cin &gt;&gt; n;</code>（更新内存中的值）。</li>
+<li><strong>同步状态</strong>：<code>if(n == -1) stop = true;</code>（根据刚读入的值更新标志）。</li>
+</ol>
+</blockquote>
+<h3 id="3-istream核心成员函数（高频考点）"><a href="#3-istream核心成员函数（高频考点）" class="headerlink" title="3. istream核心成员函数（高频考点）"></a>3. istream核心成员函数（高频考点）</h3><h4 id="（1）getline：按行读取字符串"><a href="#（1）getline：按行读取字符串" class="headerlink" title="（1）getline：按行读取字符串"></a>（1）getline：按行读取字符串</h4><h5 id="函数原型"><a href="#函数原型" class="headerlink" title="函数原型"></a>函数原型</h5><pre><code class="hljs cpp"><span class="hljs-comment">// 读到换行符\n停止</span>
+<span class="hljs-function">istream&amp; <span class="hljs-title">getline</span><span class="hljs-params">(<span class="hljs-type">char</span>* buf, <span class="hljs-type">int</span> bufSize)</span></span>;
+<span class="hljs-comment">// 读到自定义分隔符delim停止</span>
+<span class="hljs-function">istream&amp; <span class="hljs-title">getline</span><span class="hljs-params">(<span class="hljs-type">char</span>* buf, <span class="hljs-type">int</span> bufSize, <span class="hljs-type">char</span> delim)</span></span>;</code></pre>
+<h5 id="核心规则"><a href="#核心规则" class="headerlink" title="核心规则"></a>核心规则</h5><ul>
+<li>最多读取<code>bufSize-1</code>个字符，<strong>自动在缓冲区末尾添加字符串结束符’\0’</strong></li>
+<li>分隔符<code>\n</code>&#x2F;<code>delim</code>会从流中移除，但<strong>不会存入缓冲区</strong></li>
+<li>若读取字符数超过bufSize，会置位流的<code>failbit</code>，<strong>后续所有读操作全部失效</strong></li>
+</ul>
+<h5 id="错误判断：if-cin-getline-→-读取失败-流结束时返回true"><a href="#错误判断：if-cin-getline-→-读取失败-流结束时返回true" class="headerlink" title="错误判断：if(!cin.getline(...)) → 读取失败&#x2F;流结束时返回true"></a>错误判断：<code>if(!cin.getline(...))</code> → 读取失败&#x2F;流结束时返回true</h5><h4 id="（2）其他常用成员函数"><a href="#（2）其他常用成员函数" class="headerlink" title="（2）其他常用成员函数"></a>（2）其他常用成员函数</h4><table>
+<thead>
+<tr>
+<th>函数</th>
+<th>核心功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>bool eof();</code></td>
+<td>判断输入流是否到达文件末尾（EOF）</td>
+</tr>
+<tr>
+<td><code>int peek();</code></td>
+<td>返回流中下一个字符，<strong>不从流中移除</strong>（仅“偷窥”）</td>
+</tr>
+<tr>
+<td><code>istream&amp; putback(char c);</code></td>
+<td>将字符c放回输入流的开头</td>
+</tr>
+<tr>
+<td><code>istream&amp; ignore(int n=1, int delim=EOF);</code></td>
+<td>跳过流中最多n个字符，遇到delim提前停止</td>
+</tr>
+</tbody></table>
+<h4 id="（3）getline高频坑点"><a href="#（3）getline高频坑点" class="headerlink" title="（3）getline高频坑点"></a>（3）getline高频坑点</h4><p><code>cin &gt;&gt; x</code> 读取完成后，会在流中残留换行符<code>\n</code>，后续调用<code>getline</code>会直接读取空行，需先用<code>ignore()</code>清除残留换行。</p>
+<hr>
+<h2 id="三、流操纵算子（格式化输入输出）"><a href="#三、流操纵算子（格式化输入输出）" class="headerlink" title="三、流操纵算子（格式化输入输出）"></a>三、流操纵算子（格式化输入输出）</h2><blockquote>
+<p>必须包含头文件：<code>&lt;iomanip&gt;</code></p>
+</blockquote>
+<h3 id="1-整数基数控制"><a href="#1-整数基数控制" class="headerlink" title="1. 整数基数控制"></a>1. 整数基数控制</h3><table>
+<thead>
+<tr>
+<th>算子</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>dec</td>
+<td>十进制输出（默认格式）</td>
+</tr>
+<tr>
+<td>oct</td>
+<td>八进制输出</td>
+</tr>
+<tr>
+<td>hex</td>
+<td>十六进制输出</td>
+</tr>
+<tr>
+<td>setbase(n)</td>
+<td>指定输出基数（仅支持8&#x2F;10&#x2F;16）</td>
+</tr>
+</tbody></table>
+<h3 id="2-浮点数精度控制（核心考点）"><a href="#2-浮点数精度控制（核心考点）" class="headerlink" title="2. 浮点数精度控制（核心考点）"></a>2. 浮点数精度控制（核心考点）</h3><h4 id="核心工具"><a href="#核心工具" class="headerlink" title="核心工具"></a>核心工具</h4><ul>
+<li>成员函数：<code>cout.precision(n);</code></li>
+<li>流操纵算子：<code>cout &lt;&lt; setprecision(n);</code></li>
+<li>两者功能完全一致，算子支持链式连续输出</li>
+</ul>
+<h4 id="精度含义规则（与输出格式强绑定）"><a href="#精度含义规则（与输出格式强绑定）" class="headerlink" title="精度含义规则（与输出格式强绑定）"></a>精度含义规则（与输出格式强绑定）</h4><table>
+<thead>
+<tr>
+<th>输出格式</th>
+<th>控制算子</th>
+<th>setprecision(n)的含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>默认格式（defaultfloat）</td>
+<td>无&#x2F;resetiosflags</td>
+<td>n &#x3D; 总有效数字位数</td>
+</tr>
+<tr>
+<td>定点格式（fixed）</td>
+<td>setiosflags(ios::fixed) &#x2F; fixed</td>
+<td>n &#x3D; 小数点后保留位数</td>
+</tr>
+<tr>
+<td>科学计数格式（scientific）</td>
+<td>setiosflags(ios::scientific) &#x2F; scientific</td>
+<td>n &#x3D; 小数点后保留位数</td>
+</tr>
+</tbody></table>
+<h4 id="核心规则-1"><a href="#核心规则-1" class="headerlink" title="核心规则"></a>核心规则</h4><ul>
+<li>小数截短显示时，<strong>自动执行四舍五入</strong></li>
+<li>格式取消：<code>resetiosflags(ios::fixed/ios::scientific)</code></li>
+</ul>
+<h3 id="3-域宽设置（setw-width）"><a href="#3-域宽设置（setw-width）" class="headerlink" title="3. 域宽设置（setw &#x2F; width）"></a>3. 域宽设置（setw &#x2F; width）</h3><h4 id="核心用法"><a href="#核心用法" class="headerlink" title="核心用法"></a>核心用法</h4><ul>
+<li>成员函数：<code>cin.width(n);</code> &#x2F; <code>cout.width(n);</code></li>
+<li>流操纵算子：<code>cin &gt;&gt; setw(n);</code> &#x2F; <code>cout &lt;&lt; setw(n);</code></li>
+</ul>
+<h4 id="核心规则-2"><a href="#核心规则-2" class="headerlink" title="核心规则"></a>核心规则</h4><ul>
+<li>域宽设置<strong>仅对下一次读写操作有效</strong>，每次读写前必须重新设置</li>
+<li>输入时：最多读取<code>n-1</code>个字符（预留<code>\0</code>的存储位置）</li>
+<li>无参<code>width()</code>：返回当前的域宽值</li>
+</ul>
+<h3 id="4-用户自定义流操纵算子"><a href="#4-用户自定义流操纵算子" class="headerlink" title="4. 用户自定义流操纵算子"></a>4. 用户自定义流操纵算子</h3><h4 id="定义规则"><a href="#定义规则" class="headerlink" title="定义规则"></a>定义规则</h4><p>返回值和参数均为<code>ostream&amp;</code>的函数，示例：</p>
+<pre><code class="hljs cpp"><span class="hljs-comment">// 自定义制表符算子</span>
+<span class="hljs-function">ostream&amp; <span class="hljs-title">tab</span><span class="hljs-params">(ostream&amp; output)</span></span>&#123;
+    <span class="hljs-keyword">return</span> output &lt;&lt; <span class="hljs-string">&#x27;\t&#x27;</span>;
+&#125;
+<span class="hljs-comment">// 使用方式：cout &lt;&lt; &quot;a&quot; &lt;&lt; tab &lt;&lt; &quot;b&quot; &lt;&lt; endl;</span></code></pre>
+<h4 id="底层原理"><a href="#底层原理" class="headerlink" title="底层原理"></a>底层原理</h4><p>ostream重载了<code>&lt;&lt;</code>运算符，支持接收函数指针，会自动调用传入的函数，并将流对象本身作为参数传入。</p>
+<hr>
+<h2 id="四、文件IO操作（核心应用）"><a href="#四、文件IO操作（核心应用）" class="headerlink" title="四、文件IO操作（核心应用）"></a>四、文件IO操作（核心应用）</h2><blockquote>
+<p>必须包含头文件：<code>&lt;fstream&gt;</code></p>
+</blockquote>
+<h3 id="1-文件打开与关闭"><a href="#1-文件打开与关闭" class="headerlink" title="1. 文件打开与关闭"></a>1. 文件打开与关闭</h3><h4 id="（1）两种打开方式"><a href="#（1）两种打开方式" class="headerlink" title="（1）两种打开方式"></a>（1）两种打开方式</h4><table>
+<thead>
+<tr>
+<th>方式</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>构造对象时直接打开</td>
+<td><code>ofstream outFile(&quot;test.txt&quot;, ios::out|ios::binary);</code></td>
+</tr>
+<tr>
+<td>先创建对象，再用open打开</td>
+<td><code>ofstream fout; fout.open(&quot;test.txt&quot;, ios::out);</code></td>
+</tr>
+</tbody></table>
+<h4 id="（2）常用打开模式"><a href="#（2）常用打开模式" class="headerlink" title="（2）常用打开模式"></a>（2）常用打开模式</h4><table>
+<thead>
+<tr>
+<th>模式</th>
+<th>核心功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>ios::in</td>
+<td>只读模式打开（ifstream默认模式）</td>
+</tr>
+<tr>
+<td>ios::out</td>
+<td>只写模式打开，<strong>清空原有内容</strong>（ofstream默认模式）</td>
+</tr>
+<tr>
+<td>ios::app</td>
+<td>追加模式，保留原有内容，始终在文件尾部写入</td>
+</tr>
+<tr>
+<td>ios::ate</td>
+<td>打开后文件指针定位到尾部，可在文件任意位置写入</td>
+</tr>
+<tr>
+<td>ios::binary</td>
+<td>二进制模式打开，不执行换行符自动转换</td>
+</tr>
+</tbody></table>
+<h4 id="（3）打开成功判断"><a href="#（3）打开成功判断" class="headerlink" title="（3）打开成功判断"></a>（3）打开成功判断</h4><pre><code class="hljs cpp"><span class="hljs-keyword">if</span>(!fout)&#123; <span class="hljs-comment">// 流对象返回false，代表打开失败</span>
+    cerr &lt;&lt; <span class="hljs-string">&quot;文件打开失败！&quot;</span> &lt;&lt; endl;
+    <span class="hljs-keyword">return</span> <span class="hljs-number">1</span>;
+&#125;</code></pre>
+
+<h4 id="（4）文件关闭"><a href="#（4）文件关闭" class="headerlink" title="（4）文件关闭"></a>（4）文件关闭</h4><p>文件使用完毕必须显式关闭，释放系统资源：</p>
+<pre><code class="hljs cpp">fin.<span class="hljs-built_in">close</span>();
+fout.<span class="hljs-built_in">close</span>();</code></pre>
+
+<h3 id="2-文件读写指针操作"><a href="#2-文件读写指针操作" class="headerlink" title="2. 文件读写指针操作"></a>2. 文件读写指针操作</h3><table>
+<thead>
+<tr>
+<th>指针类型</th>
+<th>适用流</th>
+<th>核心函数</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>读指针</td>
+<td>ifstream&#x2F;fstream</td>
+<td><code>tellg()</code></td>
+<td>获取读指针当前位置（字节数）</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td><code>seekg(偏移量, 基准位置)</code></td>
+<td>移动读指针到指定位置</td>
+</tr>
+<tr>
+<td>写指针</td>
+<td>ofstream&#x2F;fstream</td>
+<td><code>tellp()</code></td>
+<td>获取写指针当前位置（字节数）</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td><code>seekp(偏移量, 基准位置)</code></td>
+<td>移动写指针到指定位置</td>
+</tr>
+</tbody></table>
+<h4 id="基准位置参数"><a href="#基准位置参数" class="headerlink" title="基准位置参数"></a>基准位置参数</h4><ul>
+<li><code>ios::beg</code>：文件开头（默认基准）</li>
+<li><code>ios::cur</code>：指针当前位置</li>
+<li><code>ios::end</code>：文件尾部</li>
+<li>偏移量支持负数（代表向前移动）</li>
+</ul>
+<h3 id="3-文本文件读写"><a href="#3-文本文件读写" class="headerlink" title="3. 文本文件读写"></a>3. 文本文件读写</h3><ul>
+<li>文本文件流的用法与cin&#x2F;cout完全一致，所有流操纵算子、&gt;&gt;&#x2F;&lt;&lt;运算符均适用</li>
+<li>典型场景：从文本文件读取数据、处理后写入另一个文本文件（如整数排序、文本拷贝）</li>
+</ul>
+<h3 id="4-二进制文件读写（核心考点）"><a href="#4-二进制文件读写（核心考点）" class="headerlink" title="4. 二进制文件读写（核心考点）"></a>4. 二进制文件读写（核心考点）</h3><h4 id="核心函数"><a href="#核心函数" class="headerlink" title="核心函数"></a>核心函数</h4><table>
+<thead>
+<tr>
+<th>函数</th>
+<th>标准用法</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>write（写）</td>
+<td><code>fout.write((const char*)&amp;变量地址, sizeof(变量类型));</code></td>
+</tr>
+<tr>
+<td>read（读）</td>
+<td><code>fin.read((char*)&amp;变量地址, sizeof(变量类型));</code></td>
+</tr>
+</tbody></table>
+<h4 id="辅助函数"><a href="#辅助函数" class="headerlink" title="辅助函数"></a>辅助函数</h4><p><code>gcount()</code>：返回最近一次<code>read</code>操作实际读取的字节数</p>
+<h4 id="核心特性"><a href="#核心特性" class="headerlink" title="核心特性"></a>核心特性</h4><ul>
+<li>直接读写内存中的二进制数据，无格式转换，记事本打开为乱码</li>
+<li>适用于结构体&#x2F;类对象的批量读写，效率高、无精度损失</li>
+<li>必须配合<code>ios::binary</code>模式打开文件</li>
+</ul>
+<h3 id="5-文本文件-vs-二进制文件（高频考点）"><a href="#5-文本文件-vs-二进制文件（高频考点）" class="headerlink" title="5. 文本文件 vs 二进制文件（高频考点）"></a>5. 文本文件 vs 二进制文件（高频考点）</h3><h4 id="换行符系统差异"><a href="#换行符系统差异" class="headerlink" title="换行符系统差异"></a>换行符系统差异</h4><table>
+<thead>
+<tr>
+<th>系统</th>
+<th>换行符</th>
+<th>ASCII码</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Linux&#x2F;Unix</td>
+<td><code>\n</code></td>
+<td>0x0a</td>
+</tr>
+<tr>
+<td>Windows</td>
+<td><code>\r\n</code></td>
+<td>0x0d 0x0a</td>
+</tr>
+<tr>
+<td>Mac OS</td>
+<td><code>\r</code></td>
+<td>0x0d</td>
+</tr>
+</tbody></table>
+<h4 id="打开模式差异"><a href="#打开模式差异" class="headerlink" title="打开模式差异"></a>打开模式差异</h4><table>
+<thead>
+<tr>
+<th>系统</th>
+<th>文本模式（无ios::binary）</th>
+<th>二进制模式（ios::binary）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Linux&#x2F;Unix</td>
+<td>无任何转换，与二进制模式无区别</td>
+<td>无任何转换，按原始字节读写</td>
+</tr>
+<tr>
+<td>Windows</td>
+<td>读：自动将<code>\r\n</code>转为<code>\n</code>（少读1字节）<br>写：自动将<code>\n</code>转为<code>\r\n</code>（多写1字节）</td>
+<td>无任何转换，按原始字节读写</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="五、注意点"><a href="#五、注意点" class="headerlink" title="五、注意点"></a>五、注意点</h2><ol>
+<li><strong>getline坑点</strong>：<code>cin &gt;&gt;</code>后残留的<code>\n</code>会导致getline直接读取空行，需用<code>cin.ignore()</code>清除换行符</li>
+<li><strong>setw单次有效</strong>：域宽设置仅对下一次读写生效，每次使用前必须重新设置</li>
+<li><strong>流failbit置位</strong>：getline读取溢出、读取出错会置位failbit，后续所有流操作全部失效，需用<code>cin.clear()</code>重置流状态</li>
+<li><strong>Windows换行转换</strong>：二进制读写必须添加<code>ios::binary</code>，否则会因换行符自动转换导致文件读写异常</li>
+<li><strong>文件关闭要求</strong>：文件打开使用后必须显式调用<code>close()</code>，否则会导致资源泄漏，其他程序无法操作该文件</li>
+<li><strong>cerr不可重定向</strong>：错误信息必须用cerr输出，避免cout重定向后，错误信息无法在屏幕显示</li>
+<li><strong>二进制读写强制转换</strong>：write&#x2F;read的第一个参数必须强制转为<code>char*</code>&#x2F;<code>const char*</code>，否则会编译报错</li>
+</ol>
+
+  </div>
+
+  
+  <div class="post-copyright animate-entry animate-delay-300">
+    <p><strong>本文作者：</strong>flowwalker</p>
+    <p><strong>本文链接：</strong><a href="/coding-notes-blog/posts/a1e2/">/coding-notes-blog/posts/a1e2/</a></p>
+    <p><strong>版权声明：</strong>本文采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> 许可协议</p>
+  </div>
+  
+</article>
+
+
+<nav class="post-navigation animate-entry animate-delay-300">
+  
+    <a href="/coding-notes-blog/posts/88d0/" class="post-nav-item prev" title="多态与虚函数">
+      <span class="nav-arrow">←</span>
+      <span class="nav-text">多态与虚函数</span>
+    </a>
+  
+  
+    <a href="/coding-notes-blog/posts/ed2e/" class="post-nav-item next" title="继承与派生">
+      <span class="nav-text">继承与派生</span>
+      <span class="nav-arrow">→</span>
+    </a>
+  
+</nav>
+
+
+
+
+
+      </div>
+      <footer class="site-footer">
+  <div class="footer-inner">
+    
+    <div class="footer-copyright">
+      &copy; 2026–2026 flowwalker
+    </div>
+    
+    
+    <div class="footer-powered">
+      Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <span>Dawn</span>
+    </div>
+    
+  </div>
+</footer>
+
+
+    </main>
+  </div>
+  <button class="sidebar-expand-btn" id="sidebar-expand-btn" title="展开侧边栏" aria-label="展开侧边栏">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+  </button>
+  <div class="floating-actions">
+    
+    <div class="back-to-top-wrap" id="back-to-top-wrap">
+      <svg class="progress-ring" width="52" height="52" viewBox="0 0 52 52">
+        <circle class="progress-ring-bg" cx="26" cy="26" r="23"/>
+        <circle class="progress-ring-fill" id="progress-ring-fill" cx="26" cy="26" r="23"/>
+      </svg>
+      <button class="back-to-top" id="back-to-top" aria-label="回到顶部">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+      </button>
+    </div>
+    
+    <button class="search-toggle-float" id="search-toggle-btn" title="搜索" aria-label="搜索">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    </button>
+    
+    <a href="/coding-notes-blog/" class="floating-home" aria-label="回到主页" title="回到主页">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    </a>
+    
+    
+    <button class="dark-toggle-float" id="dark-toggle-btn" title="暗色模式" aria-label="暗色模式">
+      <svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    </button>
+    
+    
+    <button class="immersive-toggle" id="immersive-toggle-btn" title="沉浸式阅读" aria-label="沉浸式阅读">
+      <svg class="icon-enter" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
+      <svg class="icon-exit" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 8 3 3 8 3"/><polyline points="20 16 21 21 16 21"/><line x1="14" y1="14" x2="21" y2="21"/><line x1="3" y1="3" x2="10" y2="10"/></svg>
+    </button>
+    
+  </div>
+  <div class="search-overlay" id="search-overlay">
+    <div class="search-modal">
+      <div class="search-modal-header">
+        <input type="text" id="search-input" class="search-input" placeholder="输入关键词搜索文章..." autocomplete="off">
+        <button class="search-close-btn" id="search-close-btn" aria-label="关闭搜索">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="search-results" id="search-results"></div>
+    </div>
+  </div>
+  <script>
+(function() {
+  var STORAGE_KEY = 'dawn-theme';
+  var html = document.documentElement;
+
+  function getLabel(dark) {
+    return dark ? '亮色模式' : '暗色模式';
+  }
+
+  function updateUI(dark) {
+    var btn = document.getElementById('dark-toggle-btn');
+    if (!btn) return;
+    btn.setAttribute('title', getLabel(dark));
+    btn.setAttribute('aria-label', getLabel(dark));
+  }
+
+  var saved = localStorage.getItem(STORAGE_KEY);
+  if (saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+    html.classList.add('dark');
+    updateUI(true);
+  } else {
+    html.classList.remove('dark');
+    updateUI(false);
+  }
+
+  function setTheme(dark) {
+    if (dark) {
+      html.classList.add('dark');
+    } else {
+      html.classList.remove('dark');
+    }
+    localStorage.setItem(STORAGE_KEY, dark ? 'dark' : 'light');
+    updateUI(dark);
+    updateGiscus(dark);
+  }
+
+  function updateGiscus(dark) {
+    var frame = document.querySelector('.giscus-frame');
+    if (frame) {
+      frame.contentWindow.postMessage({
+        giscus: { setConfig: { theme: dark ? 'dark' : 'light' } }
+      }, 'https://giscus.app');
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    var btn = document.getElementById('dark-toggle-btn');
+    if (btn) {
+      btn.addEventListener('click', function() {
+        setTheme(!html.classList.contains('dark'));
+      });
+    }
+  });
+
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
+    if (localStorage.getItem(STORAGE_KEY) === null) {
+      setTheme(e.matches);
+    }
+  });
+})();
+</script>
+
+  <script src="/coding-notes-blog/js/main.js"></script>
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        processEscapes: true
+      },
+      options: {
+        ignoreHtmlClass: 'no-mathjax',
+        processHtmlClass: 'mathjax-process'
+      }
+    };
+  }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+
+
+
+</body>
+</html>

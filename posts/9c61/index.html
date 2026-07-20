@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="">
+<head>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>类和对象进阶 | 码艺Blog</title>
+
+<meta name="description" content="flowwalker 的编程学习与实践笔记">
+
+
+<meta name="author" content="flowwalker">
+<link rel="alternate" href="/coding-notes-blog/atom.xml" title="码艺Blog" type="application/atom+xml">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="/coding-notes-blog/css/style.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+
+
+<link rel="icon" href="/coding-notes-blog/img/favicon.png">
+
+<script>
+(function() {
+  var saved = localStorage.getItem('dawn-theme');
+  if (saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+    document.documentElement.classList.add('dark');
+  }
+})();
+</script>
+
+
+<meta name="generator" content="Hexo 8.1.2"></head>
+<body>
+  <div class="site-wrapper">
+    <aside class="site-sidebar" id="sidebar">
+  <button class="sidebar-collapse-btn" id="sidebar-collapse-btn" title="折叠侧边栏" aria-label="折叠侧边栏">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+  </button>
+  <div class="sidebar-inner">
+    
+    
+    <div class="sidebar-toc sidebar-toc--full">
+      <div class="sidebar-toc-header">
+        <h3 class="sidebar-toc-title">目录</h3>
+        <button class="toc-expand-all-btn" id="toc-expand-all-btn" title="展开全部目录" aria-label="展开全部目录">
+          <svg class="toc-expand-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+      </div>
+      <div class="sidebar-toc-content">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%B1%BB%E5%92%8C%E5%AF%B9%E8%B1%A1%E8%BF%9B%E9%98%B6"><span class="toc-text">类和对象进阶</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9B%AE%E5%BD%95"><span class="toc-text">目录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0-%E5%A4%8D%E5%88%B6%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0-%E6%9E%90%E6%9E%84%E5%87%BD%E6%95%B0"><span class="toc-text">构造函数&amp;复制构造函数&amp;析构函数</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0"><span class="toc-text">构造函数</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E8%8C%83%E5%BC%8F"><span class="toc-text">基本范式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%9A%90%E5%BC%8F%E8%BD%AC%E6%8D%A2"><span class="toc-text">隐式转换</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0"><span class="toc-text">类型转换构造函数</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%8D%E5%88%B6%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0"><span class="toc-text">复制构造函数</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%8C%83%E5%BC%8F"><span class="toc-text">范式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%87%8D%E7%82%B9%EF%BC%9A%E8%A2%AB%E8%B0%83%E7%94%A8%E7%9A%84%E4%B8%89%E7%A7%8D%E6%83%85%E5%86%B5"><span class="toc-text">重点：被调用的三种情况</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-%E5%BD%93%E7%94%A8%E4%B8%80%E4%B8%AA%E5%AF%B9%E8%B1%A1%E5%8E%BB%E5%88%9D%E5%A7%8B%E5%8C%96%E5%90%8C%E7%B1%BB%E7%9A%84%E5%8F%A6%E4%B8%80%E4%B8%AA%E5%AF%B9%E8%B1%A1"><span class="toc-text">1.当用一个对象去初始化同类的另一个对象</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-%E7%B1%BBA%E7%9A%84%E5%AF%B9%E8%B1%A1%E4%BD%9C%E4%B8%BA%E6%9F%90%E4%B8%AA%E5%87%BD%E6%95%B0%E7%9A%84%E5%8F%82%E6%95%B0"><span class="toc-text">2.类A的对象作为某个函数的参数</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3-%E7%B1%BBA%E7%9A%84%E5%AF%B9%E8%B1%A1%E4%BD%9C%E4%B8%BA%E6%9F%90%E4%B8%AA%E5%87%BD%E6%95%B0%E7%9A%84%E8%BF%94%E5%9B%9E%E5%80%BC"><span class="toc-text">3.类A的对象作为某个函数的返回值</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9E%90%E6%9E%84%E5%87%BD%E6%95%B0"><span class="toc-text">析构函数</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%8C%83%E5%BC%8F-1"><span class="toc-text">范式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BD%9C%E7%94%A8%E6%83%85%E5%86%B5"><span class="toc-text">作用情况</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%87%8D%E7%82%B9%EF%BC%9A%E7%94%9F%E5%AD%98%E5%91%A8%E6%9C%9F"><span class="toc-text">重点：生存周期</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%9D%99%E6%80%81%E6%88%90%E5%91%98-static-%E5%85%B3%E9%94%AE%E5%AD%97"><span class="toc-text">静态成员(static 关键字)</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%8C%83%E5%BC%8F-2"><span class="toc-text">范式</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%85%B6%E4%BB%96%E6%B3%A8%E6%84%8F%E7%82%B9%F0%9F%94%A5%F0%9F%94%A5"><span class="toc-text">其他注意点🔥🔥</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%AE%9E%E6%88%98%E8%8C%83%E4%BE%8B"><span class="toc-text">实战范例</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#this%E6%8C%87%E9%92%88"><span class="toc-text">this指针</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B0%81%E9%97%AD%E7%B1%BB"><span class="toc-text">封闭类</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%88%90%E5%91%98%E5%AF%B9%E8%B1%A1"><span class="toc-text">成员对象</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B0%81%E9%97%AD%E7%B1%BB%E5%9F%BA%E6%9C%AC%E5%AE%9A%E4%B9%89"><span class="toc-text">封闭类基本定义</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BB%8F%E5%85%B8%E7%9A%84%E4%BE%8B%E5%AD%90"><span class="toc-text">经典的例子</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%97%E8%A1%A8"><span class="toc-text">初始化列表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B0%81%E9%97%AD%E7%B1%BB%E4%B8%AD%E6%9E%84%E9%80%A0%E5%92%8C%E6%9E%90%E6%9E%84%E5%87%BD%E6%95%B0%E6%89%A7%E8%A1%8C%E9%A1%BA%E5%BA%8F"><span class="toc-text">封闭类中构造和析构函数执行顺序</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%8B%E5%85%83"><span class="toc-text">友元</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8F%8B%E5%85%83%E5%87%BD%E6%95%B0"><span class="toc-text">友元函数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8F%8B%E5%85%83%E7%B1%BB"><span class="toc-text">友元类</span></a></li></ol></li></ol></li></ol></li></ol>
+      </div>
+    </div>
+    
+  </div>
+</aside>
+
+    <main class="main-content">
+      <header class="site-header">
+  <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+  <nav class="header-nav animate-stagger-50">
+    
+      <a href="/coding-notes-blog/" class="nav-item animate-entry">首页</a>
+    
+      <a href="/coding-notes-blog/about/" class="nav-item animate-entry">此地一二</a>
+    
+      <a href="/coding-notes-blog/archives/" class="nav-item animate-entry">时光长河</a>
+    
+      <a href="/coding-notes-blog/categories/" class="nav-item animate-entry">卷宗总览</a>
+    
+      <a href="/coding-notes-blog/tags/" class="nav-item animate-entry">签注归集</a>
+    
+      <a href="/coding-notes-blog/links/" class="nav-item animate-entry">四处仙山</a>
+    
+      <a href="https://flowwalker.top" class="nav-item animate-entry">归返本山</a>
+    
+  </nav>
+</header>
+
+      <div class="content-area">
+        <article class="post-full">
+  <header class="post-header">
+    <h1 class="post-title animate-entry animate-delay-0">类和对象进阶</h1>
+    <div class="post-meta animate-entry animate-delay-80">
+      
+      <span class="meta-item">
+        <i class="fa fa-calendar"></i>
+        <time datetime="2026-03-12">发布于 2026-03-12</time>
+      </span>
+      
+      
+      <span class="meta-item">
+        <i class="fa fa-edit"></i>
+        <time datetime="2026-07-20">更新于 2026-07-20</time>
+      </span>
+      
+      
+      <span class="meta-item">
+        <i class="fa fa-folder"></i>
+        
+          <a href="/coding-notes-blog/categories/%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%AC%94%E8%AE%B0-c-OOP/">程序设计笔记--c++OOP</a>
+        
+      </span>
+      
+    </div>
+    
+    <div class="post-tags animate-entry animate-delay-80">
+      
+        <a href="/coding-notes-blog/tags/OOP/" class="tag-badge">#OOP</a>
+      
+        <a href="/coding-notes-blog/tags/%E7%A8%8B%E8%AE%BE/" class="tag-badge">#程设</a>
+      
+        <a href="/coding-notes-blog/tags/c/" class="tag-badge">#c++</a>
+      
+    </div>
+    
+  </header>
+
+  
+  <div class="post-cover animate-entry animate-delay-80">
+    <img src="https://gcore.jsdelivr.net/gh/flowwalker/PicGo-based-image-host@main/ec0280b7e0fc80a1de7df677bc760e88.jpg" alt="类和对象进阶">
+  </div>
+  
+
+  <div class="post-content">
+    <h1 id="类和对象进阶"><a href="#类和对象进阶" class="headerlink" title="类和对象进阶"></a>类和对象进阶</h1><h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ul>
+<li>🚀<a href="#%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0%E5%A4%8D%E5%88%B6%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0%E6%9E%90%E6%9E%84%E5%87%BD%E6%95%B0">构造函数&amp;复制构造函数&amp;析构函数</a><ul>
+<li><a href="#%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0">构造函数</a><ul>
+<li><a href="#%E5%9F%BA%E6%9C%AC%E8%8C%83%E5%BC%8F">基本范式</a></li>
+<li><a href="#%E9%9A%90%E5%BC%8F%E8%BD%AC%E6%8D%A2">隐式转换</a></li>
+</ul>
+</li>
+<li><a href="#%E5%A4%8D%E5%88%B6%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0">复制构造函数</a><ul>
+<li><a href="#%E8%8C%83%E5%BC%8F-1">范式</a></li>
+<li><a href="#%E9%87%8D%E7%82%B9%E8%A2%AB%E8%B0%83%E7%94%A8%E7%9A%84%E4%B8%89%E7%A7%8D%E6%83%85%E5%86%B5">重点：被调用的三种情况</a><ul>
+<li><a href="#1%E5%BD%93%E7%94%A8%E4%B8%80%E4%B8%AA%E5%AF%B9%E8%B1%A1%E5%8E%BB%E5%88%9D%E5%A7%8B%E5%8C%96%E5%90%8C%E7%B1%BB%E7%9A%84%E5%8F%A6%E4%B8%80%E4%B8%AA%E5%AF%B9%E8%B1%A1">1.当用一个对象去初始化同类的另一个对象</a></li>
+<li><a href="#2%E7%B1%BBa%E7%9A%84%E5%AF%B9%E8%B1%A1%E4%BD%9C%E4%B8%BA%E6%9F%90%E4%B8%AA%E5%87%BD%E6%95%B0%E7%9A%84%E5%8F%82%E6%95%B0">2.类A的对象作为某个函数的参数</a></li>
+<li><a href="#3%E7%B1%BBa%E7%9A%84%E5%AF%B9%E8%B1%A1%E4%BD%9C%E4%B8%BA%E6%9F%90%E4%B8%AA%E5%87%BD%E6%95%B0%E7%9A%84%E8%BF%94%E5%9B%9E%E5%80%BC">3.类A的对象作为某个函数的返回值</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#%E6%9E%90%E6%9E%84%E5%87%BD%E6%95%B0">析构函数</a><ul>
+<li><a href="#%E8%8C%83%E5%BC%8F-2">范式</a></li>
+<li><a href="#%E4%BD%9C%E7%94%A8%E6%83%85%E5%86%B5">作用情况</a></li>
+<li><a href="#%E9%87%8D%E7%82%B9%E7%94%9F%E5%AD%98%E5%91%A8%E6%9C%9F">重点：生存周期</a></li>
+<li><a href="#%E9%9D%99%E6%80%81%E6%88%90%E5%91%98static-%E5%85%B3%E9%94%AE%E5%AD%97">静态成员(static 关键字)</a><ul>
+<li><a href="#%E8%8C%83%E5%BC%8F-3">范式</a></li>
+<li><a href="#%E5%85%B6%E4%BB%96%E6%B3%A8%E6%84%8F%E7%82%B9">其他注意点</a></li>
+<li><a href="#%E5%AE%9E%E6%88%98%E8%8C%83%E4%BE%8B">实战范例</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>🚀<a href="#this%E6%8C%87%E9%92%88">this指针</a></li>
+<li>🚀<a href="#%E5%B0%81%E9%97%AD%E7%B1%BB">封闭类</a><ul>
+<li><p><a href="#%E6%88%90%E5%91%98%E5%AF%B9%E8%B1%A1">成员对象</a></p>
+</li>
+<li><p><a href="#%E5%B0%81%E9%97%AD%E7%B1%BB%E5%9F%BA%E6%9C%AC%E5%AE%9A%E4%B9%89">封闭类基本定义</a></p>
+<ul>
+<li><a href="#%E7%BB%8F%E5%85%B8%E7%9A%84%E4%BE%8B%E5%AD%90">经典的例子</a></li>
+</ul>
+</li>
+<li><p><a href="#%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%97%E8%A1%A8">初始化列表</a></p>
+</li>
+<li><p><a href="#%E5%B0%81%E9%97%AD%E7%B1%BB%E4%B8%AD%E6%9E%84%E9%80%A0%E5%92%8C%E6%9E%90%E6%9E%84%E5%87%BD%E6%95%B0%E6%89%A7%E8%A1%8C%E9%A1%BA%E5%BA%8F">封闭类中构造和析构函数执行顺序</a></p>
+</li>
+<li><p><a href="#%E5%8F%8B%E5%85%83">友元</a></p>
+<ul>
+<li><a href="#%E5%8F%8B%E5%85%83%E5%87%BD%E6%95%B0">友元函数</a></li>
+<li><a href="#%E5%8F%8B%E5%85%83%E7%B1%BB">友元类</a></li>
+</ul>
+<p>**备注：**此处有重要考点：即构造函数、复制构造函数调用顺序（通常 print 测试）</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="构造函数-复制构造函数-析构函数"><a href="#构造函数-复制构造函数-析构函数" class="headerlink" title="构造函数&amp;复制构造函数&amp;析构函数"></a>构造函数&amp;复制构造函数&amp;析构函数</h2><p>⚠️ Tips：</p>
+<ul>
+<li><strong>不定义任何构造函数</strong>（包括<strong>复制构造函数</strong>）的情况下，类会自动生成</li>
+</ul>
+<h3 id="构造函数"><a href="#构造函数" class="headerlink" title="构造函数"></a>构造函数</h3><ul>
+<li><p><strong>函数名与类名相同</strong></p>
+</li>
+<li><p>类生成<strong>必须调用</strong>（<strong>未设计</strong>情况下<strong>自动生成无参构造函数</strong>，<strong>否则不生成</strong>，不一定需要自己写）</p>
+</li>
+<li><p>可以重载（即：一个类可有多个构造函数，编译器自动选择<strong>可行且唯一</strong>的）</p>
+</li>
+<li><p>无返回值 （⚠️ void也不能写！）</p>
+</li>
+<li><p><strong>不分配</strong>空间，<strong>只初始</strong>化空间</p>
+</li>
+<li><p>对象<strong>一旦生成后</strong>，<strong>不能</strong>在其上执行构造函数</p>
+</li>
+<li><p>⚠️private 的构造函数不能用于初始化</p>
+</li>
+<li><p>⚠️无参构造函数，又称为<strong>默认构造函数</strong>（不管是自动生成的，还是人为创立的）</p>
+</li>
+</ul>
+<h4 id="基本范式"><a href="#基本范式" class="headerlink" title="基本范式"></a>基本范式</h4><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Complex</span>&#123;
+<span class="hljs-keyword">private</span>:
+	<span class="hljs-type">double</span> real,imag;
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-comment">// ☀️</span>
+	<span class="hljs-built_in">Complex</span>(<span class="hljs-type">double</span> r,<span class="hljs-type">double</span> i=<span class="hljs-number">0</span>);
+    <span class="hljs-comment">// 若不写，则自动生成无参构造函数</span>
+    <span class="hljs-comment">// 此时并未自动生成无参构造函数！</span>
+
+    <span class="hljs-built_in">Complex</span>(Comlpex c1,Complex c2);
+    <span class="hljs-comment">//构造函数可重载，但是⚠️这个接受双参数，不是*复制*构造函数！（加了 &amp; 也不是）</span>
+    
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">set</span><span class="hljs-params">(<span class="hljs-type">double</span> r,<span class="hljs-type">double</span> i)</span></span>&#123;&#125;
+    <span class="hljs-comment">//不是构造函数！</span>
+&#125;;
+Complex::<span class="hljs-built_in">Complex</span>(<span class="hljs-type">double</span> r,<span class="hljs-type">double</span> i)&#123; <span class="hljs-comment">//这里默认初始值不能再写的否则报错</span>
+ 	real=r; imag=i;
+    <span class="hljs-comment">// 第二个参数默认为0</span>
+&#125;
+
+Complex::<span class="hljs-built_in">Complex</span>(Complex c1,Complex c2)
+&#123;
+    real=c<span class="hljs-number">1.</span>real+c<span class="hljs-number">2.</span>real;
+    imag=c<span class="hljs-number">1.</span>imag+c<span class="hljs-number">2.</span>imag;
+&#125;
+
+Complex c1; <span class="hljs-comment">// error！</span>
+Complex *pc = <span class="hljs-keyword">new</span> Complex; <span class="hljs-comment">// error! 未定义也因为定义其他而不会自动生成无参构造函数</span>
+<span class="hljs-function">Complex <span class="hljs-title">c2</span><span class="hljs-params">(<span class="hljs-number">2</span>)</span></span>; <span class="hljs-comment">// ok</span>
+<span class="hljs-function">Complex <span class="hljs-title">c3</span><span class="hljs-params">(<span class="hljs-number">2</span>,<span class="hljs-number">4</span>)</span></span>; <span class="hljs-comment">// ok</span>
+Complex *pc2 = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Complex</span>(<span class="hljs-number">3</span>,<span class="hljs-number">4</span>) <span class="hljs-comment">// ok</span>
+Complex <span class="hljs-built_in">c4</span>(c2,c3); <span class="hljs-comment">// ok!</span>
+</code></pre>
+
+<h4 id="隐式转换"><a href="#隐式转换" class="headerlink" title="隐式转换"></a>隐式转换</h4><blockquote>
+<p>在有合适的构造函数的情况下,且运行时需要就会自动进行隐式转换</p>
+</blockquote>
+<pre><code class="hljs C++">Complex c1 = <span class="hljs-number">7</span>
+<span class="hljs-comment">//隐式转换 Complex(7) 时调用一次输出，复制构造函数调用（但是不输出）</span>
+<span class="hljs-comment">// 实质：7→隐式构造Complex(7)→调用自动生成的默认复制构造函数来初始化c1</span>
+
+Complex c2=<span class="hljs-built_in">Comlpex</span>(<span class="hljs-number">7</span>)
+<span class="hljs-comment">//生成 Complex(7) 时调用一次普通构造函数输出，然后初始化调用复制构造函数（但是不输出）</span>
+    
+<span class="hljs-comment">// 所以两次都会 &quot;Constuctor called&quot;，结果相同</span>
+   
+Complex c2=c1
+<span class="hljs-comment">// 不调用带参数的构造函数，不输出</span></code></pre>
+
+<p>破案：编译器优化～</p>
+<p>🤨比较奇怪的现象：(有点类似于复制省略)</p>
+<p><img src="https://gcore.jsdelivr.net/gh/flowwalker/PicGo-based-image-host@main/image-20260312204107122.png" alt="image-2026031220410712"></p>
+<p><img src="https://gcore.jsdelivr.net/gh/flowwalker/PicGo-based-image-host@main/image-20260312205156893.png" alt="image-20260312205156893"></p>
+<p><img src="https://gcore.jsdelivr.net/gh/flowwalker/PicGo-based-image-host@main/image-20260312205216895.png" alt="image-20260312205216895"></p>
+<h4 id="类型转换构造函数"><a href="#类型转换构造函数" class="headerlink" title="类型转换构造函数"></a>类型转换构造函数</h4><p><strong>只有一个参数</strong>，参数类型可为多样，能够起到强制类型转换的作用（把数字隐式转换为一个临时对象）</p>
+<p>原因如下：</p>
+<pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Complex</span>&#123;
+<span class="hljs-keyword">public</span>:
+	<span class="hljs-type">double</span> real,imag;
+	<span class="hljs-built_in">Complex</span>(<span class="hljs-type">int</span> i)&#123;...&#125; <span class="hljs-comment">//类型转换构造函数</span>
+	<span class="hljs-built_in">Complex</span>(<span class="hljs-type">double</span> r,<span class="hljs-type">double</span> i)&#123;...&#125;
+&#125;
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;
+	<span class="hljs-function">Complex <span class="hljs-title">c1</span><span class="hljs-params">(<span class="hljs-number">7</span>,<span class="hljs-number">8</span>)</span></span>;
+	Complex c2=<span class="hljs-number">12</span>; <span class="hljs-comment">// 是初始化语句！不是赋值！</span>
+	c1=<span class="hljs-number">9</span>; <span class="hljs-comment">// 9 将被自动创建为一个临时的 Complex 对象 Complex(9)</span>
+	cout&lt;&lt;c<span class="hljs-number">1.</span>real&lt;&lt;<span class="hljs-string">&quot;,&quot;</span>&lt;&lt;c<span class="hljs-number">1.</span>imag&lt;&lt;endl;
+	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+&#125;</code></pre>
+
+<p>🤨 <code>Complex c2=12; // 是初始化语句！不是赋值！</code>会调用复制构造函数吗？</p>
+<blockquote>
+<p>可以采用explicit关键字防止隐式转换（不过vscode好像直接宰了）</p>
+<pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Complex</span>&#123;
+<span class="hljs-keyword">public</span>:
+	<span class="hljs-type">double</span> real,imag;
+	<span class="hljs-function"><span class="hljs-keyword">explicit</span> <span class="hljs-title">Complex</span><span class="hljs-params">(<span class="hljs-type">int</span> i)</span></span>&#123;...&#125; <span class="hljs-comment">//类型转换构造函数</span>
+	<span class="hljs-built_in">Complex</span>(<span class="hljs-type">double</span> r,<span class="hljs-type">double</span> i)&#123;...&#125;
+&#125;
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;
+	<span class="hljs-function">Complex <span class="hljs-title">c1</span><span class="hljs-params">(<span class="hljs-number">7</span>,<span class="hljs-number">8</span>)</span></span>;
+	Complex c2=<span class="hljs-built_in">Complex</span>(<span class="hljs-number">12</span>); 
+	<span class="hljs-comment">// c1=9; //error!</span>
+    	c1=<span class="hljs-built_in">Complex</span>(<span class="hljs-number">9</span>);
+	cout&lt;&lt;c<span class="hljs-number">1.</span>real&lt;&lt;<span class="hljs-string">&quot;,&quot;</span>&lt;&lt;c<span class="hljs-number">1.</span>imag&lt;&lt;endl;
+	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+&#125;</code></pre>
+
+<p><img src="https://gcore.jsdelivr.net/gh/flowwalker/PicGo-based-image-host@main/image-20260312210504664.png" alt="image-20260312210504664"></p>
+</blockquote>
+<blockquote>
+<p>强制复制消除,不调用复制构造函数(优化掉)</p>
+</blockquote>
+<h3 id="复制构造函数"><a href="#复制构造函数" class="headerlink" title="复制构造函数"></a>复制构造函数</h3><p><u>属于构造函数的一种</u>，也称为<strong>拷贝构造函数</strong>，<strong>只有一个参数</strong>，参数类型为<strong>本类的引用</strong></p>
+<ul>
+<li><strong>不编写</strong>则编译器会<strong>自动生成-默认复制构造函数</strong>。（如果<strong>自己编写</strong>了，<strong>默认复制构造函数就不存在了</strong>，而且可以发现自己写的不一定要“复制“）</li>
+</ul>
+<h4 id="范式"><a href="#范式" class="headerlink" title="范式"></a>范式</h4><pre><code class="hljs C++"><span class="hljs-comment">// 第一种</span>
+<span class="hljs-built_in">Complex</span>(<span class="hljs-type">const</span> Complex &amp; a)&#123;&#125;
+
+<span class="hljs-comment">// 第二种</span>
+<span class="hljs-built_in">Complex</span>(Complex &amp; a)&#123;&#125;
+<span class="hljs-comment">// 或者先声明再Complex::Complex()&#123;&#125;亦可</span></code></pre>
+
+<p><strong>注意⚠️：</strong></p>
+<ul>
+<li><p><strong>const版本接收范围更广一些，可以接收const Complex &amp;a 和Complex &amp;a</strong>，而<strong>无const</strong>版本<strong>只</strong>能接收<strong>后者</strong>（因可实现修改，无法保证const传入不被修改）</p>
+</li>
+<li><p><strong>禁止以本类的对象作为唯一参数</strong>，即</p>
+<p>⚠️<code>Complex(Complex c){} \\  ❌error!</code> 因为调用时将生成一份，这一份又要生成一份，这一份又要生成一份…死循环</p>
+</li>
+</ul>
+<blockquote>
+<p>理论上，复制构造函数可以重载并调用最佳匹配，但是一般不建议<br>传统上：</p>
+<pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span>
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">MyClass</span> &#123;
+<span class="hljs-keyword">public</span>:
+ <span class="hljs-built_in">MyClass</span>() = <span class="hljs-keyword">default</span>;
+ <span class="hljs-built_in">MyClass</span>(MyClass&amp;)      &#123; std::cout &lt;&lt; <span class="hljs-string">&quot;non-const lvalue\n&quot;</span>; &#125;
+ <span class="hljs-built_in">MyClass</span>(<span class="hljs-type">const</span> MyClass&amp;)&#123; std::cout &lt;&lt; <span class="hljs-string">&quot;const lvalue\n&quot;</span>; &#125;
+&#125;;
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;
+ MyClass a;
+ <span class="hljs-type">const</span> MyClass b;
+ MyClass c = a;  <span class="hljs-comment">// 非 const 左值 -&gt; 调用 non-const lvalue</span>
+ MyClass d = b;  <span class="hljs-comment">// const 左值 -&gt; 调用 const lvalue</span>
+ MyClass e = <span class="hljs-built_in">MyClass</span>(); <span class="hljs-comment">// 临时对象（右值） -&gt; 调用 const lvalue（C++98/11 都如此,编译器优化可能会产生拷贝消除而不输出）</span>
+&#125;</code></pre>
+<p>输出:</p>
+<pre><code class="hljs txt">non-const lvalue
+const lvalue
+const lvalue</code></pre>
+
+<p>此外，自己编写的复制构造函数并<strong>不一定要做复制操作</strong>，但习惯上还是保持类似于复制操作为佳</p>
+</blockquote>
+<h4 id="重点：被调用的三种情况"><a href="#重点：被调用的三种情况" class="headerlink" title="重点：被调用的三种情况"></a>重点：被调用的三种情况</h4><h5 id="1-当用一个对象去初始化同类的另一个对象"><a href="#1-当用一个对象去初始化同类的另一个对象" class="headerlink" title="1.当用一个对象去初始化同类的另一个对象"></a>1.当用一个对象去初始化同类的另一个对象</h5><pre><code class="hljs c++"><span class="hljs-function">Complex <span class="hljs-title">c2</span><span class="hljs-params">(c1)</span></span>; <span class="hljs-comment">// copy constructor called</span>
+Complex c2=c1; <span class="hljs-comment">// copy constructor called</span>
+
+c1=c2; <span class="hljs-comment">// ❌empty output! 仅仅只是赋值，并未调用复制构造函数！</span></code></pre>
+
+<p><strong>⚠️：对象间用等号赋值不</strong>导致调用复制构造函数</p>
+<h5 id="2-类A的对象作为某个函数的参数"><a href="#2-类A的对象作为某个函数的参数" class="headerlink" title="2.类A的对象作为某个函数的参数"></a>2.类A的对象作为某个函数的参数</h5><p>函数被调用时，将调用复制构造函数</p>
+<pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">A</span>
+&#123;
+	<span class="hljs-keyword">public</span>:
+		<span class="hljs-built_in">A</span>()&#123;&#125;;
+    	<span class="hljs-comment">// ☀️</span>
+		<span class="hljs-built_in">A</span>(<span class="hljs-type">const</span> A &amp;)&#123; cout&lt;&lt;<span class="hljs-string">&quot;copy constructor called!&quot;</span>&lt;&lt;endl;&#125;
+    	<span class="hljs-comment">//也可以A(const A &amp;a)&#123; cout&lt;&lt;&quot;copy constructor called!&quot;&lt;&lt;endl;&#125;</span>
+&#125;;
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">Func</span><span class="hljs-params">(A a)</span></span>&#123;&#125;
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;
+	A a;
+	<span class="hljs-built_in">Func</span>(a);
+	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+&#125;
+<span class="hljs-comment">// 会发现此处的形参不一定等于实参，取决于复制构造函数怎么写</span></code></pre>
+
+<h5 id="3-类A的对象作为某个函数的返回值"><a href="#3-类A的对象作为某个函数的返回值" class="headerlink" title="3.类A的对象作为某个函数的返回值"></a>3.类A的对象作为某个函数的返回值</h5><p>函数返回时，复制构造函数被调用</p>
+<pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">A</span>
+&#123;
+<span class="hljs-keyword">public</span>:
+	<span class="hljs-type">int</span> v;
+	<span class="hljs-built_in">A</span>(<span class="hljs-type">int</span> n) &#123; v = n; &#125;;
+	<span class="hljs-built_in">A</span>(<span class="hljs-type">const</span> A&amp;a) &#123; 
+        v = a.v;
+        cout &lt;&lt; <span class="hljs-string">&quot;Copy constructor called&quot;</span> &lt;&lt;endl;
+	&#125; 
+&#125;;
+<span class="hljs-comment">// ☀️</span>
+<span class="hljs-function">A <span class="hljs-title">Func</span><span class="hljs-params">()</span> </span>&#123; <span class="hljs-function">A <span class="hljs-title">b</span><span class="hljs-params">(<span class="hljs-number">4</span>)</span></span>; <span class="hljs-keyword">return</span> b; &#125;
+<span class="hljs-comment">// 生成Func()调用复制构造函数，其实参来源于b</span>
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>
+<span class="hljs-function"></span>&#123; 
+    cout &lt;&lt; <span class="hljs-built_in">Func</span>().v &lt;&lt; endl;
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>; 
+&#125;
+<span class="hljs-comment">// 此处临时对象在经过现代编译器优化后可能结果有所不同--拷贝消除（但我们默认会调用复制构造函数）</span></code></pre>
+
+<blockquote>
+<p>编译器优化不大同于移动构造函数和复制构造函数</p>
+</blockquote>
+<h3 id="析构函数"><a href="#析构函数" class="headerlink" title="析构函数"></a>析构函数</h3><ul>
+<li><p>函数名即<code>~类名</code></p>
+</li>
+<li><p>一个类最多一个</p>
+</li>
+<li><p>默认自动生成，定义后则不自动生成（<strong>缺省析构函数什么也不做</strong>，最多确认基类的析构函数被调用）</p>
+</li>
+<li><p><strong>对象消亡时自动被调用</strong></p>
+</li>
+<li><p>⚠️<strong>动态分配的构造函数要手动写析构函数</strong></p>
+</li>
+</ul>
+<h4 id="范式-1"><a href="#范式-1" class="headerlink" title="范式"></a>范式</h4><p><code>~类名(){}</code></p>
+<p>或</p>
+<p><code>~类名(); //声明</code></p>
+<p><code>类名::~类名(){} //定义 </code> </p>
+<h4 id="作用情况"><a href="#作用情况" class="headerlink" title="作用情况"></a>作用情况</h4><ol>
+<li><p>delete 触发消亡→析构</p>
+</li>
+<li><p><strong>作用范围结束</strong>触发消亡→析构</p>
+</li>
+</ol>
+<p>  （如：main 函数结束变量消亡、局部范围（如函数和{}）结束局部变量消亡）</p>
+<ol start="3">
+<li><p>作为<strong>函数形参</strong>→函数结尾消亡</p>
+<p>  （注：引用和指针形参不属于对象，消亡对实参对象无影响）</p>
+<blockquote>
+<pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">foo</span><span class="hljs-params">(MyClass obj)</span> </span>&#123; &#125;      <span class="hljs-comment">// obj 是独立对象，函数结束 obj 析构</span>
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">bar</span><span class="hljs-params">(MyClass&amp; ref)</span> </span>&#123; &#125;     <span class="hljs-comment">// ref 只是实参的别名，函数结束&quot;别名&quot;消失</span>
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">baz</span><span class="hljs-params">(MyClass* ptr)</span> </span>&#123; &#125;     <span class="hljs-comment">// ptr 存的是地址，函数结束&quot;地址变量&quot;消失</span></code></pre>
+
+</blockquote>
+</li>
+<li><p>作为函数返回值→return的东西消亡</p>
+</li>
+</ol>
+<h4 id="重点：生存周期"><a href="#重点：生存周期" class="headerlink" title="重点：生存周期"></a>重点：生存周期</h4><p>经典范例1：</p>
+<pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Demo</span> &#123;
+<span class="hljs-keyword">private</span>:
+    <span class="hljs-type">int</span> id;
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-built_in">Demo</span>(<span class="hljs-type">int</span> i) &#123;
+        id = i;
+        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;id=%d, Construct\n&quot;</span>, id);
+    &#125;
+    ~<span class="hljs-built_in">Demo</span>() &#123;
+        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;id=%d, Destruct\n&quot;</span>, id);
+    &#125;
+&#125;;
+
+<span class="hljs-function">Demo <span class="hljs-title">d1</span><span class="hljs-params">(<span class="hljs-number">1</span>)</span></span>;
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">fun</span><span class="hljs-params">()</span> </span>&#123;
+    <span class="hljs-function"><span class="hljs-type">static</span> Demo <span class="hljs-title">d2</span><span class="hljs-params">(<span class="hljs-number">2</span>)</span></span>;
+    <span class="hljs-function">Demo <span class="hljs-title">d3</span><span class="hljs-params">(<span class="hljs-number">3</span>)</span></span>;
+    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;fun \n&quot;</span>);
+&#125;
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;
+    <span class="hljs-function">Demo <span class="hljs-title">d4</span><span class="hljs-params">(<span class="hljs-number">4</span>)</span></span>;
+    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;main \n&quot;</span>);
+    &#123;
+        <span class="hljs-function">Demo <span class="hljs-title">d5</span><span class="hljs-params">(<span class="hljs-number">5</span>)</span></span>;
+    &#125;
+    <span class="hljs-built_in">fun</span>();
+    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;endmain \n&quot;</span>);
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+&#125;</code></pre>
+
+<p>output:</p>
+<pre><code class="hljs text">id=1, Construct
+id=4, Construct
+main
+id=5, Construct
+id=5, Destruct
+id=2, Construct
+id=3, Construct
+fun
+id=3, Destruct
+endmain
+id=4, Destruct
+id=2, Destruct
+id=1, Destruct</code></pre>
+
+
+
+<p>经典范例2：</p>
+<pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span>
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">CMyclass</span> &#123;
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-built_in">CMyclass</span>() &#123;&#125;;
+    <span class="hljs-built_in">CMyclass</span>(CMyclass &amp;c) &#123;
+        cout &lt;&lt; <span class="hljs-string">&quot;copy constructor&quot;</span> &lt;&lt; endl;
+    &#125;
+    ~<span class="hljs-built_in">CMyclass</span>() &#123;
+        cout &lt;&lt; <span class="hljs-string">&quot;destructor&quot;</span> &lt;&lt; endl;
+    &#125;
+&#125;;
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">fun</span><span class="hljs-params">(CMyclass obj_)</span> </span>&#123;
+    cout &lt;&lt; <span class="hljs-string">&quot;fun&quot;</span> &lt;&lt; endl;
+&#125;
+
+CMyclass c;
+
+<span class="hljs-function">CMyclass <span class="hljs-title">Test</span><span class="hljs-params">()</span> </span>&#123;
+    cout &lt;&lt; <span class="hljs-string">&quot;test&quot;</span> &lt;&lt; endl;
+    <span class="hljs-keyword">return</span> c;
+&#125;
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;
+    CMyclass c1;
+    <span class="hljs-built_in">fun</span>(c1);
+    <span class="hljs-built_in">Test</span>();
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+&#125;</code></pre>
+
+<p>output:</p>
+<pre><code class="hljs text">copy constructor
+fun
+destructor //参数消亡
+test
+copy constructor
+destructor // 返回值临时对象消亡
+destructor // 局部变量消亡
+destructor // 全局变量消亡</code></pre>
+
+
+
+<h4 id="静态成员-static-关键字"><a href="#静态成员-static-关键字" class="headerlink" title="静态成员(static 关键字)"></a>静态成员(static 关键字)</h4><p>⚠️ <strong>本质</strong>上属于<strong>全局变量</strong>，写进类里是为了<strong>形式上为一个整体</strong>，易于维护和理解</p>
+<ul>
+<li>静态成员变量<strong>只有一份</strong>，为<strong>同类的所有对象共享</strong>⚠️</li>
+<li><strong>静态成员变量必须在类定义外面专门定义一下</strong>，<code>T 类名::变量名</code>（可选择进一步直接赋值）</li>
+<li>静态成员函数<strong>不具体作用在某个对象上</strong></li>
+<li><code>sizeof()</code><strong>计算不包含静态成员</strong>⚠️</li>
+<li><strong>静态</strong>成员函数<strong>不能调用this指针</strong>（因为静态成员不具体作用于某个对象）</li>
+</ul>
+<h5 id="范式-2"><a href="#范式-2" class="headerlink" title="范式"></a>范式</h5><p><code>类名：：成员名</code> <strong>不需对象即可访问</strong></p>
+<p>（甚至可以在还未有对象生成时访问一个类的静态成员；普通访问方式也适用，但无意义）</p>
+<h5 id="其他注意点🔥🔥"><a href="#其他注意点🔥🔥" class="headerlink" title="其他注意点🔥🔥"></a>其他注意点🔥🔥</h5><blockquote>
+<pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">static</span> <span class="hljs-type">void</span> <span class="hljs-title">staticFunc</span><span class="hljs-params">(Foo&amp; obj)</span> </span>&#123;
+    obj.val++;        <span class="hljs-comment">// ✅ 现在知道是哪个对象了</span>
+    obj.<span class="hljs-built_in">nonStatic</span>();  <span class="hljs-comment">// ✅ 可以调用</span>
+&#125;</code></pre>
+
+<pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Foo</span> &#123;
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-type">static</span> <span class="hljs-type">int</span> s_val;
+    <span class="hljs-type">int</span> val;
+
+    <span class="hljs-function"><span class="hljs-type">static</span> <span class="hljs-type">void</span> <span class="hljs-title">staticFunc</span><span class="hljs-params">()</span> </span>&#123;
+        s_val++;      <span class="hljs-comment">// ✅ 可以访问静态成员</span>
+        <span class="hljs-comment">// val++;     // ❌ 编译错误！不知道 val 属于哪个对象</span>
+        <span class="hljs-comment">// nonStatic(); // ❌ 同样错误</span>
+    &#125;
+
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">nonStatic</span><span class="hljs-params">()</span> </span>&#123;
+        val++;        <span class="hljs-comment">// ✅ 编译器隐式做了 this-&gt;val++</span>
+    &#125;
+&#125;;</code></pre>
+
+</blockquote>
+<ul>
+<li><p><strong>静态</strong>成员<strong>不具体作用于某个对象</strong>，因此：</p>
+<ul>
+<li>静态<strong>成员函数内部</strong>不能访问 <strong>非静态成员变量和函数</strong> （因为它搞不清非静态成员是谁）</li>
+</ul>
+</li>
+<li><p><strong>静态</strong>成员函数的<strong>真实参数个数</strong>就是<strong>程序写的个数</strong>（普通成员函数还要加上this指针）</p>
+</li>
+</ul>
+<h5 id="实战范例"><a href="#实战范例" class="headerlink" title="实战范例"></a>实战范例</h5><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span>
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">CRectangle</span>
+&#123;
+<span class="hljs-keyword">private</span>:
+    <span class="hljs-type">int</span> w, h;
+    <span class="hljs-type">static</span> <span class="hljs-type">int</span> totalArea;      <span class="hljs-comment">// 矩形总面积（静态成员变量声明）</span>
+    <span class="hljs-type">static</span> <span class="hljs-type">int</span> totalNumber;    <span class="hljs-comment">// 矩形总数（静态成员变量声明）</span>
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-built_in">CRectangle</span>(<span class="hljs-type">int</span> w_, <span class="hljs-type">int</span> h_);     
+    <span class="hljs-built_in">CRectangle</span>(<span class="hljs-type">const</span> CRectangle &amp; other);  
+    ~<span class="hljs-built_in">CRectangle</span>();      
+    <span class="hljs-function"><span class="hljs-type">static</span> <span class="hljs-type">void</span> <span class="hljs-title">PrintTotal</span><span class="hljs-params">()</span></span>;               
+&#125;;
+
+<span class="hljs-comment">// 静态成员变量定义并初始化（必须在类外进行，否则链接错误——静态成员不类外定义→未分配内存找不到）</span>
+<span class="hljs-type">int</span> CRectangle::totalNumber = <span class="hljs-number">0</span>;
+<span class="hljs-type">int</span> CRectangle::totalArea = <span class="hljs-number">0</span>;
+
+CRectangle::<span class="hljs-built_in">CRectangle</span>(<span class="hljs-type">int</span> w_, <span class="hljs-type">int</span> h_)
+&#123;
+    w = w_;
+    h = h_;
+    totalNumber++;          <span class="hljs-comment">// 新对象产生，总数加1</span>
+    totalArea += w * h;      <span class="hljs-comment">// 新对象产生，总面积增加</span>
+&#125;
+
+<span class="hljs-comment">// 复制构造函数实现（要记得！确保程序正确）</span>
+CRectangle::<span class="hljs-built_in">CRectangle</span>(<span class="hljs-type">const</span> CRectangle &amp; other)
+&#123;
+    w = other.w;
+    h = other.h;
+    totalNumber++;          <span class="hljs-comment">// 复制产生新对象，总数加1</span>
+    totalArea += w * h;      <span class="hljs-comment">// 新对象面积加入总面积</span>
+&#125;
+
+CRectangle::~<span class="hljs-built_in">CRectangle</span>()
+&#123;
+    totalNumber--;           <span class="hljs-comment">// 对象消亡，总数减1</span>
+    totalArea -= w * h;      <span class="hljs-comment">// 对象消亡，总面积减少</span>
+&#125;
+
+<span class="hljs-comment">// 静态成员函数实现：输出当前总数和总面积</span>
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">CRectangle::PrintTotal</span><span class="hljs-params">()</span></span>
+<span class="hljs-function"></span>&#123;
+    cout &lt;&lt; totalNumber &lt;&lt; <span class="hljs-string">&quot;, &quot;</span> &lt;&lt; totalArea &lt;&lt; endl;
+&#125;
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>
+<span class="hljs-function"></span>&#123;
+    <span class="hljs-function">CRectangle <span class="hljs-title">r1</span><span class="hljs-params">(<span class="hljs-number">3</span>, <span class="hljs-number">3</span>)</span>, <span class="hljs-title">r2</span><span class="hljs-params">(<span class="hljs-number">2</span>, <span class="hljs-number">2</span>)</span></span>;
+    <span class="hljs-comment">// cout &lt;&lt; CRectangle::totalNumber; // 错误：totalNumber 是私有的，不能直接访问</span>
+    CRectangle::<span class="hljs-built_in">PrintTotal</span>();  <span class="hljs-comment">// 通过类名调用静态函数</span>
+    r<span class="hljs-number">1.</span><span class="hljs-built_in">PrintTotal</span>();           <span class="hljs-comment">// 通过对象调用静态函数（效果相同）</span>
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+&#125;</code></pre>
+
+
+
+
+
+<h2 id="this指针"><a href="#this指针" class="headerlink" title="this指针"></a>this指针</h2><p>核心作用：<strong>指向成员函数所作用的对象</strong>，即<strong>指向当前对象自己</strong>的指针</p>
+<p>（<strong>非静态</strong>成员函数中可以使用 this 来代表 指向调用该成员函数的当前对象的指针）</p>
+<blockquote>
+<p>官方的，<strong>非静态</strong>成员函数中可以使用 this 来代表 指向该函数作用的对象的指针（作用的对象其实也就是当前的对象）</p>
+</blockquote>
+<p><strong>最最最重要的用途：</strong></p>
+<pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-keyword">class</span> <span class="hljs-title">Complex</span><span class="hljs-params">()</span></span>&#123;
+<span class="hljs-keyword">public</span>:
+	<span class="hljs-type">double</span> real,imag;
+	<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">print</span><span class="hljs-params">()</span></span>&#123;
+		cout&lt;&lt;real&lt;&lt;<span class="hljs-string">&quot;,&quot;</span>&lt;&lt;imag;
+	&#125;
+	<span class="hljs-built_in">Complex</span>(<span class="hljs-type">double</span> r,<span class="hljs-type">double</span> i):<span class="hljs-built_in">real</span>(r),<span class="hljs-built_in">imag</span>(i)&#123;&#125;
+	<span class="hljs-function">Complex <span class="hljs-title">AddOne</span><span class="hljs-params">()</span></span>&#123;
+		real++; <span class="hljs-comment">// 底层：this-&gt;real++;</span>
+		<span class="hljs-built_in">print</span>(); <span class="hljs-comment">// 底层：this-&gt;print();</span>
+		<span class="hljs-keyword">return</span> *<span class="hljs-keyword">this</span>; <span class="hljs-comment">//⚠️⚠️⚠️操作自己的唯一方式</span>
+	&#125;
+&#125;;</code></pre>
+
+<blockquote>
+<p>C 和 C++ 的类比</p>
+<p><img src="https://gcore.jsdelivr.net/gh/flowwalker/PicGo-based-image-host@main/image-20260312223740691.png" alt="image-20260312223740691"></p>
+<p>一些神奇的思考</p>
+<pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">A</span> &#123;
+    <span class="hljs-type">int</span> i;
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">Hello</span><span class="hljs-params">()</span> </span>&#123; cout &lt;&lt; <span class="hljs-string">&quot;hello&quot;</span> &lt;&lt; endl; &#125;
+&#125;; <span class="hljs-comment">// void Hello( A * this ) &#123; cout &lt;&lt; &quot;hello&quot; &lt;&lt; endl; &#125;</span>
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;
+    A * p = <span class="hljs-literal">NULL</span>;
+    p-&gt;<span class="hljs-built_in">Hello</span>(); <span class="hljs-comment">// 底层转换为 Hello(p);</span>
+&#125; <span class="hljs-comment">//输出：hello</span>
+<span class="hljs-comment">// 此刻不涉及指针的具体内容（Null），传入后无所谓</span>
+<span class="hljs-comment">// 注：此做法可能会产生未定义行为</span></code></pre>
+
+<pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">A</span> &#123;
+    <span class="hljs-type">int</span> i;
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">Hello</span><span class="hljs-params">()</span> </span>&#123; cout &lt;&lt; i &lt;&lt; <span class="hljs-string">&quot;hello&quot;</span> &lt;&lt; endl; &#125;
+&#125;;
+<span class="hljs-comment">// void Hello( A * this ) &#123; cout &lt;&lt; this-&gt;i &lt;&lt; &quot;hello&quot; &lt;&lt; endl; &#125;</span>
+
+<span class="hljs-comment">// this若为NULL，则出错</span>
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;
+    A * p = <span class="hljs-literal">NULL</span>;
+    p-&gt;<span class="hljs-built_in">Hello</span>(); <span class="hljs-comment">// Hello(p);</span>
+&#125;
+<span class="hljs-comment">// 此时 this 为 Null ，但是要求访问 i ，错误！</span></code></pre></blockquote>
+<p>**备注：**此处又为重要考点：即封闭类，为垒土成山的基石</p>
+<h2 id="封闭类"><a href="#封闭类" class="headerlink" title="封闭类"></a>封闭类</h2><h3 id="成员对象"><a href="#成员对象" class="headerlink" title="成员对象"></a>成员对象</h3><p>一个类A的对象a作为另一个类B的成员变量，则a为B的成员对象</p>
+<p>（可以说a这个B的成员变量是一个成员对象，也可以说a这个A的对象是B的成员对象）</p>
+<h3 id="封闭类基本定义"><a href="#封闭类基本定义" class="headerlink" title="封闭类基本定义"></a>封闭类基本定义</h3><p>包含<strong>成员对象</strong>的类，即称为<strong>封闭类</strong></p>
+<h4 id="经典的例子"><a href="#经典的例子" class="headerlink" title="经典的例子"></a>经典的例子</h4><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">CTyre</span>&#123;
+<span class="hljs-keyword">private</span>:
+	<span class="hljs-type">int</span> radius;
+	<span class="hljs-type">int</span> width;
+<span class="hljs-keyword">public</span>:
+	<span class="hljs-built_in">Ctyre</span>(<span class="hljs-type">int</span> r,<span class="hljs-type">int</span> w):<span class="hljs-built_in">radius</span>(r),<span class="hljs-built_in">width</span>(w)&#123;&#125;		
+&#125;;
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">CEngine</span>&#123;
+&#125;;
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">CCar</span>&#123;
+<span class="hljs-keyword">private</span>: 
+    <span class="hljs-type">int</span> price;
+    Ctyre tyre;
+    CEngine engine;
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-built_in">CCar</span>(<span class="hljs-type">int</span> p,<span class="hljs-type">int</span> tr,<span class="hljs-type">int</span> tw);
+&#125;;
+CCar::<span class="hljs-built_in">CCar</span>(<span class="hljs-type">int</span> p,<span class="hljs-type">int</span> tr,<span class="hljs-type">int</span> tw):<span class="hljs-built_in">price</span>(p),<span class="hljs-built_in">tyre</span>(tr,tw)&#123;
+&#125;
+<span class="hljs-comment">// CEngine 调用默认构造函数初始化</span>
+<span class="hljs-comment">// CTyre 无默认构造函数，必须初始化列表赋值！（否则编译器不知道如何初始化）</span>
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;
+    <span class="hljs-function">CCar <span class="hljs-title">car</span><span class="hljs-params">(<span class="hljs-number">20000</span>,<span class="hljs-number">17</span>,<span class="hljs-number">225</span>)</span></span>;
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+&#125;</code></pre>
+
+
+
+<h3 id="初始化列表"><a href="#初始化列表" class="headerlink" title="初始化列表"></a>初始化列表</h3><pre><code class="hljs c++">类名::构造函数名(‘类型 参数’表)：成员变量<span class="hljs-number">1</span>(参数表),成员变量<span class="hljs-number">2</span>(参数表),...
+&#123;
+...
+&#125;</code></pre>
+
+<p>初始化列表中的成员变量，既可以是成员对象，也可以是基本类型的成员变量</p>
+<ul>
+<li><p>对于<strong>成员对象</strong>，“参数表”中放的就是<strong>成员对象构造函数的参数</strong></p>
+</li>
+<li><p>对于基本类型的成员变量，“参数表”中即初始值</p>
+</li>
+<li><p>关键是要<strong>让编译器弄明白成员对象如何初始化</strong>，否则编译出错</p>
+</li>
+<li><p>⚠️参数可以是<strong>复杂表达式</strong>（全局函数、字符串拼接、复杂算数表达式…）</p>
+</li>
+</ul>
+<p>⚠️：初始化列表和{…}内赋值似乎作用相同，然而以下情况<strong>必须使用初始化列表</strong>！</p>
+<ol>
+<li><p>const 成员**：必须在创建时初始化（<strong>因为不能赋值</strong>）</p>
+</li>
+<li><p>⚠️引用成员**：必须在<strong>定义时绑定对象</strong>！</p>
+</li>
+<li><p>🔥没有默认构造函数的类类型成员**：未初始化不可赋值！</p>
+</li>
+</ol>
+<pre><code class="hljs c++"><span class="hljs-comment">// 参见如下示例</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">Member</span>&#123;
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-built_in">Member</span>(<span class="hljs-type">int</span> x)&#123;&#125;
+&#125;;
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">MyClass</span>&#123;
+    <span class="hljs-type">const</span> <span class="hljs-type">int</span> c;
+    <span class="hljs-type">int</span>&amp; ref;
+    Member m;
+    <span class="hljs-built_in">MyClass</span>(<span class="hljs-type">int</span> &amp; r):<span class="hljs-built_in">c</span>(<span class="hljs-number">100</span>),<span class="hljs-built_in">ref</span>(r),<span class="hljs-built_in">m</span>(<span class="hljs-number">200</span>)&#123;
+        <span class="hljs-comment">// c=100; // error! 常量不可赋值！</span>
+        <span class="hljs-comment">// ref=&amp;r; //error! 引用必定在初始化绑定！</span>
+        <span class="hljs-comment">//  m=Member(200); // error! //未初始化，不可赋值！</span>
+    &#125;
+&#125;;</code></pre>
+
+
+
+<h3 id="封闭类中构造和析构函数执行顺序"><a href="#封闭类中构造和析构函数执行顺序" class="headerlink" title="封闭类中构造和析构函数执行顺序"></a>封闭类中构造和析构函数执行顺序</h3><p>⚠️ <strong>先拼组件，再合装为成品&#x2F;先拆成组件，组件再拆成碎片</strong></p>
+<p>（只需记住上面👆这点即可）</p>
+<p>构造：</p>
+<ul>
+<li>先执行成员对象构造函数</li>
+<li>再执行封闭类自己的构造函数</li>
+</ul>
+<p>析构：</p>
+<ul>
+<li><p>先执行封闭类的析构函数</p>
+</li>
+<li><p>然后再执行成员对象的析构函数</p>
+<p>⚠️ 对象成员的构造函数调用次序取决于对象成员在<strong>类中的说明次序</strong>，<strong>与在初始化列表出现次序无关</strong></p>
+<blockquote>
+<pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">A</span> &#123;
+    <span class="hljs-type">int</span> x;
+    <span class="hljs-type">int</span> y;
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-built_in">A</span>() : <span class="hljs-built_in">y</span>(<span class="hljs-number">1</span>), <span class="hljs-built_in">x</span>(y) &#123; &#125;  <span class="hljs-comment">// 初始化列表先写 y，但 x 先构造</span>
+&#125;;</code></pre>
+
+<p>实际构造顺序：</p>
+<ol>
+<li><code>x</code> 先构造（类中先声明）</li>
+<li><code>y</code> 后构造（类中后声明）</li>
+</ol>
+<p>所以 <code>x(y)</code> 用的是<strong>未初始化的 <code>y</code></strong>，结果是<strong>未定义行为</strong>。</p>
+<p>编译器通常会给你<strong>警告</strong>（warning），但不会报错，因为语法上是合法的。C++ 标准明确规定：初始化列表的顺序<strong>不影响</strong>实际构造顺序</p>
+</blockquote>
+</li>
+</ul>
+<h3 id="友元"><a href="#友元" class="headerlink" title="友元"></a>友元</h3><ul>
+<li>一言以蔽之，<strong>方便访问别类的私有成员</strong>（但此处<strong>不具有对称性</strong>，即<del>你认为我是你的朋友，但我不一定</del>）</li>
+<li>友元关系<strong>不能传递</strong>！<strong>不能继承</strong>！（参见继承章节）</li>
+</ul>
+<h4 id="友元函数"><a href="#友元函数" class="headerlink" title="友元函数"></a>友元函数</h4><p><strong>一个类的友元函数可以访问这个类的私有成员</strong></p>
+<pre><code class="hljs c++"><span class="hljs-comment">// 一般的</span>
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">total_func</span><span class="hljs-params">()</span></span>&#123;&#125;
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">B</span>&#123;
+<span class="hljs-keyword">public</span>:
+	<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">function</span><span class="hljs-params">()</span></span>;
+&#125;;
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">A</span>&#123;
+    <span class="hljs-function"><span class="hljs-keyword">friend</span> <span class="hljs-type">void</span> <span class="hljs-title">total_func</span><span class="hljs-params">()</span></span>;
+	<span class="hljs-function"><span class="hljs-keyword">friend</span> <span class="hljs-type">void</span> <span class="hljs-title">B::function</span><span class="hljs-params">()</span></span>; 
+&#125;;</code></pre>
+
+<p>请参看如下具体示例：</p>
+<pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">CCar</span>; <span class="hljs-comment">//声明下用</span>
+<span class="hljs-comment">// 此处因为产生了互相套用的情况，因此要提前声明，只调整顺序无效；友元关系只是声明不造成循环嵌套</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">CDriver</span>&#123;
+<span class="hljs-keyword">public</span>:
+	<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">ModifyCar</span><span class="hljs-params">( CCar * pCar)</span></span>; <span class="hljs-comment">//改装汽车</span>
+&#125;;
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">CCar</span>&#123;
+<span class="hljs-keyword">private</span>:
+	<span class="hljs-type">int</span> price;
+	<span class="hljs-function"><span class="hljs-keyword">friend</span> <span class="hljs-type">int</span> <span class="hljs-title">MostExpensiveCar</span><span class="hljs-params">( CCar cars[],<span class="hljs-type">int</span> total)</span></span>; 
+	<span class="hljs-function"><span class="hljs-keyword">friend</span> <span class="hljs-type">void</span> <span class="hljs-title">CDriver::ModifyCar</span><span class="hljs-params">(CCar *pCar)</span></span>;
+&#125;; <span class="hljs-comment">//// 声明友元</span>
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">CDriver::ModifyCar</span><span class="hljs-params">(CCar *pCar)</span></span>&#123;
+    pCar-&gt;price+=<span class="hljs-number">1000</span>; <span class="hljs-comment">// 友元成员函数可以使之改装后增值</span>
+&#125;
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">MostExpensiveCar</span><span class="hljs-params">(CCar cars[],<span class="hljs-type">int</span> total)</span></span>&#123;
+    <span class="hljs-type">int</span> tmpMax=<span class="hljs-number">-1</span>;
+    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">0</span>;i&lt;total;i++)&#123;
+        <span class="hljs-keyword">if</span>(cars[i].price&gt;tmpMax) tmpMax=cars[i].price; <span class="hljs-comment">// 友元函数可以访问私有成员变量</span>
+    &#125;
+    <span class="hljs-keyword">return</span> tmpMax;
+&#125;</code></pre>
+
+
+
+<h4 id="友元类"><a href="#友元类" class="headerlink" title="友元类"></a>友元类</h4><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">CCar</span>&#123;
+<span class="hljs-keyword">private</span>:
+	<span class="hljs-type">int</span> price;
+	<span class="hljs-keyword">friend</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">CDriver</span>; <span class="hljs-comment">// 声明CDriver为友元类</span>
+    <span class="hljs-comment">// ⚠️ 此处本就是声明 CDriver是一个类，故前面无需再次声明</span>
+&#125;;
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">CDriver</span>&#123;
+<span class="hljs-keyword">public</span>:
+	CCar myCar;
+	<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">ModifyCar</span><span class="hljs-params">()</span></span>&#123; <span class="hljs-comment">//改装汽车</span>
+		myCar.price += <span class="hljs-number">1000</span>; 
+        <span class="hljs-comment">//因CDriver是CCar的友元类, 故此处可以访问其私有成员</span>
+	&#125; 
+&#125;;</code></pre>
+
+<p>⚠️ <del>你以为我是你的朋友，但我可不一定这么看</del></p>
+
+  </div>
+
+  
+  <div class="post-copyright animate-entry animate-delay-300">
+    <p><strong>本文作者：</strong>flowwalker</p>
+    <p><strong>本文链接：</strong><a href="/coding-notes-blog/posts/9c61/">/coding-notes-blog/posts/9c61/</a></p>
+    <p><strong>版权声明：</strong>本文采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> 许可协议</p>
+  </div>
+  
+</article>
+
+
+<nav class="post-navigation animate-entry animate-delay-300">
+  
+    <a href="/coding-notes-blog/posts/55fa/" class="post-nav-item prev" title="运算符重载">
+      <span class="nav-arrow">←</span>
+      <span class="nav-text">运算符重载</span>
+    </a>
+  
+  
+    <a href="/coding-notes-blog/posts/53f3/" class="post-nav-item next" title="类和对象初步">
+      <span class="nav-text">类和对象初步</span>
+      <span class="nav-arrow">→</span>
+    </a>
+  
+</nav>
+
+
+
+
+
+      </div>
+      <footer class="site-footer">
+  <div class="footer-inner">
+    
+    <div class="footer-copyright">
+      &copy; 2026–2026 flowwalker
+    </div>
+    
+    
+    <div class="footer-powered">
+      Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <span>Dawn</span>
+    </div>
+    
+  </div>
+</footer>
+
+
+    </main>
+  </div>
+  <button class="sidebar-expand-btn" id="sidebar-expand-btn" title="展开侧边栏" aria-label="展开侧边栏">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+  </button>
+  <div class="floating-actions">
+    
+    <div class="back-to-top-wrap" id="back-to-top-wrap">
+      <svg class="progress-ring" width="52" height="52" viewBox="0 0 52 52">
+        <circle class="progress-ring-bg" cx="26" cy="26" r="23"/>
+        <circle class="progress-ring-fill" id="progress-ring-fill" cx="26" cy="26" r="23"/>
+      </svg>
+      <button class="back-to-top" id="back-to-top" aria-label="回到顶部">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+      </button>
+    </div>
+    
+    <button class="search-toggle-float" id="search-toggle-btn" title="搜索" aria-label="搜索">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    </button>
+    
+    <a href="/coding-notes-blog/" class="floating-home" aria-label="回到主页" title="回到主页">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    </a>
+    
+    
+    <button class="dark-toggle-float" id="dark-toggle-btn" title="暗色模式" aria-label="暗色模式">
+      <svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    </button>
+    
+    
+    <button class="immersive-toggle" id="immersive-toggle-btn" title="沉浸式阅读" aria-label="沉浸式阅读">
+      <svg class="icon-enter" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
+      <svg class="icon-exit" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 8 3 3 8 3"/><polyline points="20 16 21 21 16 21"/><line x1="14" y1="14" x2="21" y2="21"/><line x1="3" y1="3" x2="10" y2="10"/></svg>
+    </button>
+    
+  </div>
+  <div class="search-overlay" id="search-overlay">
+    <div class="search-modal">
+      <div class="search-modal-header">
+        <input type="text" id="search-input" class="search-input" placeholder="输入关键词搜索文章..." autocomplete="off">
+        <button class="search-close-btn" id="search-close-btn" aria-label="关闭搜索">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="search-results" id="search-results"></div>
+    </div>
+  </div>
+  <script>
+(function() {
+  var STORAGE_KEY = 'dawn-theme';
+  var html = document.documentElement;
+
+  function getLabel(dark) {
+    return dark ? '亮色模式' : '暗色模式';
+  }
+
+  function updateUI(dark) {
+    var btn = document.getElementById('dark-toggle-btn');
+    if (!btn) return;
+    btn.setAttribute('title', getLabel(dark));
+    btn.setAttribute('aria-label', getLabel(dark));
+  }
+
+  var saved = localStorage.getItem(STORAGE_KEY);
+  if (saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+    html.classList.add('dark');
+    updateUI(true);
+  } else {
+    html.classList.remove('dark');
+    updateUI(false);
+  }
+
+  function setTheme(dark) {
+    if (dark) {
+      html.classList.add('dark');
+    } else {
+      html.classList.remove('dark');
+    }
+    localStorage.setItem(STORAGE_KEY, dark ? 'dark' : 'light');
+    updateUI(dark);
+    updateGiscus(dark);
+  }
+
+  function updateGiscus(dark) {
+    var frame = document.querySelector('.giscus-frame');
+    if (frame) {
+      frame.contentWindow.postMessage({
+        giscus: { setConfig: { theme: dark ? 'dark' : 'light' } }
+      }, 'https://giscus.app');
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    var btn = document.getElementById('dark-toggle-btn');
+    if (btn) {
+      btn.addEventListener('click', function() {
+        setTheme(!html.classList.contains('dark'));
+      });
+    }
+  });
+
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
+    if (localStorage.getItem(STORAGE_KEY) === null) {
+      setTheme(e.matches);
+    }
+  });
+})();
+</script>
+
+  <script src="/coding-notes-blog/js/main.js"></script>
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        processEscapes: true
+      },
+      options: {
+        ignoreHtmlClass: 'no-mathjax',
+        processHtmlClass: 'mathjax-process'
+      }
+    };
+  }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+
+
+
+</body>
+</html>

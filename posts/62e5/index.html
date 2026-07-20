@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="">
+<head>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>STL初步 | 码艺Blog</title>
+
+<meta name="description" content="flowwalker 的编程学习与实践笔记">
+
+
+<meta name="author" content="flowwalker">
+<link rel="alternate" href="/coding-notes-blog/atom.xml" title="码艺Blog" type="application/atom+xml">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="/coding-notes-blog/css/style.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+
+
+<link rel="icon" href="/coding-notes-blog/img/favicon.png">
+
+<script>
+(function() {
+  var saved = localStorage.getItem('dawn-theme');
+  if (saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+    document.documentElement.classList.add('dark');
+  }
+})();
+</script>
+
+
+<meta name="generator" content="Hexo 8.1.2"></head>
+<body>
+  <div class="site-wrapper">
+    <aside class="site-sidebar" id="sidebar">
+  <button class="sidebar-collapse-btn" id="sidebar-collapse-btn" title="折叠侧边栏" aria-label="折叠侧边栏">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+  </button>
+  <div class="sidebar-inner">
+    
+    
+    <div class="sidebar-toc sidebar-toc--full">
+      <div class="sidebar-toc-header">
+        <h3 class="sidebar-toc-title">目录</h3>
+        <button class="toc-expand-all-btn" id="toc-expand-all-btn" title="展开全部目录" aria-label="展开全部目录">
+          <svg class="toc-expand-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+      </div>
+      <div class="sidebar-toc-content">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#STL%E5%88%9D%E6%AD%A5"><span class="toc-text">STL初步</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B3%9B%E5%9E%8B%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%EF%BC%88generic-programming%EF%BC%89"><span class="toc-text">泛型程序设计（generic programming）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%BE%E8%AE%A1%E6%80%9D%E6%83%B3"><span class="toc-text">设计思想</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%A8%A1%E6%9D%BF%E6%9C%BA%E5%88%B6"><span class="toc-text">模板机制</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%A0%87%E5%87%86%E6%A8%A1%E6%9D%BF%E5%BA%93%EF%BC%88Standard-Template-Library%EF%BC%89"><span class="toc-text">标准模板库（Standard Template Library）</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#STL%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="toc-text">STL的基本概念</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%AD%E4%BB%A3%E5%99%A8"><span class="toc-text">迭代器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%B9%E5%99%A8"><span class="toc-text">容器</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%86%E7%B1%BB"><span class="toc-text">分类</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%B9%E5%99%A8%E6%A6%82%E8%BF%B0"><span class="toc-text">容器概述</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%88%90%E5%91%98%E5%87%BD%E6%95%B0%E6%A6%82%E8%BF%B0"><span class="toc-text">成员函数概述</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%85%B1%E6%9C%89%E6%88%90%E5%91%98%E5%87%BD%E6%95%B0"><span class="toc-text">共有成员函数</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%AC%AC%E4%B8%80%E7%B1%BB%E5%AE%B9%E5%99%A8%E7%89%B9%E6%9C%89%E7%9A%84%E6%88%90%E5%91%98%E5%87%BD%E6%95%B0"><span class="toc-text">第一类容器特有的成员函数</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E9%A1%BA%E5%BA%8F%E5%AE%B9%E5%99%A8%E7%89%B9%E6%9C%89%E6%88%90%E5%91%98%E5%87%BD%E6%95%B0"><span class="toc-text">顺序容器特有成员函数</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%AF%A6%E7%BB%86%E4%BB%8B%E7%BB%8D"><span class="toc-text">详细介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E9%A1%BA%E5%BA%8F%E5%AE%B9%E5%99%A8"><span class="toc-text">顺序容器</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#vector"><span class="toc-text">vector</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#deque"><span class="toc-text">deque</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#list"><span class="toc-text">list</span></a></li></ol></li></ol></li></ol></li></ol></li></ol></li></ol>
+      </div>
+    </div>
+    
+  </div>
+</aside>
+
+    <main class="main-content">
+      <header class="site-header">
+  <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+  <nav class="header-nav animate-stagger-50">
+    
+      <a href="/coding-notes-blog/" class="nav-item animate-entry">首页</a>
+    
+      <a href="/coding-notes-blog/about/" class="nav-item animate-entry">此地一二</a>
+    
+      <a href="/coding-notes-blog/archives/" class="nav-item animate-entry">时光长河</a>
+    
+      <a href="/coding-notes-blog/categories/" class="nav-item animate-entry">卷宗总览</a>
+    
+      <a href="/coding-notes-blog/tags/" class="nav-item animate-entry">签注归集</a>
+    
+      <a href="/coding-notes-blog/links/" class="nav-item animate-entry">四处仙山</a>
+    
+      <a href="https://flowwalker.top" class="nav-item animate-entry">归返本山</a>
+    
+  </nav>
+</header>
+
+      <div class="content-area">
+        <article class="post-full">
+  <header class="post-header">
+    <h1 class="post-title animate-entry animate-delay-0">STL初步</h1>
+    <div class="post-meta animate-entry animate-delay-80">
+      
+      <span class="meta-item">
+        <i class="fa fa-calendar"></i>
+        <time datetime="2026-04-04">发布于 2026-04-04</time>
+      </span>
+      
+      
+      <span class="meta-item">
+        <i class="fa fa-edit"></i>
+        <time datetime="2026-07-20">更新于 2026-07-20</time>
+      </span>
+      
+      
+      <span class="meta-item">
+        <i class="fa fa-folder"></i>
+        
+          <a href="/coding-notes-blog/categories/%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%AC%94%E8%AE%B0-c-OOP/">程序设计笔记--c++OOP</a>
+        
+      </span>
+      
+    </div>
+    
+    <div class="post-tags animate-entry animate-delay-80">
+      
+        <a href="/coding-notes-blog/tags/OOP/" class="tag-badge">#OOP</a>
+      
+        <a href="/coding-notes-blog/tags/%E7%A8%8B%E8%AE%BE/" class="tag-badge">#程设</a>
+      
+        <a href="/coding-notes-blog/tags/c/" class="tag-badge">#c++</a>
+      
+        <a href="/coding-notes-blog/tags/STL/" class="tag-badge">#STL</a>
+      
+    </div>
+    
+  </header>
+
+  
+  <div class="post-cover animate-entry animate-delay-80">
+    <img src="https://gcore.jsdelivr.net/gh/flowwalker/PicGo-based-image-host@main/ec0280b7e0fc80a1de7df677bc760e88.jpg" alt="STL初步">
+  </div>
+  
+
+  <div class="post-content">
+    <h1 id="STL初步"><a href="#STL初步" class="headerlink" title="STL初步"></a>STL初步</h1><h2 id="泛型程序设计（generic-programming）"><a href="#泛型程序设计（generic-programming）" class="headerlink" title="泛型程序设计（generic programming）"></a>泛型程序设计（generic programming）</h2><h3 id="设计思想"><a href="#设计思想" class="headerlink" title="设计思想"></a>设计思想</h3><ul>
+<li>C++语言的核心优势之一 —— <strong>软件的重用</strong></li>
+<li>C++中有两个方面体现重用:<ol>
+<li><strong>面向对象的思想</strong>：继承和多态，标准类库</li>
+<li><strong>泛型程序设计的思想</strong>：<ul>
+<li>模板机制</li>
+<li>标准模板库 <strong>STL</strong></li>
+</ul>
+</li>
+</ol>
+</li>
+</ul>
+<h4 id="模板机制"><a href="#模板机制" class="headerlink" title="模板机制"></a>模板机制</h4><ul>
+<li><p>将一些常用的<strong>数据结构</strong>（比如链表，数组，二叉树）和<strong>算法</strong>（比如排序，查找）写成模板</p>
+</li>
+<li><p>以后不论数据结构里放的是什么对象，算法针对什么样的对象<br>→ 都不必重新实现数据结构，重新编写算法</p>
+</li>
+</ul>
+<h4 id="标准模板库（Standard-Template-Library）"><a href="#标准模板库（Standard-Template-Library）" class="headerlink" title="标准模板库（Standard Template Library）"></a>标准模板库（Standard Template Library）</h4><ul>
+<li>常用数据结构和算法的模板的集合</li>
+<li>无需写过多的标准数据结构和算法</li>
+<li>同时可获得非常高的性能</li>
+</ul>
+<h2 id="STL的基本概念"><a href="#STL的基本概念" class="headerlink" title="STL的基本概念"></a>STL的基本概念</h2><ul>
+<li><strong>容器</strong>：可容纳<strong>各种数据类型</strong>的通用<strong>数据结构</strong>，是类模板</li>
+<li><strong>迭代器</strong>：可用于依次<strong>存取</strong>容器中元素，类似于指针<ul>
+<li>普通的C++指针就是一种迭代器</li>
+</ul>
+</li>
+<li><strong>算法</strong>：用来<strong>操作</strong>容器中的元素的<strong>函数模板</strong></li>
+</ul>
+<blockquote>
+<ul>
+<li><code>sort()</code> 来对一个数组中的数据进行排序</li>
+<li><code>find()</code> 来搜索一个数组中的对象<br>算法本身与他们操作的数据的类型无关，<br>  因此他们可以在从简单数组到高度复杂容器的任何数据结构上使用</li>
+</ul>
+<pre><code class="hljs cpp"><span class="hljs-type">int</span> array[<span class="hljs-number">100</span>];    <span class="hljs-comment">// 该数组就是容器，而int* 类型的指针变量就可以作为迭代器</span>
+<span class="hljs-built_in">sort</span>(array, array<span class="hljs-number">+70</span>);  <span class="hljs-comment">// sort 算法可以作用于该容器上，对其进行排序</span></code></pre>
+</blockquote>
+<h3 id="迭代器"><a href="#迭代器" class="headerlink" title="迭代器"></a>迭代器</h3><ul>
+<li><p>用于指向<strong>第一类容器</strong>的元素</p>
+<ul>
+<li>可以读取指向元素</li>
+<li>非const迭代器可以修改指向元素</li>
+</ul>
+</li>
+<li><p>使用方法：</p>
+<pre><code class="hljs c++">/定义一个容器类的迭代器的方法：
+容器类名::iterator 变量名;
+容器类名::const_iterator 变量名;
+<span class="hljs-comment">//访问一个迭代器指向的元素：</span>
+* 迭代器变量名</code></pre>
+</li>
+<li><p>不同容器支持的迭代器功能<strong>强弱不同</strong>→决定支持的算法</p>
+<ul>
+<li><p>只有<strong>第一类容器</strong>可以使用迭代器<strong>遍历</strong></p>
+</li>
+<li><p>强弱</p>
+<pre><code class="hljs mermaid">flowchart LR
+        direction LR
+        A[输入迭代器&lt;br&gt;只读访问&lt;br&gt;&lt;br&gt;++p, p++&lt;br&gt;value=*p, p=p1&lt;br&gt;p==p1, p!=p1] --&gt; B[输出迭代器&lt;br&gt;只写访问&lt;br&gt;*p=value, p=p1]
+        B --&gt; C[正向迭代器&lt;br&gt;读写 + 单向步进前进]
+        C --&gt; D[双向迭代器&lt;br&gt;读写 + 双向步进移动&lt;br&gt;&lt;br&gt;--p, p--]
+        D --&gt; E[随机访问迭代器&lt;br&gt;读写 + 随机跳转&lt;br&gt;&lt;br&gt;移动i个单元（+=i or -=i）&lt;br&gt;大小比较&lt;br&gt;取下标]</code></pre>
+
+<blockquote>
+<p>→表示包含前者功能</p>
+</blockquote>
+</li>
+<li><p>容器对应的迭代器类别</p>
+<blockquote>
+<table>
+<thead>
+<tr>
+<th align="left">容器</th>
+<th align="left">迭代器类别</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">vector</td>
+<td align="left">随机</td>
+</tr>
+<tr>
+<td align="left">deque</td>
+<td align="left">随机</td>
+</tr>
+<tr>
+<td align="left">list</td>
+<td align="left">双向</td>
+</tr>
+<tr>
+<td align="left">set&#x2F;multiset</td>
+<td align="left">双向</td>
+</tr>
+<tr>
+<td align="left">map&#x2F;multimap</td>
+<td align="left">双向</td>
+</tr>
+<tr>
+<td align="left">stack</td>
+<td align="left">不支持迭代器</td>
+</tr>
+<tr>
+<td align="left">queue</td>
+<td align="left">不支持迭代器</td>
+</tr>
+<tr>
+<td align="left">priority_queue</td>
+<td align="left">不支持迭代器</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong>备注</strong>：如图中提示，像 <code>sort</code>、<code>binary_search</code> 等算法要求<strong>随机访问迭代器</strong>，因此 <strong>list</strong> 以及 <strong>set&#x2F;multiset</strong>、<strong>map&#x2F;multimap</strong> 等关联容器无法直接使用这些算法，通常需要借助成员函数或手动实现。</p>
+</blockquote>
+<blockquote>
+<p>⚠️书写应严格按照表格支持的类别，例如list<strong>不能使用</strong><code>it&lt;l.end()</code>和<code>it+=2</code>和<code>l[i]</code>语法</p>
+</blockquote>
+</blockquote>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="容器"><a href="#容器" class="headerlink" title="容器"></a>容器</h3><h4 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h4><ul>
+<li><p>顺序容器&#x2F;序列容器</p>
+<p><code>vector</code>, <code>deque</code>, <code>list</code></p>
+</li>
+<li><p>关联容器&#x2F;有序容器</p>
+<p><code>set</code>, <code>multiset</code>, <code>map</code> <code>multimap</code></p>
+</li>
+<li><p>容器适配器</p>
+<p><code>stack</code>, <code>queue</code>, <code>priority_queue</code></p>
+</li>
+</ul>
+<blockquote>
+<p>其中前两类属于<strong>第一类容器</strong></p>
+</blockquote>
+<h4 id="容器概述"><a href="#容器概述" class="headerlink" title="容器概述"></a>容器概述</h4><ul>
+<li>插入的是对象的一个复制品</li>
+<li>往往需要重载 &#x3D;&#x3D; 和 &lt;  运算符以比较→进而实现查找、排序……</li>
+</ul>
+<h4 id="成员函数概述"><a href="#成员函数概述" class="headerlink" title="成员函数概述"></a>成员函数概述</h4><h5 id="共有成员函数"><a href="#共有成员函数" class="headerlink" title="共有成员函数"></a>共有成员函数</h5><ul>
+<li>按照<strong>词典序</strong>比较两个容器的运算符<code>==</code>, <code>!=</code>, <code>&gt;</code>, <code>&lt;</code>, <code>&gt;=</code>, <code>&lt;=</code></li>
+<li><code>empty</code> 判断是否为空</li>
+<li><code>max_size</code> 容器最多能装元素个数（常上万）</li>
+<li><code>size</code> 容器中元素个数</li>
+<li><code>swap</code> 交换容器内容</li>
+</ul>
+<h5 id="第一类容器特有的成员函数"><a href="#第一类容器特有的成员函数" class="headerlink" title="第一类容器特有的成员函数"></a>第一类容器特有的成员函数</h5><table>
+<thead>
+<tr>
+<th>函数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>begin()</code> &#x2F; <code>end()</code></td>
+<td>首&#x2F;尾后迭代器</td>
+</tr>
+<tr>
+<td><code>rbegin()</code> &#x2F; <code>rend()</code></td>
+<td>反向迭代器</td>
+</tr>
+<tr>
+<td><code>erase(iter)</code></td>
+<td>删除迭代器指向元素</td>
+</tr>
+<tr>
+<td><code>erase(begin, end)</code></td>
+<td>删除区间</td>
+</tr>
+<tr>
+<td><code>clear()</code></td>
+<td>清空</td>
+</tr>
+<tr>
+<td><code>insert(iter, val)</code></td>
+<td>在迭代器位置前插入</td>
+</tr>
+</tbody></table>
+<h5 id="顺序容器特有成员函数"><a href="#顺序容器特有成员函数" class="headerlink" title="顺序容器特有成员函数"></a>顺序容器特有成员函数</h5><table>
+<thead>
+<tr>
+<th>函数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>push_back(val)</code></td>
+<td>尾插</td>
+</tr>
+<tr>
+<td><code>pop_back()</code></td>
+<td>尾删</td>
+</tr>
+<tr>
+<td><code>front()</code> &#x2F; <code>back()</code></td>
+<td>首&#x2F;尾元素引用</td>
+</tr>
+<tr>
+<td><code>resize(n)</code></td>
+<td>调整大小</td>
+</tr>
+<tr>
+<td><code>assign(n, val)</code></td>
+<td>赋 n 个 val</td>
+</tr>
+</tbody></table>
+<h4 id="详细介绍"><a href="#详细介绍" class="headerlink" title="详细介绍"></a>详细介绍</h4><h5 id="顺序容器"><a href="#顺序容器" class="headerlink" title="顺序容器"></a>顺序容器</h5><h6 id="vector"><a href="#vector" class="headerlink" title="vector"></a>vector</h6><ul>
+<li>头文件<code>&lt;vector&gt;</code></li>
+<li>动态数组，内存连续</li>
+<li>随机存取→常数时间</li>
+<li><strong>尾端</strong>增删性能佳，中间增删 O(n)</li>
+<li>扩容时重新分配内存，原迭代器失效</li>
+</ul>
+<pre><code class="hljs cpp">vector&lt;<span class="hljs-type">int</span>&gt; v;
+v.<span class="hljs-built_in">push_back</span>(<span class="hljs-number">1</span>);               <span class="hljs-comment">// 尾插</span>
+v.<span class="hljs-built_in">pop_back</span>();                 <span class="hljs-comment">// 尾删</span>
+v.<span class="hljs-built_in">insert</span>(v.<span class="hljs-built_in">begin</span>()+i, val);   <span class="hljs-comment">// 位置 i 前插入</span>
+v.<span class="hljs-built_in">erase</span>(v.<span class="hljs-built_in">begin</span>()+i);         <span class="hljs-comment">// 删除位置 i</span>
+<span class="hljs-built_in">sort</span>(v.<span class="hljs-built_in">begin</span>(), v.<span class="hljs-built_in">end</span>());     <span class="hljs-comment">// 排序（随机迭代器）</span></code></pre>
+
+<h6 id="deque"><a href="#deque" class="headerlink" title="deque"></a>deque</h6><ul>
+<li>头文件<code>&lt;deque&gt;</code></li>
+<li>双向队列，<strong>首尾</strong>增删 O(1)</li>
+<li>支持 <code>[]</code> 下标、随机迭代器</li>
+<li>内存分段，<code>sort</code> 效率略低于 <code>vector</code></li>
+</ul>
+<pre><code class="hljs cpp">deque&lt;<span class="hljs-type">int</span>&gt; dq;
+dq.<span class="hljs-built_in">push_back</span>(<span class="hljs-number">1</span>);  dq.<span class="hljs-built_in">push_front</span>(<span class="hljs-number">2</span>);
+dq.<span class="hljs-built_in">pop_back</span>();    dq.<span class="hljs-built_in">pop_front</span>();</code></pre>
+
+<h6 id="list"><a href="#list" class="headerlink" title="list"></a>list</h6><ul>
+<li>头文件<code>&lt;list&gt;</code></li>
+<li>双向链表，<strong>任意位置</strong>增删 O(1)</li>
+<li>仅双向迭代器：<strong>不支持</strong> <code>[]</code>、<code>it+=n</code>、<code>it&lt;end</code></li>
+<li>自带 <code>sort()</code>、<code>reverse()</code>、<code>merge()</code>、<code>remove(val)</code> 成员函数</li>
+</ul>
+<pre><code class="hljs cpp">list&lt;<span class="hljs-type">int</span>&gt; lst;
+lst.<span class="hljs-built_in">push_back</span>(<span class="hljs-number">1</span>);   lst.<span class="hljs-built_in">push_front</span>(<span class="hljs-number">0</span>);
+lst.<span class="hljs-built_in">insert</span>(it, val);   <span class="hljs-comment">// it 前插入</span>
+lst.<span class="hljs-built_in">erase</span>(it);          <span class="hljs-comment">// 删除 it</span>
+lst.<span class="hljs-built_in">sort</span>();             <span class="hljs-comment">// 成员 sort（非全局 sort）</span></code></pre>
+
+<blockquote>
+<p>频繁中间增删用 list；需随机访问用 vector。</p>
+</blockquote>
+
+  </div>
+
+  
+  <div class="post-copyright animate-entry animate-delay-300">
+    <p><strong>本文作者：</strong>flowwalker</p>
+    <p><strong>本文链接：</strong><a href="/coding-notes-blog/posts/62e5/">/coding-notes-blog/posts/62e5/</a></p>
+    <p><strong>版权声明：</strong>本文采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> 许可协议</p>
+  </div>
+  
+</article>
+
+
+<nav class="post-navigation animate-entry animate-delay-300">
+  
+    <a href="/coding-notes-blog/posts/ad77/" class="post-nav-item prev" title="STL进阶">
+      <span class="nav-arrow">←</span>
+      <span class="nav-text">STL进阶</span>
+    </a>
+  
+  
+    <a href="/coding-notes-blog/posts/9cf8/" class="post-nav-item next" title="string库">
+      <span class="nav-text">string库</span>
+      <span class="nav-arrow">→</span>
+    </a>
+  
+</nav>
+
+
+
+
+
+      </div>
+      <footer class="site-footer">
+  <div class="footer-inner">
+    
+    <div class="footer-copyright">
+      &copy; 2026–2026 flowwalker
+    </div>
+    
+    
+    <div class="footer-powered">
+      Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <span>Dawn</span>
+    </div>
+    
+  </div>
+</footer>
+
+
+    </main>
+  </div>
+  <button class="sidebar-expand-btn" id="sidebar-expand-btn" title="展开侧边栏" aria-label="展开侧边栏">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+  </button>
+  <div class="floating-actions">
+    
+    <div class="back-to-top-wrap" id="back-to-top-wrap">
+      <svg class="progress-ring" width="52" height="52" viewBox="0 0 52 52">
+        <circle class="progress-ring-bg" cx="26" cy="26" r="23"/>
+        <circle class="progress-ring-fill" id="progress-ring-fill" cx="26" cy="26" r="23"/>
+      </svg>
+      <button class="back-to-top" id="back-to-top" aria-label="回到顶部">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+      </button>
+    </div>
+    
+    <button class="search-toggle-float" id="search-toggle-btn" title="搜索" aria-label="搜索">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    </button>
+    
+    <a href="/coding-notes-blog/" class="floating-home" aria-label="回到主页" title="回到主页">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    </a>
+    
+    
+    <button class="dark-toggle-float" id="dark-toggle-btn" title="暗色模式" aria-label="暗色模式">
+      <svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    </button>
+    
+    
+    <button class="immersive-toggle" id="immersive-toggle-btn" title="沉浸式阅读" aria-label="沉浸式阅读">
+      <svg class="icon-enter" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
+      <svg class="icon-exit" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 8 3 3 8 3"/><polyline points="20 16 21 21 16 21"/><line x1="14" y1="14" x2="21" y2="21"/><line x1="3" y1="3" x2="10" y2="10"/></svg>
+    </button>
+    
+  </div>
+  <div class="search-overlay" id="search-overlay">
+    <div class="search-modal">
+      <div class="search-modal-header">
+        <input type="text" id="search-input" class="search-input" placeholder="输入关键词搜索文章..." autocomplete="off">
+        <button class="search-close-btn" id="search-close-btn" aria-label="关闭搜索">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="search-results" id="search-results"></div>
+    </div>
+  </div>
+  <script>
+(function() {
+  var STORAGE_KEY = 'dawn-theme';
+  var html = document.documentElement;
+
+  function getLabel(dark) {
+    return dark ? '亮色模式' : '暗色模式';
+  }
+
+  function updateUI(dark) {
+    var btn = document.getElementById('dark-toggle-btn');
+    if (!btn) return;
+    btn.setAttribute('title', getLabel(dark));
+    btn.setAttribute('aria-label', getLabel(dark));
+  }
+
+  var saved = localStorage.getItem(STORAGE_KEY);
+  if (saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+    html.classList.add('dark');
+    updateUI(true);
+  } else {
+    html.classList.remove('dark');
+    updateUI(false);
+  }
+
+  function setTheme(dark) {
+    if (dark) {
+      html.classList.add('dark');
+    } else {
+      html.classList.remove('dark');
+    }
+    localStorage.setItem(STORAGE_KEY, dark ? 'dark' : 'light');
+    updateUI(dark);
+    updateGiscus(dark);
+  }
+
+  function updateGiscus(dark) {
+    var frame = document.querySelector('.giscus-frame');
+    if (frame) {
+      frame.contentWindow.postMessage({
+        giscus: { setConfig: { theme: dark ? 'dark' : 'light' } }
+      }, 'https://giscus.app');
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    var btn = document.getElementById('dark-toggle-btn');
+    if (btn) {
+      btn.addEventListener('click', function() {
+        setTheme(!html.classList.contains('dark'));
+      });
+    }
+  });
+
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
+    if (localStorage.getItem(STORAGE_KEY) === null) {
+      setTheme(e.matches);
+    }
+  });
+})();
+</script>
+
+  <script src="/coding-notes-blog/js/main.js"></script>
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        processEscapes: true
+      },
+      options: {
+        ignoreHtmlClass: 'no-mathjax',
+        processHtmlClass: 'mathjax-process'
+      }
+    };
+  }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+
+
+
+</body>
+</html>

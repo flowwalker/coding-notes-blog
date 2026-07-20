@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="">
+<head>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>运算符重载 | 码艺Blog</title>
+
+<meta name="description" content="flowwalker 的编程学习与实践笔记">
+
+
+<meta name="author" content="flowwalker">
+<link rel="alternate" href="/coding-notes-blog/atom.xml" title="码艺Blog" type="application/atom+xml">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="/coding-notes-blog/css/style.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+
+
+<link rel="icon" href="/coding-notes-blog/img/favicon.png">
+
+<script>
+(function() {
+  var saved = localStorage.getItem('dawn-theme');
+  if (saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+    document.documentElement.classList.add('dark');
+  }
+})();
+</script>
+
+
+<meta name="generator" content="Hexo 8.1.2"></head>
+<body>
+  <div class="site-wrapper">
+    <aside class="site-sidebar" id="sidebar">
+  <button class="sidebar-collapse-btn" id="sidebar-collapse-btn" title="折叠侧边栏" aria-label="折叠侧边栏">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+  </button>
+  <div class="sidebar-inner">
+    
+    
+    <div class="sidebar-toc sidebar-toc--full">
+      <div class="sidebar-toc-header">
+        <h3 class="sidebar-toc-title">目录</h3>
+        <button class="toc-expand-all-btn" id="toc-expand-all-btn" title="展开全部目录" aria-label="展开全部目录">
+          <svg class="toc-expand-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+      </div>
+      <div class="sidebar-toc-content">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%BF%90%E7%AE%97%E7%AC%A6%E9%87%8D%E8%BD%BD"><span class="toc-text">运算符重载</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9B%AE%E5%BD%95"><span class="toc-text">目录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%8C%83%E5%BC%8F"><span class="toc-text">范式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BA%A6%E5%AE%9A"><span class="toc-text">约定</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%99%AE%E9%80%9A%E8%BF%90%E7%AE%97%E7%AC%A6%E9%87%8D%E8%BD%BD%E5%AE%9E%E4%BE%8B"><span class="toc-text">普通运算符重载实例</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B9%E6%B3%95-1%EF%BC%9A%E4%BB%A3%E7%90%86%E7%B1%BB%EF%BC%88%E5%AE%9E%E7%8E%B0-a-i-j-%E8%AF%AD%E6%B3%95%EF%BC%89"><span class="toc-text">方法 1：代理类（实现 a[i][j] 语法）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B9%E6%B3%95-2%EF%BC%9A%E7%9B%B4%E6%8E%A5%E9%87%8D%E8%BD%BD-operator"><span class="toc-text">方法 2：直接重载 operator()</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%90%E7%AE%97%E7%AC%A6%E9%87%8D%E8%BD%BD%E4%B8%BA%E5%8F%8B%E5%85%83"><span class="toc-text">运算符重载为友元</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%8B%E6%A0%87%E8%BF%90%E7%AE%97%E7%AC%A6%E7%9A%84%E9%AB%98%E7%BA%A7%E9%87%8D%E8%BD%BD"><span class="toc-text">下标运算符的高级重载</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9B%AE%E6%A0%87"><span class="toc-text">目标</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%8C%E6%9C%9B"><span class="toc-text">希望</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9E%E7%8E%B0"><span class="toc-text">实现</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B5%8B%E5%80%BC%E8%BF%90%E7%AE%97%E7%AC%A6%E7%9A%84%E9%87%8D%E8%BD%BD"><span class="toc-text">赋值运算符的重载</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A0%87%E5%87%86%E6%93%8D%E4%BD%9C"><span class="toc-text">标准操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%89%8D%E7%BD%AE%EF%BC%9A%E6%B5%85%E6%8B%B7%E8%B4%9D%E5%92%8C%E6%B7%B1%E6%8B%B7%E8%B4%9D"><span class="toc-text">前置：浅拷贝和深拷贝</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B5%85%E6%8B%B7%E8%B4%9D%EF%BC%88%E6%B5%85%E5%A4%8D%E5%88%B6%EF%BC%89"><span class="toc-text">浅拷贝（浅复制）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B7%B1%E6%8B%B7%E8%B4%9D"><span class="toc-text">深拷贝</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9B%AE%E6%A0%87-1"><span class="toc-text">目标</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9E%E7%8E%B0-1"><span class="toc-text">实现</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B5%81%E8%BF%90%E7%AE%97%E7%AC%A6%E7%9A%84%E9%87%8D%E8%BD%BD"><span class="toc-text">流运算符的重载</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B5%81%E6%8F%92%E5%85%A5%E8%BF%90%E7%AE%97%E7%AC%A6%E9%87%8D%E8%BD%BD"><span class="toc-text">流插入运算符重载</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%87%8D%E8%BD%BD%E4%B8%BA%E6%88%90%E5%91%98%E5%87%BD%E6%95%B0"><span class="toc-text">重载为成员函数</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B5%81%E6%8F%90%E5%8F%96%E8%BF%90%E7%AE%97%E7%AC%A6%E9%87%8D%E8%BD%BD"><span class="toc-text">流提取运算符重载</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9E%E9%99%85%E9%87%8D%E8%BD%BD"><span class="toc-text">实际重载</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%BA%E5%88%B6%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2%E8%BF%90%E7%AE%97%E7%AC%A6%E9%87%8D%E8%BD%BD"><span class="toc-text">强制类型转换运算符重载</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%9E%E7%8E%B0%EF%BC%88%E4%BB%A5double%E9%87%8D%E8%BD%BD%E4%B8%BA%E4%BE%8B%EF%BC%89"><span class="toc-text">实现（以double重载为例）</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%87%8D%E8%BD%BD%E8%87%AA%E5%A2%9E%E3%80%81%E8%87%AA%E5%87%8F%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="toc-text">重载自增、自减运算符</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%9E%E7%8E%B0-2"><span class="toc-text">实现</span></a></li></ol></li></ol></li></ol></li></ol>
+      </div>
+    </div>
+    
+  </div>
+</aside>
+
+    <main class="main-content">
+      <header class="site-header">
+  <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+  <nav class="header-nav animate-stagger-50">
+    
+      <a href="/coding-notes-blog/" class="nav-item animate-entry">首页</a>
+    
+      <a href="/coding-notes-blog/about/" class="nav-item animate-entry">此地一二</a>
+    
+      <a href="/coding-notes-blog/archives/" class="nav-item animate-entry">时光长河</a>
+    
+      <a href="/coding-notes-blog/categories/" class="nav-item animate-entry">卷宗总览</a>
+    
+      <a href="/coding-notes-blog/tags/" class="nav-item animate-entry">签注归集</a>
+    
+      <a href="/coding-notes-blog/links/" class="nav-item animate-entry">四处仙山</a>
+    
+      <a href="https://flowwalker.top" class="nav-item animate-entry">归返本山</a>
+    
+  </nav>
+</header>
+
+      <div class="content-area">
+        <article class="post-full">
+  <header class="post-header">
+    <h1 class="post-title animate-entry animate-delay-0">运算符重载</h1>
+    <div class="post-meta animate-entry animate-delay-80">
+      
+      <span class="meta-item">
+        <i class="fa fa-calendar"></i>
+        <time datetime="2026-03-13">发布于 2026-03-13</time>
+      </span>
+      
+      
+      <span class="meta-item">
+        <i class="fa fa-edit"></i>
+        <time datetime="2026-07-20">更新于 2026-07-20</time>
+      </span>
+      
+      
+      <span class="meta-item">
+        <i class="fa fa-folder"></i>
+        
+          <a href="/coding-notes-blog/categories/%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%AC%94%E8%AE%B0-c-OOP/">程序设计笔记--c++OOP</a>
+        
+      </span>
+      
+    </div>
+    
+    <div class="post-tags animate-entry animate-delay-80">
+      
+        <a href="/coding-notes-blog/tags/OOP/" class="tag-badge">#OOP</a>
+      
+        <a href="/coding-notes-blog/tags/%E7%A8%8B%E8%AE%BE/" class="tag-badge">#程设</a>
+      
+        <a href="/coding-notes-blog/tags/c/" class="tag-badge">#c++</a>
+      
+        <a href="/coding-notes-blog/tags/%E8%BF%90%E7%AE%97%E7%AC%A6%E9%87%8D%E8%BD%BD/" class="tag-badge">#运算符重载</a>
+      
+    </div>
+    
+  </header>
+
+  
+  <div class="post-cover animate-entry animate-delay-80">
+    <img src="https://gcore.jsdelivr.net/gh/flowwalker/PicGo-based-image-host@main/06-%E5%9B%BE%E7%89%87.png" alt="运算符重载">
+  </div>
+  
+
+  <div class="post-content">
+    <h1 id="运算符重载"><a href="#运算符重载" class="headerlink" title="运算符重载"></a>运算符重载</h1><ul>
+<li><p>对<strong>已有</strong>的运算符赋予<strong>多重</strong>含义</p>
+</li>
+<li><p>使得<strong>同一运算符</strong>作用于<strong>不同数据类型</strong>时产生<strong>不同类型</strong>的行为</p>
+</li>
+<li><p><em>实质是函数重载</em>，例如<code>operator+(a,b)</code>和<code>a.operator+(b)</code></p>
+</li>
+<li><p><strong>运算符可以被重载为普通函数和类的成员函数(better)</strong></p>
+</li>
+<li><ul>
+<li><p>重载为普通函数时，参数个数就是实际运算符目数；</p>
+</li>
+<li><p>重载为<strong>成员函数</strong>时，参数个数为<strong>运算符数-1</strong>（由于<code>类名.函数</code>相当于已包含自己，更具体的如，<code>a.operator-(b)</code>）</p>
+<blockquote>
+<p>一个成为<strong>函数作用的对象</strong>，其余成为函数的实参</p>
+</blockquote>
+</li>
+</ul>
+</li>
+<li><p>编译</p>
+<blockquote>
+<p><img src="https://gcore.jsdelivr.net/gh/flowwalker/PicGo-based-image-host@main/image-20260313220945023.png" alt="image-20260313220945023"></p>
+</blockquote>
+</li>
+<li><p>⚠️ <code>*</code>既可以作为乘法号（两个参数），也可以<strong>作为指针符号一个参数</strong></p>
+</li>
+</ul>
+<h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ul>
+<li><a href="#%E8%8C%83%E5%BC%8F">范式</a></li>
+<li><a href="#%E7%BA%A6%E5%AE%9A">约定</a></li>
+<li><a href="#%E6%99%AE%E9%80%9A%E8%BF%90%E7%AE%97%E7%AC%A6%E9%87%8D%E8%BD%BD%E5%AE%9E%E4%BE%8B">普通运算符重载实例</a></li>
+<li><a href="#%E8%BF%90%E7%AE%97%E7%AC%A6%E9%87%8D%E8%BD%BD%E4%B8%BA%E5%8F%8B%E5%85%83">运算符重载为友元</a></li>
+<li><a href="#%E4%B8%8B%E6%A0%87%E8%BF%90%E7%AE%97%E7%AC%A6%E7%9A%84%E9%AB%98%E7%BA%A7%E9%87%8D%E8%BD%BD">下标运算符的高级重载</a><ul>
+<li><a href="#%E7%9B%AE%E6%A0%87-1">目标</a></li>
+<li><a href="#%E5%B8%8C%E6%9C%9B">希望</a></li>
+<li><a href="#%E5%AE%9E%E7%8E%B0-1">实现（可变长度数组的实现</a></li>
+</ul>
+</li>
+<li><a href="#%E8%B5%8B%E5%80%BC%E8%BF%90%E7%AE%97%E7%AC%A6%E7%9A%84%E9%87%8D%E8%BD%BD">赋值运算符的重载</a><ul>
+<li><a href="#%E6%A0%87%E5%87%86%E6%93%8D%E4%BD%9C">标准操作</a></li>
+<li><a href="#%E5%89%8D%E7%BD%AE%E6%B5%85%E6%8B%B7%E8%B4%9D%E5%92%8C%E6%B7%B1%E6%8B%B7%E8%B4%9D">前置：浅拷贝和深拷贝</a></li>
+<li><a href="#%E7%9B%AE%E6%A0%87-2">目标（String类实现）</a></li>
+<li><a href="#%E5%AE%9E%E7%8E%B0-2">实现（String类实现）</a></li>
+</ul>
+</li>
+<li><a href="#%E6%B5%81%E8%BF%90%E7%AE%97%E7%AC%A6%E7%9A%84%E9%87%8D%E8%BD%BD">流运算符的重载</a><ul>
+<li><a href="#%E6%B5%81%E6%8F%92%E5%85%A5%E8%BF%90%E7%AE%97%E7%AC%A6%E9%87%8D%E8%BD%BD">流插入运算符重载</a></li>
+<li><a href="#%E6%B5%81%E6%8F%90%E5%8F%96%E8%BF%90%E7%AE%97%E7%AC%A6%E9%87%8D%E8%BD%BD">流提取运算符重载</a></li>
+</ul>
+</li>
+<li><a href="#%E5%BC%BA%E5%88%B6%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2%E8%BF%90%E7%AE%97%E7%AC%A6%E9%87%8D%E8%BD%BD">强制类型转换运算符重载</a></li>
+<li><a href="#%E9%87%8D%E8%BD%BD%E8%87%AA%E5%A2%9E%E8%87%AA%E5%87%8F%E8%BF%90%E7%AE%97%E7%AC%A6">重载自增、自减运算符</a><ul>
+<li><a href="#%E5%AE%9E%E7%8E%B0-3">实现（自增自减）</a></li>
+</ul>
+</li>
+</ul>
+<h2 id="范式"><a href="#范式" class="headerlink" title="范式"></a>范式</h2><pre><code class="hljs c++">返回值类型 <span class="hljs-keyword">operator</span> 运算符 (形参表)
+&#123;
+...
+&#125;</code></pre>
+
+<p>运算符的操作数称为函数调用的实参，运算的结果就是函数的返回值。</p>
+<blockquote>
+<p>对于强制类型运算符,返回值类型不必写,因为运算符就说明了返回值类型</p>
+</blockquote>
+<h2 id="约定"><a href="#约定" class="headerlink" title="约定"></a>约定</h2><ul>
+<li>重载后的运算符含义<strong>应该符合原有的用法习惯</strong></li>
+<li>尽量<strong>保持原有的特性</strong></li>
+<li>C++规定，运算符重载<strong>不改变运算符优先级</strong></li>
+<li>⚠️并非所有都可重载，<strong>不能被重载</strong>的运算符：<code>.</code> <code>::</code> <code>?:</code> <code>sizeof</code> <code>.*</code> (以及原来不存在的)</li>
+<li>⚠️只能<strong>重载为</strong>成员函数： <code>=</code> <code>()</code> <code>[]</code> <code>-&gt;</code>和<code>强制类型转换运算符</code></li>
+</ul>
+<h2 id="普通运算符重载实例"><a href="#普通运算符重载实例" class="headerlink" title="普通运算符重载实例"></a>普通运算符重载实例</h2><pre><code class="hljs c++"><span class="hljs-comment">// 注意以下暂时将变量置于public以方便访问，正常情况下参见 friend 接口访问</span>
+<span class="hljs-comment">// 此处的+重载为普通函数，但一般情况下还是更推荐重载为成员函数</span>
+
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span>
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">Complex</span>
+&#123;
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-type">double</span> real, imag;
+    <span class="hljs-built_in">Complex</span>(<span class="hljs-type">double</span> r = <span class="hljs-number">0.0</span>, <span class="hljs-type">double</span> i = <span class="hljs-number">0.0</span>) : <span class="hljs-built_in">real</span>(r), <span class="hljs-built_in">imag</span>(i) &#123;&#125;
+    Complex <span class="hljs-keyword">operator</span>-(<span class="hljs-type">const</span> Complex &amp;c);
+&#125;;
+Complex <span class="hljs-keyword">operator</span>+(<span class="hljs-type">const</span> Complex &amp;a, <span class="hljs-type">const</span> Complex &amp;b)
+&#123;
+    <span class="hljs-keyword">return</span> <span class="hljs-built_in">Complex</span>(a.real + b.real, a.imag + b.imag);
+&#125;
+Complex Complex::<span class="hljs-keyword">operator</span>-(<span class="hljs-type">const</span> Complex &amp;c)
+&#123;
+    <span class="hljs-keyword">return</span> <span class="hljs-built_in">Complex</span>(real - c.real, imag - c.imag);
+&#125;
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>
+<span class="hljs-function"></span>&#123;
+    <span class="hljs-function">Complex <span class="hljs-title">a</span><span class="hljs-params">(<span class="hljs-number">4</span>,<span class="hljs-number">4</span>)</span>, <span class="hljs-title">b</span><span class="hljs-params">(<span class="hljs-number">1</span>,<span class="hljs-number">1</span>)</span>, c</span>;
+    c = a + b;
+    cout &lt;&lt; c.real &lt;&lt; <span class="hljs-string">&quot; , &quot;</span> &lt;&lt; c.imag &lt;&lt; endl;
+    cout &lt;&lt; (a-b).real &lt;&lt; <span class="hljs-string">&quot; , &quot;</span> &lt;&lt; (a-b).imag &lt;&lt; endl;
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+&#125;</code></pre>
+
+<blockquote>
+<p>实现[]的重载</p>
+<pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span>
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">Complex</span>
+&#123;
+<span class="hljs-keyword">public</span>:
+<span class="hljs-type">double</span> real, imag;
+<span class="hljs-built_in">Complex</span>(<span class="hljs-type">double</span> r = <span class="hljs-number">0.0</span>, <span class="hljs-type">double</span> i = <span class="hljs-number">0.0</span>) : <span class="hljs-built_in">real</span>(r), <span class="hljs-built_in">imag</span>(i) &#123;&#125;
+
+<span class="hljs-comment">// 此处用到了引用作为返回值即为return的值（实参）</span>
+Complex <span class="hljs-keyword">operator</span>-(<span class="hljs-type">const</span> Complex &amp;c);
+<span class="hljs-type">double</span>&amp; <span class="hljs-keyword">operator</span>[](<span class="hljs-type">int</span> index)             &#123; <span class="hljs-keyword">return</span> index == <span class="hljs-number">0</span> ? real : imag; &#125;
+<span class="hljs-type">const</span> <span class="hljs-type">double</span>&amp; <span class="hljs-keyword">operator</span>[](<span class="hljs-type">int</span> index) <span class="hljs-type">const</span> &#123; <span class="hljs-keyword">return</span> index == <span class="hljs-number">0</span> ? real : imag; &#125;
+<span class="hljs-comment">// 此处重载了两次，前者用于非const对象的只读和写入，后者用于const对象的只读（const 只能用于此）--当然也可以传入非const对象只读</span>
+&#125;;
+
+Complex <span class="hljs-keyword">operator</span>+(<span class="hljs-type">const</span> Complex &amp;a, <span class="hljs-type">const</span> Complex &amp;b)
+&#123;
+<span class="hljs-keyword">return</span> <span class="hljs-built_in">Complex</span>(a.real + b.real, a.imag + b.imag);
+&#125;
+
+Complex Complex::<span class="hljs-keyword">operator</span>-(<span class="hljs-type">const</span> Complex &amp;c)
+&#123;
+<span class="hljs-keyword">return</span> <span class="hljs-built_in">Complex</span>(real - c.real, imag - c.imag);
+&#125;
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>
+<span class="hljs-function"></span>&#123;
+<span class="hljs-function">Complex <span class="hljs-title">a</span><span class="hljs-params">(<span class="hljs-number">4</span>,<span class="hljs-number">4</span>)</span>, <span class="hljs-title">b</span><span class="hljs-params">(<span class="hljs-number">1</span>,<span class="hljs-number">1</span>)</span>, c</span>;
+c = a + b;
+cout &lt;&lt; c[<span class="hljs-number">0</span>] &lt;&lt; <span class="hljs-string">&quot; , &quot;</span> &lt;&lt; c[<span class="hljs-number">1</span>] &lt;&lt; endl;   <span class="hljs-comment">// 使用 [] 访问</span>
+
+a[<span class="hljs-number">0</span>] = <span class="hljs-number">10</span>;   <span class="hljs-comment">// 通过 [] 修改实部</span>
+a[<span class="hljs-number">1</span>] = <span class="hljs-number">20</span>;   <span class="hljs-comment">// 修改虚部</span>
+cout &lt;&lt; (a-b)[<span class="hljs-number">0</span>] &lt;&lt; <span class="hljs-string">&quot; , &quot;</span> &lt;&lt; (a-b)[<span class="hljs-number">1</span>] &lt;&lt; endl;
+
+<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+&#125;</code></pre>
+
+<p>此外，<code>[]</code> 是双目运算符，需要两个操作数：<strong>对象本身</strong>（左操作数）和<strong>下标索引</strong>（右操作数），重载为成员函数（只能）仅有<strong>一个参数</strong>，因为第一个操作数被<code>this 指针</code>隐式获取了</p>
+<p>实现二维数组</p>
+<h3 id="方法-1：代理类（实现-a-i-j-语法）"><a href="#方法-1：代理类（实现-a-i-j-语法）" class="headerlink" title="方法 1：代理类（实现 a[i][j] 语法）"></a>方法 1：代理类（实现 <code>a[i][j]</code> 语法）</h3><p><code>operator[]</code> 只能接受一个参数，所以第一次 <code>a[i]</code> 返回一个<strong>代理对象</strong>，再由代理对象的 <code>operator[]</code> 取列：</p>
+<p>cpp</p>
+<pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Array2D</span> &#123;
+    <span class="hljs-type">int</span>* data;
+    <span class="hljs-type">int</span> rows, cols;
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-comment">// 代理类：代表某一行</span>
+    <span class="hljs-keyword">class</span> <span class="hljs-title class_">RowProxy</span> &#123;
+        <span class="hljs-type">int</span>* row_start;
+    <span class="hljs-keyword">public</span>:
+        <span class="hljs-built_in">RowProxy</span>(<span class="hljs-type">int</span>* p) : <span class="hljs-built_in">row_start</span>(p) &#123;&#125;
+        <span class="hljs-type">int</span>&amp; <span class="hljs-keyword">operator</span>[](<span class="hljs-type">int</span> j) &#123; <span class="hljs-keyword">return</span> row_start[j]; &#125;
+    &#125;;
+
+    <span class="hljs-built_in">Array2D</span>(<span class="hljs-type">int</span> r, <span class="hljs-type">int</span> c) : <span class="hljs-built_in">rows</span>(r), <span class="hljs-built_in">cols</span>(c) &#123;
+        data = <span class="hljs-keyword">new</span> <span class="hljs-type">int</span>[r * c]();  <span class="hljs-comment">// 一维连续内存</span>
+    &#125;
+    ~<span class="hljs-built_in">Array2D</span>() &#123; <span class="hljs-keyword">delete</span>[] data; &#125;
+
+    RowProxy <span class="hljs-keyword">operator</span>[](<span class="hljs-type">int</span> i) &#123;
+        <span class="hljs-keyword">return</span> <span class="hljs-built_in">RowProxy</span>(data + i * cols);
+    &#125;
+&#125;;
+
+<span class="hljs-comment">// 使用</span>
+<span class="hljs-function">Array2D <span class="hljs-title">a</span><span class="hljs-params">(<span class="hljs-number">3</span>, <span class="hljs-number">4</span>)</span></span>;
+a[<span class="hljs-number">1</span>][<span class="hljs-number">2</span>] = <span class="hljs-number">100</span>;   <span class="hljs-comment">// 先 a[1] 返回 RowProxy，再 [2] 定位元素</span></code></pre>
+
+<p><strong>好处</strong>：符合直觉的 <code>[][]</code> 写法，且底层是<strong>一维连续内存</strong></p>
+<hr>
+<h3 id="方法-2：直接重载-operator"><a href="#方法-2：直接重载-operator" class="headerlink" title="方法 2：直接重载 operator()"></a>方法 2：直接重载 <code>operator()</code></h3><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Array2D</span> &#123;
+    <span class="hljs-type">int</span>* data;
+    <span class="hljs-type">int</span> rows, cols;
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-built_in">Array2D</span>(<span class="hljs-type">int</span> r, <span class="hljs-type">int</span> c) : <span class="hljs-built_in">rows</span>(r), <span class="hljs-built_in">cols</span>(c) &#123;
+        data = <span class="hljs-keyword">new</span> <span class="hljs-type">int</span>[r * c]();
+    &#125;
+    ~<span class="hljs-built_in">Array2D</span>() &#123; <span class="hljs-keyword">delete</span>[] data; &#125;
+
+    <span class="hljs-function"><span class="hljs-type">int</span>&amp; <span class="hljs-title">operator</span><span class="hljs-params">()</span><span class="hljs-params">(<span class="hljs-type">int</span> i, <span class="hljs-type">int</span> j)</span> </span>&#123;
+        <span class="hljs-keyword">return</span> data[i * cols + j];
+    &#125;
+    
+    <span class="hljs-function"><span class="hljs-type">int</span>&amp; <span class="hljs-title">operator</span><span class="hljs-params">()</span><span class="hljs-params">(<span class="hljs-type">int</span> i, <span class="hljs-type">int</span> j)</span> <span class="hljs-type">const</span> </span>&#123;
+        <span class="hljs-keyword">return</span> data[i * cols + j];
+    &#125;
+&#125;;
+
+<span class="hljs-comment">// 使用</span>
+<span class="hljs-function">Array2D <span class="hljs-title">a</span><span class="hljs-params">(<span class="hljs-number">3</span>, <span class="hljs-number">4</span>)</span></span>;
+<span class="hljs-built_in">a</span>(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>) = <span class="hljs-number">100</span>;   <span class="hljs-comment">// 直接二维索引，无需代理类</span></code></pre>
+
+<p>方法3:最直接了当的办法</p>
+<pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Array2D</span> &#123;
+    <span class="hljs-type">int</span>** data;
+    <span class="hljs-type">int</span> rows, cols;
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-built_in">Array2D</span>(<span class="hljs-type">int</span> r, <span class="hljs-type">int</span> c) : <span class="hljs-built_in">rows</span>(r), <span class="hljs-built_in">cols</span>(c) &#123;
+        data = <span class="hljs-keyword">new</span> <span class="hljs-type">int</span>*[rows];
+        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; rows; ++i)
+            data[i] = <span class="hljs-keyword">new</span> <span class="hljs-type">int</span>[c]();
+    &#125;
+
+    <span class="hljs-type">int</span>* <span class="hljs-keyword">operator</span>[](<span class="hljs-type">int</span> i) &#123; <span class="hljs-keyword">return</span> data[i]; &#125;  <span class="hljs-comment">// 返回 int*，第二次 [j] 用内建指针下标</span>
+
+    ~<span class="hljs-built_in">Array2D</span>() &#123;
+        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; rows; ++i) <span class="hljs-keyword">delete</span>[] data[i];
+        <span class="hljs-keyword">delete</span>[] data;
+    &#125;
+&#125;;
+
+<span class="hljs-comment">// 使用</span>
+<span class="hljs-function">Array2D <span class="hljs-title">a</span><span class="hljs-params">(<span class="hljs-number">3</span>, <span class="hljs-number">4</span>)</span></span>;
+a[<span class="hljs-number">1</span>][<span class="hljs-number">2</span>] = <span class="hljs-number">100</span>;  <span class="hljs-comment">// a[1] 返回 int*，然后 [2] 是原生指针运算</span></code></pre></blockquote>
+<h2 id="运算符重载为友元"><a href="#运算符重载为友元" class="headerlink" title="运算符重载为友元"></a>运算符重载为友元</h2><ul>
+<li><strong>一般情况</strong>下，运算符重载为<strong>成员函数</strong></li>
+<li>重载为成员函数<strong>不能满足需求</strong>，重载为<strong>全局</strong>函数</li>
+<li>重载为全局函数<strong>不能访问类的私有成员</strong>，所以需要<strong>重载为友元</strong></li>
+</ul>
+<blockquote>
+<p>例如：重载为成员函数 <code>c+5 //ok</code> ，<code>5+c //error!</code>，需重载为全局函数，为使其能够访问私有<strong>应声明为友元</strong></p>
+<p>示范：</p>
+<pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Complex</span>&#123;
+<span class="hljs-keyword">private</span>:
+	<span class="hljs-type">double</span> real,imag;
+<span class="hljs-keyword">public</span>:
+	<span class="hljs-built_in">Complex</span>(<span class="hljs-type">double</span> r,<span class="hljs-type">double</span> i):<span class="hljs-built_in">real</span>(r),<span class="hljs-built_in">imag</span>(i)&#123;&#125;
+    	Complex <span class="hljs-keyword">operator</span>+(<span class="hljs-type">double</span> r);
+    	<span class="hljs-keyword">friend</span> Complex <span class="hljs-keyword">operator</span>+(<span class="hljs-type">double</span> r,<span class="hljs-type">const</span> Complex&amp; c);
+&#125;;
+Complex Complex::<span class="hljs-keyword">operator</span>+(<span class="hljs-type">double</span> r)&#123;
+    <span class="hljs-keyword">return</span> <span class="hljs-built_in">Complex</span>(real+r,img);
+&#125;
+<span class="hljs-comment">//解释 c+5</span>
+Complex <span class="hljs-keyword">operator</span>+(<span class="hljs-type">double</span> r,<span class="hljs-type">const</span> Complex &amp;c)&#123;
+    <span class="hljs-keyword">return</span> <span class="hljs-built_in">Complex</span>(r+c.real,c.imag);
+&#125;
+<span class="hljs-comment">//解释 5+c</span>
+<span class="hljs-comment">// 对于全局函数+，第一个参数为左值，第二个参数为右值</span></code></pre>
+
+<p>事实上：</p>
+<p>更加简单的写法（但可能略微开销）是：</p>
+<pre><code class="hljs c++"><span class="hljs-comment">//构造函数改为：</span>
+<span class="hljs-built_in">Complex</span>(<span class="hljs-type">double</span> r,<span class="hljs-type">double</span> i=<span class="hljs-number">0</span>):<span class="hljs-built_in">real</span>(r),<span class="hljs-built_in">imag</span>(i)&#123;&#125;
+<span class="hljs-comment">//采用全局友函数+自动隐式转换的方式</span>
+<span class="hljs-function"><span class="hljs-keyword">friend</span> <span class="hljs-title">Complex</span><span class="hljs-params">(<span class="hljs-type">const</span> Complex &amp;c1,<span class="hljs-type">const</span> Complex &amp;c2)</span></span>&#123;
+	<span class="hljs-keyword">return</span> <span class="hljs-built_in">Complex</span>(c<span class="hljs-number">1.</span>real+c<span class="hljs-number">2.</span>real,c<span class="hljs-number">1.</span>imag+c<span class="hljs-number">2.</span>imag);
+&#125;
+<span class="hljs-comment">// 这样5→Complex(5)可以实现正常加减</span></code></pre>
+
+</blockquote>
+<h2 id="下标运算符的高级重载"><a href="#下标运算符的高级重载" class="headerlink" title="下标运算符的高级重载"></a>下标运算符的高级重载</h2><h3 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h3><p><strong>重载为长度可变的整型数组类</strong></p>
+<h3 id="希望"><a href="#希望" class="headerlink" title="希望"></a>希望</h3><ul>
+<li>数组元素<strong>个数可在初始化</strong>该对象时<strong>指定</strong></li>
+<li><strong>可以</strong>往动态数组中<strong>添加元素</strong></li>
+<li>使用该类时<strong>不用操心动态分配、释放</strong>问题</li>
+<li>能够像使用数组那样使用动态数组类对象，如可以<strong>下标访问元素</strong></li>
+</ul>
+<p>⚠️ “[]”是双目运算符，两个操作数，一里一外，“a[i]”等价于<code>a.operator[](i)</code>。按照原有“[]”的特性，“a[i]”可作为左值使用（<strong>等号左侧</strong>，具有<strong>明确的内存地址</strong>），因此应该<strong>返回引用</strong></p>
+<h3 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h3><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span>
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">CArray</span>&#123;
+<span class="hljs-keyword">private</span>:
+    <span class="hljs-type">int</span> size; <span class="hljs-comment">//数组元素个数</span>
+    <span class="hljs-type">int</span> *ptr; <span class="hljs-comment">//指向动态分配的数组</span>
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-built_in">CArray</span>(<span class="hljs-type">int</span> s=<span class="hljs-number">0</span>);
+    <span class="hljs-built_in">CArray</span>(<span class="hljs-type">const</span> CArray &amp;a);
+    ~<span class="hljs-built_in">CArray</span>();
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">push_back</span><span class="hljs-params">(<span class="hljs-type">int</span> v)</span></span>; <span class="hljs-comment">// 欲实现 a.push_back(...)</span>
+    
+    <span class="hljs-comment">// 更进一步的优化，应当是提供一个const版本</span>
+    CArray &amp; <span class="hljs-keyword">operator</span>=(<span class="hljs-type">const</span> CArray &amp;a); <span class="hljs-comment">// 用于数组对象之间的赋值</span>
+    <span class="hljs-comment">// 优化版本，const关键字防止修改</span>
+    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">length</span> <span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>&#123;<span class="hljs-keyword">return</span> size;&#125; 
+    
+    <span class="hljs-comment">//此处返回的是 int &amp; 相当于是对下表的那块地址的引用</span>
+    <span class="hljs-type">int</span> &amp; <span class="hljs-keyword">operator</span>[](<span class="hljs-type">int</span> i)&#123;
+        <span class="hljs-comment">// 防越界</span>
+        <span class="hljs-built_in">assert</span>(i&gt;=<span class="hljs-number">0</span> &amp;&amp; i&lt;size); <span class="hljs-comment">// 条件不成立程序直接终止并报错</span>
+        <span class="hljs-comment">// 用于支持根据下标访问数组元素，如 a[i]=4 和 n=a[i]的语句</span>
+        <span class="hljs-keyword">return</span> *(ptr+i); <span class="hljs-comment">// 或者等价地写为 ptr[i]</span>
+    &#125;
+&#125;; <span class="hljs-comment">// ！</span>
+CArray::<span class="hljs-built_in">CArray</span>(<span class="hljs-type">int</span> s):<span class="hljs-built_in">size</span>(s)&#123;
+    <span class="hljs-keyword">if</span>(s==<span class="hljs-number">0</span>)
+        ptr=<span class="hljs-literal">NULL</span>;
+    <span class="hljs-keyword">else</span>
+        ptr=<span class="hljs-keyword">new</span> <span class="hljs-type">int</span>[s];
+&#125;
+CArray::<span class="hljs-built_in">CArray</span>(<span class="hljs-type">const</span> CArray &amp;a)&#123;
+    <span class="hljs-keyword">if</span>(!a.ptr)&#123;
+        ptr=<span class="hljs-literal">NULL</span>;
+        size=<span class="hljs-number">0</span>;
+        <span class="hljs-keyword">return</span>;
+    &#125;
+    ptr=<span class="hljs-keyword">new</span> <span class="hljs-type">int</span>[a.size];
+    <span class="hljs-built_in">memcpy</span>(ptr,a.ptr,<span class="hljs-built_in">sizeof</span>(<span class="hljs-type">int</span>)*a.size);
+    size=a.size;
+&#125;
+CArray::~<span class="hljs-built_in">CArray</span>()&#123;
+    <span class="hljs-keyword">if</span>(ptr) <span class="hljs-keyword">delete</span> []ptr;
+&#125;
+CArray &amp; CArray::<span class="hljs-keyword">operator</span>=(<span class="hljs-type">const</span> CArray &amp; a)&#123;
+    <span class="hljs-comment">//赋值号作用：“=”左边对象中存放的数组，大小和内容都和右边对象一样</span>
+    <span class="hljs-comment">// 防自己，防空</span>
+    <span class="hljs-keyword">if</span>(ptr==a.ptr) <span class="hljs-keyword">return</span> *<span class="hljs-keyword">this</span>; <span class="hljs-comment">// 防止自等</span>
+    <span class="hljs-keyword">if</span>(a.ptr==<span class="hljs-literal">NULL</span>)&#123;
+        <span class="hljs-keyword">if</span>(ptr) <span class="hljs-keyword">delete</span> []ptr;
+        ptr=<span class="hljs-literal">NULL</span>; <span class="hljs-comment">// 清空地址后为悬浮指针，仍然指向原来地址，必须令为NULL保证安全</span>
+        size=<span class="hljs-number">0</span>;
+        <span class="hljs-keyword">return</span> *<span class="hljs-keyword">this</span>;
+    &#125;
+    <span class="hljs-keyword">if</span>(size&lt;a.size)&#123;  <span class="hljs-comment">// 只有不够才多申请，不用担心push，因为size也对已经改了</span>
+        <span class="hljs-keyword">if</span>(ptr)
+            <span class="hljs-keyword">delete</span> []ptr;
+        ptr=<span class="hljs-keyword">new</span> <span class="hljs-type">int</span>[a.size];
+    &#125;
+    <span class="hljs-built_in">memcpy</span>(ptr,a.ptr,<span class="hljs-built_in">sizeof</span>(<span class="hljs-type">int</span>)*a.size);
+    size=a.size;
+    <span class="hljs-keyword">return</span> *<span class="hljs-keyword">this</span>;
+&#125;
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">CArray::push_back</span><span class="hljs-params">(<span class="hljs-type">int</span> v)</span></span>&#123;
+    <span class="hljs-keyword">if</span>(ptr)&#123;
+        <span class="hljs-type">int</span> *tmpPtr=<span class="hljs-keyword">new</span> <span class="hljs-type">int</span>[size<span class="hljs-number">+1</span>]; <span class="hljs-comment">// 重新分配空间</span>
+        <span class="hljs-built_in">memcpy</span>(tmpPtr,ptr,<span class="hljs-built_in">sizeof</span>(<span class="hljs-type">int</span>)*size); <span class="hljs-comment">// 复制原数组内容</span>
+        <span class="hljs-keyword">delete</span> []ptr;
+        ptr=tmpPtr;
+    &#125;
+    <span class="hljs-keyword">else</span>
+        ptr=<span class="hljs-keyword">new</span> <span class="hljs-type">int</span>[<span class="hljs-number">1</span>];
+    	ptr[size++]=v; <span class="hljs-comment">// 加入新的数组元素</span>
+&#125;
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;
+    CArray a;
+    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">0</span>;i&lt;<span class="hljs-number">5</span>;++i)
+        a.<span class="hljs-built_in">push_back</span>(i);
+    CArray a2,a3;
+    a2=a;
+    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">0</span>;i&lt;a<span class="hljs-number">2.l</span>ength();++i)
+        cout&lt;&lt;a2[i]&lt;&lt;<span class="hljs-string">&quot; &quot;</span>;
+    cout&lt;&lt;endl;
+    a[<span class="hljs-number">3</span>]=<span class="hljs-number">100</span>;
+    <span class="hljs-function">CArray <span class="hljs-title">a4</span><span class="hljs-params">(a)</span></span>;
+    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">0</span>;i&lt;a<span class="hljs-number">4.l</span>ength;++i)
+        cout&lt;&lt;a4[i]&lt;&lt;<span class="hljs-string">&quot; &quot;</span>;
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+&#125;</code></pre>
+
+<blockquote>
+<p>Tips：注意到push_back函数每次尾部添加一个元素都要重新分配内存并复制原有内容，效率低下，因此可以<strong>采用“翻倍扩容增长策略”</strong></p>
+<pre><code class="hljs c++"><span class="hljs-comment">// 成员变量增加 capacity</span>
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">CArray::push_back</span><span class="hljs-params">(<span class="hljs-type">int</span> v)</span></span>&#123;
+    <span class="hljs-keyword">if</span>(size==capacity)&#123;
+        <span class="hljs-comment">// 空间爆满再扩容</span>
+        <span class="hljs-type">int</span> newCapacity=(capacity==<span class="hljs-number">0</span>?)<span class="hljs-number">1</span>:<span class="hljs-number">2</span>*capacity;
+        <span class="hljs-type">int</span> *tmpPtr=<span class="hljs-keyword">new</span> <span class="hljs-type">int</span>[newCapacity];
+        <span class="hljs-keyword">if</span>(ptr)&#123;
+            <span class="hljs-built_in">memcpy</span>(tmpPtr，ptr,<span class="hljs-built_in">sizeof</span>(<span class="hljs-type">int</span>)*size);
+            <span class="hljs-keyword">delete</span> []ptr;
+        &#125;
+        ptr=tmpPtr;
+        capacity=newCapacity;
+    &#125;
+    ptr[size++]=v;
+&#125;
+</code></pre>
+
+<p>如此将扩容次数从 n 降到 log(n)</p>
+</blockquote>
+<blockquote>
+<pre><code class="hljs c++"><span class="hljs-type">int</span>* a = <span class="hljs-keyword">new</span> <span class="hljs-type">int</span>[<span class="hljs-number">5</span>];      <span class="hljs-comment">// a[0] 可能是 0，也可能是 114514，不可预期</span>
+<span class="hljs-type">int</span>* b = <span class="hljs-keyword">new</span> <span class="hljs-type">int</span>[<span class="hljs-number">5</span>]();    <span class="hljs-comment">// b[0] ~ b[4] 保证全是 0</span></code></pre>
+
+</blockquote>
+<h2 id="赋值运算符的重载"><a href="#赋值运算符的重载" class="headerlink" title="赋值运算符的重载"></a>赋值运算符的重载</h2><p><strong>赋值运算符“&#x3D;”只能重载为成员函数！</strong>（与该类<strong>强关联</strong>必须重载为成员函数）</p>
+<h3 id="标准操作"><a href="#标准操作" class="headerlink" title="标准操作"></a>标准操作</h3><ul>
+<li>⚠️</li>
+<li>检查自我赋值</li>
+<li>检查是否为空</li>
+<li>释放旧内存→分配新内存→复制数据</li>
+<li>让目标指向新内存</li>
+</ul>
+<p>以下为<code>&lt;string&gt;</code>的可能实现参考，掌握以下则几乎可以掌握“&#x3D;”的重载</p>
+<h3 id="前置：浅拷贝和深拷贝"><a href="#前置：浅拷贝和深拷贝" class="headerlink" title="前置：浅拷贝和深拷贝"></a>前置：浅拷贝和深拷贝</h3><h4 id="浅拷贝（浅复制）"><a href="#浅拷贝（浅复制）" class="headerlink" title="浅拷贝（浅复制）"></a>浅拷贝（浅复制）</h4><p>执行<strong>逐个字节</strong>的复制工作</p>
+<ul>
+<li>对于指针，（拷贝指针的值即地址）将导致<strong>指向同一个地方</strong></li>
+<li>若1对象消亡，但另一指针2仍然指向该地址，对象2消亡释放同一块内存，程序崩溃</li>
+<li>若将1指针改指向”others”，消亡原本对象，2指针成为悬空指针</li>
+</ul>
+<p><img src="https://gcore.jsdelivr.net/gh/flowwalker/PicGo-based-image-host@main/image-20260315154951918.png" alt="image-20260315154951918"></p>
+<h4 id="深拷贝"><a href="#深拷贝" class="headerlink" title="深拷贝"></a>深拷贝</h4><p>将一个<strong>对象中指针变量指向的内容</strong>→复制到另一个对象中指针成员变量指向的地方</p>
+<p><img src="https://gcore.jsdelivr.net/gh/flowwalker/PicGo-based-image-host@main/image-20260315160722752.png" alt="image-20260315160722752"></p>
+<blockquote>
+<p>🤨</p>
+<p><img src="https://gcore.jsdelivr.net/gh/flowwalker/PicGo-based-image-host@main/image-20260315160532693.png" alt="image-20260315160532693"></p>
+</blockquote>
+<h3 id="目标-1"><a href="#目标-1" class="headerlink" title="目标"></a>目标</h3><p>实现 string 类，长度可变</p>
+<h3 id="实现-1"><a href="#实现-1" class="headerlink" title="实现"></a>实现</h3><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;cstring&gt;</span></span>
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">String</span>&#123;
+<span class="hljs-keyword">private</span>:
+    <span class="hljs-type">char</span> *str;
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-built_in">String</span>():<span class="hljs-built_in">str</span>(<span class="hljs-literal">NULL</span>)&#123;&#125;
+    <span class="hljs-comment">//定义转换构造函数（方便强制类型转换）</span>
+    <span class="hljs-built_in">String</span>(<span class="hljs-type">const</span> <span class="hljs-type">char</span>* s):<span class="hljs-built_in">str</span>(<span class="hljs-literal">NULL</span>)&#123;
+        <span class="hljs-keyword">if</span>(s)&#123;
+            str=<span class="hljs-keyword">new</span> <span class="hljs-type">char</span>[<span class="hljs-built_in">strlen</span>(s)<span class="hljs-number">+1</span>];
+            <span class="hljs-built_in">strcpy</span>(str,s);
+        &#125;
+    &#125;
+    <span class="hljs-comment">//必须补充复制构造函数以使得String s=s2 生效,深拷贝！</span>
+    <span class="hljs-built_in">String</span>(<span class="hljs-type">const</span> String &amp;s):<span class="hljs-built_in">str</span>(<span class="hljs-literal">NULL</span>)&#123;
+		<span class="hljs-keyword">if</span>(s.str)&#123;
+            str=<span class="hljs-keyword">new</span> <span class="hljs-type">char</span>[<span class="hljs-built_in">strlen</span>(s.str)<span class="hljs-number">+1</span>];
+            <span class="hljs-built_in">strcpy</span>(str,s.str);
+        &#125;
+    &#125;
+    <span class="hljs-function"><span class="hljs-type">const</span> <span class="hljs-type">char</span> *<span class="hljs-title">c_str</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>&#123; <span class="hljs-keyword">return</span> str;&#125; <span class="hljs-comment">// 加上前const防止对象内部被轻易修改，加上外const推广范围，使得const String 也可以调用</span>
+    String &amp; <span class="hljs-keyword">operator</span>=(<span class="hljs-type">const</span> <span class="hljs-type">char</span>*s);
+    ~<span class="hljs-built_in">String</span>()&#123; <span class="hljs-keyword">delete</span> []str;&#125; <span class="hljs-comment">// 根据生成来确定，此外，C++ 标准规定 delete 或 delete[] 一个空指针是安全的（不会产生任何效果）无需检查</span>
+&#125;;
+<span class="hljs-comment">// 防自己，防空</span>
+<span class="hljs-comment">// 浅拷贝（针对 const char*）</span>
+String &amp; String::<span class="hljs-keyword">operator</span>=(<span class="hljs-type">const</span> <span class="hljs-type">char</span> *s)&#123;
+    <span class="hljs-keyword">if</span>(str==s) <span class="hljs-keyword">return</span> *<span class="hljs-keyword">this</span>; <span class="hljs-comment">// 少发生</span>
+    <span class="hljs-keyword">delete</span> []str;
+    <span class="hljs-keyword">if</span>(s)&#123;
+        str=<span class="hljs-keyword">new</span> <span class="hljs-type">char</span>[<span class="hljs-built_in">strlen</span>(s)<span class="hljs-number">+1</span>];
+        <span class="hljs-built_in">strcpy</span>(str,s);
+	&#125;
+    <span class="hljs-keyword">else</span>
+        str=<span class="hljs-literal">NULL</span>;
+    <span class="hljs-keyword">return</span> *<span class="hljs-keyword">this</span>;
+&#125;
+<span class="hljs-comment">// 深拷贝</span>
+String &amp;String::<span class="hljs-keyword">operator</span>=(<span class="hljs-type">const</span> String &amp;s)&#123;
+    <span class="hljs-comment">//if(str==s.str) return *this; // 可能出现误判！</span>
+    <span class="hljs-keyword">if</span>(<span class="hljs-keyword">this</span>==&amp;s) <span class="hljs-keyword">return</span> *<span class="hljs-keyword">this</span>; <span class="hljs-comment">// 直接判断是否为同一个对象，与成员具体的值无关，最可靠！</span>
+    <span class="hljs-keyword">delete</span> []str;
+    <span class="hljs-keyword">if</span>(s.str)&#123;
+        str=<span class="hljs-keyword">new</span> <span class="hljs-type">char</span>[<span class="hljs-built_in">strlen</span>(s.str)<span class="hljs-number">+1</span>];
+		<span class="hljs-built_in">strcpy</span>(str,s.str);
+    &#125;
+    <span class="hljs-keyword">else</span>
+        str=<span class="hljs-literal">NULL</span>;
+    <span class="hljs-keyword">return</span> *<span class="hljs-keyword">this</span>;
+&#125;
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;
+    String s;
+    s=<span class="hljs-string">&quot;Good Luck&quot;</span>;
+    cout&lt;&lt;s.<span class="hljs-built_in">c_str</span>()&lt;&lt;endl;
+    <span class="hljs-comment">// String s2=&quot;hello!&quot;; //在没有转换构造函数之前这句话是错的</span>
+    s=<span class="hljs-string">&quot;Shenzhou!&quot;</span>;
+    cout&lt;&lt;s.<span class="hljs-built_in">c_str</span>()&lt;&lt;endl;
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+&#125;</code></pre>
+
+<blockquote>
+<p>关于42行误判：</p>
+<p><img src="https://gcore.jsdelivr.net/gh/flowwalker/PicGo-based-image-host@main/image-20260315171404785.png" alt="image-20260315171404785"></p>
+<p>关于 operator 返回值的讨论</p>
+<p><img src="https://gcore.jsdelivr.net/gh/flowwalker/PicGo-based-image-host@main/image-20260315171540412.png" alt="image-20260315171540412"></p>
+<p>🤨 加上 const 使得 const char* 也可以使用</p>
+<p><img src="https://gcore.jsdelivr.net/gh/flowwalker/PicGo-based-image-host@main/image-20260315163549393.png" alt="image-20260315163549393"></p>
+</blockquote>
+<h2 id="流运算符的重载"><a href="#流运算符的重载" class="headerlink" title="流运算符的重载"></a>流运算符的重载</h2><h3 id="流插入运算符重载"><a href="#流插入运算符重载" class="headerlink" title="流插入运算符重载"></a>流插入运算符重载</h3><p><strong><code>&lt;&lt;</code>本没有输出功能，只因被 ostream类重载了多次（cout是ostream类的对象）</strong></p>
+<ul>
+<li><p><code>cout&lt;&lt;object</code>→两个参数</p>
+<pre><code class="hljs c++"><span class="hljs-type">void</span> <span class="hljs-keyword">operator</span>&lt;&lt;(ostream &amp;o,<span class="hljs-type">int</span> n)&#123;
+	<span class="hljs-built_in">output</span>(n);
+&#125;</code></pre>
+
+
+</li>
+<li><p><code>cout&lt;&lt;5&lt;&lt;&quot; hello&quot;</code>→&#96;operator&lt;&lt;(operator&lt;&lt;(cout,5),” hello”)→为了链式调用，必须返回std::ostream类的引用</p>
+<pre><code class="hljs c++">ostream &amp; <span class="hljs-keyword">operator</span>&lt;&lt;(ostream &amp;o,<span class="hljs-type">int</span> n)&#123;
+	<span class="hljs-built_in">output</span>(n);
+    <span class="hljs-keyword">return</span> o;
+&#125;</code></pre></li>
+</ul>
+<p>重载为全局函数：</p>
+<pre><code class="hljs c++"><span class="hljs-comment">//实际上操作</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">A</span>&#123;
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-type">int</span> n;
+&#125;;
+ostream &amp; <span class="hljs-keyword">operator</span>&lt;&lt;(ostream &amp; o,<span class="hljs-type">const</span> A &amp;a)&#123;
+    o&lt;&lt;a.n;
+    <span class="hljs-keyword">return</span> o;
+&#125;
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;
+    A a;
+    a.n=<span class="hljs-number">5</span>;
+    cout&lt;&lt;a&lt;&lt;<span class="hljs-string">&quot;hello&quot;</span>;
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+&#125;</code></pre>
+
+<h4 id="重载为成员函数"><a href="#重载为成员函数" class="headerlink" title="重载为成员函数"></a>重载为成员函数</h4><p>标准库实际做的，<strong>但是对于自定义对象⚠️我们不能改变标准库！！！</strong></p>
+<pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">ostream</span>&#123;
+	ostream &amp; <span class="hljs-keyword">operator</span>&lt;&lt;(<span class="hljs-type">int</span> n)&#123;
+		<span class="hljs-built_in">output</span>(n);
+		<span class="hljs-keyword">return</span> *<span class="hljs-keyword">this</span>;
+	&#125;
+&#125;;</code></pre>
+
+<p>调用时则例如相当于<code>(cout.operator&lt;&lt;(n++)).operator&lt;&lt;(n)</code></p>
+<h3 id="流提取运算符重载"><a href="#流提取运算符重载" class="headerlink" title="流提取运算符重载"></a>流提取运算符重载</h3><p><strong>cin 是<code>istream</code>类的对象</strong>，在头文件iostream声明，** istream 将<code>&gt;&gt;</code>重载为成员函数，与cin组合用于输入数据 ** </p>
+<h3 id="实际重载"><a href="#实际重载" class="headerlink" title="实际重载"></a>实际重载</h3><p><strong>由于无法修改 ostream 类和 istream 类</strong>，只能重载为<strong>全局函数</strong>，且<strong>声明为友元</strong></p>
+<pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;string&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;cstdlib&gt;</span></span>
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">Complex</span>&#123;
+<span class="hljs-keyword">private</span>:
+    <span class="hljs-type">double</span> real,imag;
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-built_in">Complex</span>(<span class="hljs-type">double</span> r=<span class="hljs-number">0</span>,<span class="hljs-type">double</span> i=<span class="hljs-number">0</span>):<span class="hljs-built_in">real</span>(r),<span class="hljs-built_in">imag</span>(i)&#123;&#125;
+    <span class="hljs-keyword">friend</span> ostream &amp; <span class="hljs-keyword">operator</span>&lt;&lt;(ostream &amp;os,<span class="hljs-type">const</span> Complex &amp;c);
+    <span class="hljs-keyword">friend</span> istream &amp; <span class="hljs-keyword">operator</span>&gt;&gt;(istream &amp;is,Complex &amp;c);
+&#125;;
+ostream &amp; <span class="hljs-keyword">operator</span> &lt;&lt;(ostream &amp; os,<span class="hljs-type">const</span> Complex &amp; c)
+&#123;
+    os&lt;&lt;c.real&lt;&lt;<span class="hljs-string">&quot;+&quot;</span>&lt;&lt;c.imag&lt;&lt;<span class="hljs-string">&quot;i&quot;</span>;
+    <span class="hljs-keyword">return</span> os;
+&#125;
+istream &amp; <span class="hljs-keyword">operator</span> &gt;&gt;(istream &amp;is,Complex &amp;c)&#123;
+    string s;
+    is&gt;&gt;s;
+    <span class="hljs-type">int</span> pos=s.<span class="hljs-built_in">find</span>(<span class="hljs-string">&#x27;+&#x27;</span>,<span class="hljs-number">0</span>); <span class="hljs-comment">// 默认“a+bi”不能有空格</span>
+    <span class="hljs-comment">// 此处有个小小的坑：‘-’则不可处理</span>
+    
+    <span class="hljs-comment">// 分离实部和虚部</span>
+    string sTmp=s.<span class="hljs-built_in">substr</span>(<span class="hljs-number">0</span>,pos); 
+    c.real=<span class="hljs-built_in">atof</span>(sTmp.<span class="hljs-built_in">c_str</span>()); <span class="hljs-comment">// atof 将const char*指针指向内容转换为float</span>
+    sTmp=s.<span class="hljs-built_in">substr</span>(pos<span class="hljs-number">+1</span>,s.<span class="hljs-built_in">length</span>()-pos<span class="hljs-number">-2</span>);
+    <span class="hljs-comment">// 前面pos指的是实际位置-1=长度，取pos可；此处pos指的是+号的pos位置，+1即下一个位置，-2减掉加号和i号</span>
+    c.imag=<span class="hljs-built_in">atof</span>(sTmp.<span class="hljs-built_in">c_str</span>());
+    <span class="hljs-keyword">return</span> is;
+    
+    <span class="hljs-comment">//实际上更推荐现成的 std::stod(sTmp)。它直接支持 std::string，且能处理转换失败的异常，不需要手动调用 .c_str()</span>
+&#125;
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;
+    Complex c;
+    <span class="hljs-type">int</span> n;
+    cin&gt;&gt;c&gt;&gt;n;
+    cout&lt;&lt;c&lt;&lt;<span class="hljs-string">&quot;,&quot;</span>&lt;&lt;n;
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+&#125;</code></pre>
+
+
+
+<h3 id="强制类型转换运算符重载"><a href="#强制类型转换运算符重载" class="headerlink" title="强制类型转换运算符重载"></a>强制类型转换运算符重载</h3><p>在c++语言中，<strong>类型的名字（包括类本身的名字）本身也是一种运算符</strong>，即<strong>强制类型转换运算符</strong></p>
+<ul>
+<li><p>⚠️ <strong>不需要指定返回值类型</strong>，因为运算符就代表返回值类型</p>
+</li>
+<li><p><strong>单</strong>目运算符</p>
+</li>
+<li><p><strong>只</strong>能重载<strong>为成员函数</strong></p>
+</li>
+<li><p>经过适当重载后等价为 <code>对象.operator 类型名()</code></p>
+</li>
+</ul>
+<h4 id="实现（以double重载为例）"><a href="#实现（以double重载为例）" class="headerlink" title="实现（以double重载为例）"></a>实现（以<code>double</code>重载为例）</h4><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span>
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">Complex</span>&#123;
+<span class="hljs-keyword">private</span>:
+    <span class="hljs-type">double</span> real,imag;
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-built_in">Complex</span>(<span class="hljs-type">double</span> r=<span class="hljs-number">0</span>,<span class="hljs-type">double</span> i=<span class="hljs-number">0</span>):<span class="hljs-built_in">real</span>(r),<span class="hljs-built_in">imag</span>(i)&#123;&#125;
+    <span class="hljs-comment">// ☀️</span>
+    <span class="hljs-function"><span class="hljs-keyword">operator</span> <span class="hljs-title">double</span><span class="hljs-params">()</span></span>&#123; <span class="hljs-keyword">return</span> real;&#125; <span class="hljs-comment">// 不需要指定返回类型！</span>
+&#125;;
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;
+    <span class="hljs-function">Complex <span class="hljs-title">c</span><span class="hljs-params">(<span class="hljs-number">1.2</span>,<span class="hljs-number">3.4</span>)</span></span>;
+    cout&lt;&lt;(<span class="hljs-type">double</span>)c&lt;&lt;endl;
+    <span class="hljs-type">double</span> n=<span class="hljs-number">2</span>+c; <span class="hljs-comment">// 等价于 double n=2+c.operator()</span>
+    cout&lt;&lt;n;
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+&#125;</code></pre>
+
+<p>🌊有了对 double 运算符的重载，本该出现 double 类型的变量或常量的地方，出现的<strong>Complex类型对象会被自动调用operator double成员函数，然后取其返回值使用</strong></p>
+<h3 id="重载自增、自减运算符"><a href="#重载自增、自减运算符" class="headerlink" title="重载自增、自减运算符"></a>重载自增、自减运算符</h3><p>⚠️ 此处重载应有<strong>前置和后置之分</strong>，前置为返回操作后的值，后置返回操作前的值（再操作），因此：</p>
+<p>C++规定，⚠️ 在重载<strong>自增、自减运算符</strong>时，允许<strong>多编写一个没用的 int 类型形参</strong>→</p>
+<ul>
+<li>处理<strong>前置</strong>表达式，调用<strong>参数个数正常</strong>的重载函数</li>
+<li>⚠️处理<strong>后置</strong>表达式，调用多出一个参数的重载函数</li>
+</ul>
+<h4 id="实现-2"><a href="#实现-2" class="headerlink" title="实现"></a>实现</h4><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span>
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">CDemo</span>&#123;
+<span class="hljs-keyword">private</span>:
+	<span class="hljs-type">int</span> n;
+<span class="hljs-keyword">public</span>:
+	<span class="hljs-built_in">CDemo</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">0</span>):<span class="hljs-built_in">n</span>(i)&#123;&#125;
+	CDemo&amp; <span class="hljs-keyword">operator</span>++(); <span class="hljs-comment">// 前置形式</span>
+	CDemo <span class="hljs-keyword">operator</span>++(<span class="hljs-type">int</span>); <span class="hljs-comment">// 后置形式</span>
+	<span class="hljs-function"><span class="hljs-keyword">operator</span> <span class="hljs-title">int</span><span class="hljs-params">()</span></span>&#123; <span class="hljs-keyword">return</span> n;&#125;
+	<span class="hljs-keyword">friend</span> CDemo <span class="hljs-keyword">operator</span>--(CDemo &amp;);
+	<span class="hljs-keyword">friend</span> CDemo <span class="hljs-keyword">operator</span>--(CDemo &amp;,<span class="hljs-type">int</span>);
+&#125;;
+<span class="hljs-comment">// 此处 int 是约定不用接变量；其余则是类内声明只需类型，不一定接变量</span>
+<span class="hljs-comment">// 采用CDemo&amp;可以避免一次临时对象的拷贝，且支持 ++++a 这种连续操作</span>
+CDemo&amp; CDemo::<span class="hljs-keyword">operator</span>++()&#123; <span class="hljs-comment">//返回自身引用</span>
+<span class="hljs-comment">// 前置 ++</span>
+    n++;
+    <span class="hljs-keyword">return</span> *<span class="hljs-keyword">this</span>;
+&#125;
+
+<span class="hljs-comment">// 注意以下需要先存放原来，操作后返回</span>
+CDemo CDemo::<span class="hljs-keyword">operator</span>++(<span class="hljs-type">int</span> k)&#123; <span class="hljs-comment">//返回一个临时变量</span>
+    <span class="hljs-comment">// 后置++</span>
+    <span class="hljs-function">CDemo <span class="hljs-title">tmp</span><span class="hljs-params">(*<span class="hljs-keyword">this</span>)</span></span>; <span class="hljs-comment">//记录修改前的对象</span>
+    n++;
+    <span class="hljs-keyword">return</span> tmp;
+&#125;
+CDemo <span class="hljs-keyword">operator</span>--(CDemo &amp; c)&#123;
+    c.n--;
+    <span class="hljs-keyword">return</span> c;
+&#125;
+CDemo <span class="hljs-keyword">operator</span>--(CDemo &amp; c,<span class="hljs-type">int</span> k)&#123;
+    <span class="hljs-function">CDemo <span class="hljs-title">tmp</span><span class="hljs-params">(c)</span></span>;
+    c.n--;
+    <span class="hljs-keyword">return</span> tmp;
+&#125;
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;
+    ...
+&#125;
+<span class="hljs-comment">// 此处--重载为全局函数为示范，重载为成员函数更佳</span></code></pre>
+
+<p>对比底层可以发现，<strong>后置效率更低</strong></p>
+
+  </div>
+
+  
+  <div class="post-copyright animate-entry animate-delay-300">
+    <p><strong>本文作者：</strong>flowwalker</p>
+    <p><strong>本文链接：</strong><a href="/coding-notes-blog/posts/55fa/">/coding-notes-blog/posts/55fa/</a></p>
+    <p><strong>版权声明：</strong>本文采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> 许可协议</p>
+  </div>
+  
+</article>
+
+
+<nav class="post-navigation animate-entry animate-delay-300">
+  
+    <a href="/coding-notes-blog/posts/ed2e/" class="post-nav-item prev" title="继承与派生">
+      <span class="nav-arrow">←</span>
+      <span class="nav-text">继承与派生</span>
+    </a>
+  
+  
+    <a href="/coding-notes-blog/posts/9c61/" class="post-nav-item next" title="类和对象进阶">
+      <span class="nav-text">类和对象进阶</span>
+      <span class="nav-arrow">→</span>
+    </a>
+  
+</nav>
+
+
+
+
+
+      </div>
+      <footer class="site-footer">
+  <div class="footer-inner">
+    
+    <div class="footer-copyright">
+      &copy; 2026–2026 flowwalker
+    </div>
+    
+    
+    <div class="footer-powered">
+      Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <span>Dawn</span>
+    </div>
+    
+  </div>
+</footer>
+
+
+    </main>
+  </div>
+  <button class="sidebar-expand-btn" id="sidebar-expand-btn" title="展开侧边栏" aria-label="展开侧边栏">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+  </button>
+  <div class="floating-actions">
+    
+    <div class="back-to-top-wrap" id="back-to-top-wrap">
+      <svg class="progress-ring" width="52" height="52" viewBox="0 0 52 52">
+        <circle class="progress-ring-bg" cx="26" cy="26" r="23"/>
+        <circle class="progress-ring-fill" id="progress-ring-fill" cx="26" cy="26" r="23"/>
+      </svg>
+      <button class="back-to-top" id="back-to-top" aria-label="回到顶部">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+      </button>
+    </div>
+    
+    <button class="search-toggle-float" id="search-toggle-btn" title="搜索" aria-label="搜索">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    </button>
+    
+    <a href="/coding-notes-blog/" class="floating-home" aria-label="回到主页" title="回到主页">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    </a>
+    
+    
+    <button class="dark-toggle-float" id="dark-toggle-btn" title="暗色模式" aria-label="暗色模式">
+      <svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    </button>
+    
+    
+    <button class="immersive-toggle" id="immersive-toggle-btn" title="沉浸式阅读" aria-label="沉浸式阅读">
+      <svg class="icon-enter" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
+      <svg class="icon-exit" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 8 3 3 8 3"/><polyline points="20 16 21 21 16 21"/><line x1="14" y1="14" x2="21" y2="21"/><line x1="3" y1="3" x2="10" y2="10"/></svg>
+    </button>
+    
+  </div>
+  <div class="search-overlay" id="search-overlay">
+    <div class="search-modal">
+      <div class="search-modal-header">
+        <input type="text" id="search-input" class="search-input" placeholder="输入关键词搜索文章..." autocomplete="off">
+        <button class="search-close-btn" id="search-close-btn" aria-label="关闭搜索">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="search-results" id="search-results"></div>
+    </div>
+  </div>
+  <script>
+(function() {
+  var STORAGE_KEY = 'dawn-theme';
+  var html = document.documentElement;
+
+  function getLabel(dark) {
+    return dark ? '亮色模式' : '暗色模式';
+  }
+
+  function updateUI(dark) {
+    var btn = document.getElementById('dark-toggle-btn');
+    if (!btn) return;
+    btn.setAttribute('title', getLabel(dark));
+    btn.setAttribute('aria-label', getLabel(dark));
+  }
+
+  var saved = localStorage.getItem(STORAGE_KEY);
+  if (saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+    html.classList.add('dark');
+    updateUI(true);
+  } else {
+    html.classList.remove('dark');
+    updateUI(false);
+  }
+
+  function setTheme(dark) {
+    if (dark) {
+      html.classList.add('dark');
+    } else {
+      html.classList.remove('dark');
+    }
+    localStorage.setItem(STORAGE_KEY, dark ? 'dark' : 'light');
+    updateUI(dark);
+    updateGiscus(dark);
+  }
+
+  function updateGiscus(dark) {
+    var frame = document.querySelector('.giscus-frame');
+    if (frame) {
+      frame.contentWindow.postMessage({
+        giscus: { setConfig: { theme: dark ? 'dark' : 'light' } }
+      }, 'https://giscus.app');
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    var btn = document.getElementById('dark-toggle-btn');
+    if (btn) {
+      btn.addEventListener('click', function() {
+        setTheme(!html.classList.contains('dark'));
+      });
+    }
+  });
+
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
+    if (localStorage.getItem(STORAGE_KEY) === null) {
+      setTheme(e.matches);
+    }
+  });
+})();
+</script>
+
+  <script src="/coding-notes-blog/js/main.js"></script>
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        processEscapes: true
+      },
+      options: {
+        ignoreHtmlClass: 'no-mathjax',
+        processHtmlClass: 'mathjax-process'
+      }
+    };
+  }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+
+
+
+</body>
+</html>

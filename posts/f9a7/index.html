@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="">
+<head>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>c++11特性 | 码艺Blog</title>
+
+<meta name="description" content="flowwalker 的编程学习与实践笔记">
+
+
+<meta name="author" content="flowwalker">
+<link rel="alternate" href="/coding-notes-blog/atom.xml" title="码艺Blog" type="application/atom+xml">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="/coding-notes-blog/css/style.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+
+
+<link rel="icon" href="/coding-notes-blog/img/favicon.png">
+
+<script>
+(function() {
+  var saved = localStorage.getItem('dawn-theme');
+  if (saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+    document.documentElement.classList.add('dark');
+  }
+})();
+</script>
+
+
+<meta name="generator" content="Hexo 8.1.2"></head>
+<body>
+  <div class="site-wrapper">
+    <aside class="site-sidebar" id="sidebar">
+  <button class="sidebar-collapse-btn" id="sidebar-collapse-btn" title="折叠侧边栏" aria-label="折叠侧边栏">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+  </button>
+  <div class="sidebar-inner">
+    
+    
+    <div class="sidebar-toc sidebar-toc--full">
+      <div class="sidebar-toc-header">
+        <h3 class="sidebar-toc-title">目录</h3>
+        <button class="toc-expand-all-btn" id="toc-expand-all-btn" title="展开全部目录" aria-label="展开全部目录">
+          <svg class="toc-expand-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+      </div>
+      <div class="sidebar-toc-content">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#c-%E7%89%B9%E6%80%A7"><span class="toc-text">c++特性</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Lambda-%E8%A1%A8%E8%BE%BE%E5%BC%8F"><span class="toc-text">Lambda 表达式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#auto-%E5%85%B3%E9%94%AE%E5%AD%97"><span class="toc-text">auto 关键字</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A9%BA%E6%8C%87%E9%92%88-nullptr"><span class="toc-text">空指针 nullptr</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8E%E8%8C%83%E5%9B%B4%E7%9A%84-for-%E5%BE%AA%E7%8E%AF"><span class="toc-text">基于范围的 for 循环</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%9F%E4%B8%80%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="toc-text">{} 统一初始化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%88%90%E5%91%98%E5%8F%98%E9%87%8F%E9%BB%98%E8%AE%A4%E5%88%9D%E5%A7%8B%E5%80%BC"><span class="toc-text">成员变量默认初始值</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%B3%E5%80%BC%E5%BC%95%E7%94%A8%E5%92%8C-move-%E8%AF%AD%E4%B9%89"><span class="toc-text">右值引用和 move 语义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#unique-ptr%EF%BC%88%E7%8B%AC%E5%8D%A0%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88%EF%BC%89"><span class="toc-text">unique_ptr（独占智能指针）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#shared-ptr%EF%BC%88%E5%85%B1%E4%BA%AB%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88%EF%BC%89"><span class="toc-text">shared_ptr（共享智能指针）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#decltype-%E5%85%B3%E9%94%AE%E5%AD%97"><span class="toc-text">decltype 关键字</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%87%E8%83%BD%E5%BC%95%E7%94%A8%E4%B8%8E-forward-%E8%BD%AC%E5%8F%91"><span class="toc-text">万能引用与 forward 转发</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#C-14-%E8%A1%A5%E5%85%85"><span class="toc-text">C++14 补充</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#C-17-%E8%A1%A5%E5%85%85"><span class="toc-text">C++17 补充</span></a></li></ol></li></ol>
+      </div>
+    </div>
+    
+  </div>
+</aside>
+
+    <main class="main-content">
+      <header class="site-header">
+  <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+  <nav class="header-nav animate-stagger-50">
+    
+      <a href="/coding-notes-blog/" class="nav-item animate-entry">首页</a>
+    
+      <a href="/coding-notes-blog/about/" class="nav-item animate-entry">此地一二</a>
+    
+      <a href="/coding-notes-blog/archives/" class="nav-item animate-entry">时光长河</a>
+    
+      <a href="/coding-notes-blog/categories/" class="nav-item animate-entry">卷宗总览</a>
+    
+      <a href="/coding-notes-blog/tags/" class="nav-item animate-entry">签注归集</a>
+    
+      <a href="/coding-notes-blog/links/" class="nav-item animate-entry">四处仙山</a>
+    
+      <a href="https://flowwalker.top" class="nav-item animate-entry">归返本山</a>
+    
+  </nav>
+</header>
+
+      <div class="content-area">
+        <article class="post-full">
+  <header class="post-header">
+    <h1 class="post-title animate-entry animate-delay-0">c++11特性</h1>
+    <div class="post-meta animate-entry animate-delay-80">
+      
+      <span class="meta-item">
+        <i class="fa fa-calendar"></i>
+        <time datetime="2026-04-17">发布于 2026-04-17</time>
+      </span>
+      
+      
+      <span class="meta-item">
+        <i class="fa fa-edit"></i>
+        <time datetime="2026-07-20">更新于 2026-07-20</time>
+      </span>
+      
+      
+      <span class="meta-item">
+        <i class="fa fa-folder"></i>
+        
+          <a href="/coding-notes-blog/categories/%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%AC%94%E8%AE%B0-c-OOP/">程序设计笔记--c++OOP</a>
+        
+      </span>
+      
+    </div>
+    
+    <div class="post-tags animate-entry animate-delay-80">
+      
+        <a href="/coding-notes-blog/tags/OOP/" class="tag-badge">#OOP</a>
+      
+        <a href="/coding-notes-blog/tags/%E7%A8%8B%E8%AE%BE/" class="tag-badge">#程设</a>
+      
+        <a href="/coding-notes-blog/tags/c/" class="tag-badge">#c++</a>
+      
+    </div>
+    
+  </header>
+
+  
+  <div class="post-cover animate-entry animate-delay-80">
+    <img src="https://gcore.jsdelivr.net/gh/flowwalker/PicGo-based-image-host@main/da1027148c363d37230f81f18fb82a6f.jpg" alt="c++11特性">
+  </div>
+  
+
+  <div class="post-content">
+    <h1 id="c-特性"><a href="#c-特性" class="headerlink" title="c++特性"></a>c++特性</h1><blockquote>
+<p>以下按常用频次排序。每个特性给出最精简的语法和示例。</p>
+</blockquote>
+<hr>
+<h2 id="Lambda-表达式"><a href="#Lambda-表达式" class="headerlink" title="Lambda 表达式"></a>Lambda 表达式</h2><pre><code class="hljs cpp"><span class="hljs-comment">// [捕获](参数) -&gt; 返回类型 &#123; 函数体 &#125;</span>
+<span class="hljs-keyword">auto</span> add = [](<span class="hljs-type">int</span> a, <span class="hljs-type">int</span> b) -&gt; <span class="hljs-type">int</span> &#123; <span class="hljs-keyword">return</span> a + b; &#125;;
+<span class="hljs-keyword">auto</span> f = [&amp;x, y](<span class="hljs-type">int</span> z) &#123; x += y + z; &#125;;  <span class="hljs-comment">// x引用捕获, y值捕获</span>
+
+<span class="hljs-comment">// 捕获简写</span>
+[=]  &#123; <span class="hljs-comment">/* 全部值捕获 */</span> &#125;
+[&amp;]  &#123; <span class="hljs-comment">/* 全部引用捕获 */</span> &#125;
+[=, &amp;x] &#123; <span class="hljs-comment">/* x引用，其余值捕获 */</span> &#125;</code></pre>
+
+<h2 id="auto-关键字"><a href="#auto-关键字" class="headerlink" title="auto 关键字"></a>auto 关键字</h2><pre><code class="hljs cpp"><span class="hljs-keyword">auto</span> i = <span class="hljs-number">42</span>;              <span class="hljs-comment">// int</span>
+<span class="hljs-keyword">auto</span> s = string&#123;<span class="hljs-string">&quot;hi&quot;</span>&#125;;    <span class="hljs-comment">// string</span>
+<span class="hljs-keyword">auto</span> it = v.<span class="hljs-built_in">begin</span>();      <span class="hljs-comment">// vector&lt;int&gt;::iterator</span>
+<span class="hljs-comment">// 结合引用/const</span>
+<span class="hljs-type">const</span> <span class="hljs-keyword">auto</span>&amp; ref = vec;    <span class="hljs-comment">// const 引用</span></code></pre>
+
+<h2 id="空指针-nullptr"><a href="#空指针-nullptr" class="headerlink" title="空指针 nullptr"></a>空指针 nullptr</h2><pre><code class="hljs cpp"><span class="hljs-type">int</span>* p = <span class="hljs-literal">nullptr</span>;   <span class="hljs-comment">// 替代 NULL，类型安全</span>
+<span class="hljs-comment">// 函数重载时：f(nullptr) 走 f(int*)，f(NULL) 可能走错</span></code></pre>
+
+<h2 id="基于范围的-for-循环"><a href="#基于范围的-for-循环" class="headerlink" title="基于范围的 for 循环"></a>基于范围的 for 循环</h2><pre><code class="hljs cpp"><span class="hljs-keyword">for</span> (<span class="hljs-keyword">auto</span>&amp; x : vec) &#123; x *= <span class="hljs-number">2</span>; &#125;          <span class="hljs-comment">// 修改用引用</span>
+<span class="hljs-keyword">for</span> (<span class="hljs-type">const</span> <span class="hljs-keyword">auto</span>&amp; x : vec) &#123; cout &lt;&lt; x; &#125; <span class="hljs-comment">// 只读用 const 引用</span></code></pre>
+
+<h2 id="统一初始化"><a href="#统一初始化" class="headerlink" title="{} 统一初始化"></a>{} 统一初始化</h2><pre><code class="hljs cpp"><span class="hljs-type">int</span> a&#123;<span class="hljs-number">5</span>&#125;;
+vector&lt;<span class="hljs-type">int</span>&gt; v&#123;<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>&#125;;
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">P</span> &#123; <span class="hljs-type">int</span> x, y; &#125;;
+P p&#123;<span class="hljs-number">1</span>, <span class="hljs-number">2</span>&#125;;           <span class="hljs-comment">// 聚合初始化</span></code></pre>
+
+<h2 id="成员变量默认初始值"><a href="#成员变量默认初始值" class="headerlink" title="成员变量默认初始值"></a>成员变量默认初始值</h2><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">A</span> &#123;
+  <span class="hljs-type">int</span> x = <span class="hljs-number">0</span>;      <span class="hljs-comment">// 直接给默认值</span>
+  string s&#123;<span class="hljs-string">&quot;hi&quot;</span>&#125;;
+&#125;;</code></pre>
+
+<h2 id="右值引用和-move-语义"><a href="#右值引用和-move-语义" class="headerlink" title="右值引用和 move 语义"></a>右值引用和 move 语义</h2><pre><code class="hljs cpp"><span class="hljs-comment">// 左值：可取地址的；右值：字面量、临时对象、表达式结果</span>
+<span class="hljs-type">int</span> a = <span class="hljs-number">5</span>;
+<span class="hljs-type">int</span>&amp; lref = a;         <span class="hljs-comment">// 左值引用</span>
+<span class="hljs-type">int</span>&amp;&amp; rref = <span class="hljs-number">5</span>;        <span class="hljs-comment">// 右值引用</span>
+
+<span class="hljs-comment">// move：将左值转为右值引用，触发移动语义</span>
+vector&lt;<span class="hljs-type">int</span>&gt; v2 = <span class="hljs-built_in">move</span>(v1);  <span class="hljs-comment">// v1 内容被移走，v1 变为空</span>
+
+<span class="hljs-comment">// 移动构造函数（浅拷贝指针，移交所有权）</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">Buffer</span> &#123;
+  <span class="hljs-type">char</span>* data;
+<span class="hljs-keyword">public</span>:
+  <span class="hljs-built_in">Buffer</span>(Buffer&amp;&amp; other) <span class="hljs-keyword">noexcept</span>
+    : <span class="hljs-built_in">data</span>(other.data) &#123; other.data = <span class="hljs-literal">nullptr</span>; &#125;
+&#125;;</code></pre>
+
+<h2 id="unique-ptr（独占智能指针）"><a href="#unique-ptr（独占智能指针）" class="headerlink" title="unique_ptr（独占智能指针）"></a>unique_ptr（独占智能指针）</h2><pre><code class="hljs cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;memory&gt;</span></span>
+<span class="hljs-keyword">auto</span> p = <span class="hljs-built_in">make_unique</span>&lt;<span class="hljs-type">int</span>&gt;(<span class="hljs-number">42</span>);       <span class="hljs-comment">// 推荐写法</span>
+<span class="hljs-keyword">auto</span> p2 = <span class="hljs-built_in">move</span>(p);                   <span class="hljs-comment">// 转移所有权，p 变 nullptr</span>
+<span class="hljs-comment">// 离开作用域自动 delete，不可拷贝，不可容器传参（可 move）</span></code></pre>
+
+<h2 id="shared-ptr（共享智能指针）"><a href="#shared-ptr（共享智能指针）" class="headerlink" title="shared_ptr（共享智能指针）"></a>shared_ptr（共享智能指针）</h2><pre><code class="hljs cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;memory&gt;</span></span>
+<span class="hljs-keyword">auto</span> sp = <span class="hljs-built_in">make_shared</span>&lt;<span class="hljs-type">int</span>&gt;(<span class="hljs-number">42</span>);      <span class="hljs-comment">// 推荐写法</span>
+<span class="hljs-keyword">auto</span> sp2 = sp;                        <span class="hljs-comment">// 引用计数 +1</span>
+<span class="hljs-comment">// 计数归零自动 delete。注意循环引用导致泄漏。</span></code></pre>
+
+<blockquote>
+<p><code>make_unique</code>&#x2F;<code>make_shared</code> 比 <code>new</code> 更安全（无裸 new，异常安全）。</p>
+</blockquote>
+<h2 id="decltype-关键字"><a href="#decltype-关键字" class="headerlink" title="decltype 关键字"></a>decltype 关键字</h2><pre><code class="hljs cpp"><span class="hljs-type">int</span> x = <span class="hljs-number">0</span>;
+<span class="hljs-keyword">decltype</span>(x) y = <span class="hljs-number">1</span>;           <span class="hljs-comment">// y 类型为 int</span>
+<span class="hljs-keyword">decltype</span>((x)) z = x;         <span class="hljs-comment">// 双括号→int&amp;</span>
+<span class="hljs-comment">// 主要用于泛型中推导返回类型</span></code></pre>
+
+<h2 id="万能引用与-forward-转发"><a href="#万能引用与-forward-转发" class="headerlink" title="万能引用与 forward 转发"></a>万能引用与 forward 转发</h2><pre><code class="hljs cpp"><span class="hljs-comment">// T&amp;&amp; 在模板中为万能引用，可接受左/右值</span>
+<span class="hljs-function"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T&gt;</span>
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">wrapper</span><span class="hljs-params">(T&amp;&amp; arg)</span> </span>&#123;
+  <span class="hljs-built_in">foo</span>(forward&lt;T&gt;(arg));  <span class="hljs-comment">// 保持原值类别转发</span>
+&#125;</code></pre>
+
+<hr>
+<h2 id="C-14-补充"><a href="#C-14-补充" class="headerlink" title="C++14 补充"></a>C++14 补充</h2><table>
+<thead>
+<tr>
+<th>特性</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>二进制常量</td>
+<td><code>int b = 0b1010;</code></td>
+</tr>
+<tr>
+<td>返回类型自动推导</td>
+<td><code>auto f() { return 42; }</code></td>
+</tr>
+<tr>
+<td>泛型 lambda</td>
+<td><code>auto f = [](auto x) { return x * 2; };</code></td>
+</tr>
+<tr>
+<td>make_unique</td>
+<td>C++14 引入，用法见上</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="C-17-补充"><a href="#C-17-补充" class="headerlink" title="C++17 补充"></a>C++17 补充</h2><table>
+<thead>
+<tr>
+<th>特性</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>结构化绑定</td>
+<td><code>auto [x, y] = make_pair(1, 2);</code></td>
+</tr>
+<tr>
+<td>if 初始化</td>
+<td><code>if (auto it = m.find(k); it != m.end()) { ... }</code></td>
+</tr>
+<tr>
+<td>CTAD</td>
+<td><code>vector v{1, 2, 3};</code> 自动推导为 <code>vector&lt;int&gt;</code></td>
+</tr>
+<tr>
+<td><code>std::optional</code></td>
+<td>可能无值的返回值，<code>if (opt.has_value())</code></td>
+</tr>
+</tbody></table>
+
+  </div>
+
+  
+  <div class="post-copyright animate-entry animate-delay-300">
+    <p><strong>本文作者：</strong>flowwalker</p>
+    <p><strong>本文链接：</strong><a href="/coding-notes-blog/posts/f9a7/">/coding-notes-blog/posts/f9a7/</a></p>
+    <p><strong>版权声明：</strong>本文采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> 许可协议</p>
+  </div>
+  
+</article>
+
+
+<nav class="post-navigation animate-entry animate-delay-300">
+  
+    <a href="/coding-notes-blog/posts/180c/" class="post-nav-item prev" title="Python修养1">
+      <span class="nav-arrow">←</span>
+      <span class="nav-text">Python修养1</span>
+    </a>
+  
+  
+    <a href="/coding-notes-blog/posts/ad77/" class="post-nav-item next" title="STL进阶">
+      <span class="nav-text">STL进阶</span>
+      <span class="nav-arrow">→</span>
+    </a>
+  
+</nav>
+
+
+
+
+
+      </div>
+      <footer class="site-footer">
+  <div class="footer-inner">
+    
+    <div class="footer-copyright">
+      &copy; 2026–2026 flowwalker
+    </div>
+    
+    
+    <div class="footer-powered">
+      Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <span>Dawn</span>
+    </div>
+    
+  </div>
+</footer>
+
+
+    </main>
+  </div>
+  <button class="sidebar-expand-btn" id="sidebar-expand-btn" title="展开侧边栏" aria-label="展开侧边栏">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+  </button>
+  <div class="floating-actions">
+    
+    <div class="back-to-top-wrap" id="back-to-top-wrap">
+      <svg class="progress-ring" width="52" height="52" viewBox="0 0 52 52">
+        <circle class="progress-ring-bg" cx="26" cy="26" r="23"/>
+        <circle class="progress-ring-fill" id="progress-ring-fill" cx="26" cy="26" r="23"/>
+      </svg>
+      <button class="back-to-top" id="back-to-top" aria-label="回到顶部">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+      </button>
+    </div>
+    
+    <button class="search-toggle-float" id="search-toggle-btn" title="搜索" aria-label="搜索">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    </button>
+    
+    <a href="/coding-notes-blog/" class="floating-home" aria-label="回到主页" title="回到主页">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    </a>
+    
+    
+    <button class="dark-toggle-float" id="dark-toggle-btn" title="暗色模式" aria-label="暗色模式">
+      <svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    </button>
+    
+    
+    <button class="immersive-toggle" id="immersive-toggle-btn" title="沉浸式阅读" aria-label="沉浸式阅读">
+      <svg class="icon-enter" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
+      <svg class="icon-exit" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 8 3 3 8 3"/><polyline points="20 16 21 21 16 21"/><line x1="14" y1="14" x2="21" y2="21"/><line x1="3" y1="3" x2="10" y2="10"/></svg>
+    </button>
+    
+  </div>
+  <div class="search-overlay" id="search-overlay">
+    <div class="search-modal">
+      <div class="search-modal-header">
+        <input type="text" id="search-input" class="search-input" placeholder="输入关键词搜索文章..." autocomplete="off">
+        <button class="search-close-btn" id="search-close-btn" aria-label="关闭搜索">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="search-results" id="search-results"></div>
+    </div>
+  </div>
+  <script>
+(function() {
+  var STORAGE_KEY = 'dawn-theme';
+  var html = document.documentElement;
+
+  function getLabel(dark) {
+    return dark ? '亮色模式' : '暗色模式';
+  }
+
+  function updateUI(dark) {
+    var btn = document.getElementById('dark-toggle-btn');
+    if (!btn) return;
+    btn.setAttribute('title', getLabel(dark));
+    btn.setAttribute('aria-label', getLabel(dark));
+  }
+
+  var saved = localStorage.getItem(STORAGE_KEY);
+  if (saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+    html.classList.add('dark');
+    updateUI(true);
+  } else {
+    html.classList.remove('dark');
+    updateUI(false);
+  }
+
+  function setTheme(dark) {
+    if (dark) {
+      html.classList.add('dark');
+    } else {
+      html.classList.remove('dark');
+    }
+    localStorage.setItem(STORAGE_KEY, dark ? 'dark' : 'light');
+    updateUI(dark);
+    updateGiscus(dark);
+  }
+
+  function updateGiscus(dark) {
+    var frame = document.querySelector('.giscus-frame');
+    if (frame) {
+      frame.contentWindow.postMessage({
+        giscus: { setConfig: { theme: dark ? 'dark' : 'light' } }
+      }, 'https://giscus.app');
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    var btn = document.getElementById('dark-toggle-btn');
+    if (btn) {
+      btn.addEventListener('click', function() {
+        setTheme(!html.classList.contains('dark'));
+      });
+    }
+  });
+
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
+    if (localStorage.getItem(STORAGE_KEY) === null) {
+      setTheme(e.matches);
+    }
+  });
+})();
+</script>
+
+  <script src="/coding-notes-blog/js/main.js"></script>
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        processEscapes: true
+      },
+      options: {
+        ignoreHtmlClass: 'no-mathjax',
+        processHtmlClass: 'mathjax-process'
+      }
+    };
+  }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+
+
+
+</body>
+</html>

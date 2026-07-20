@@ -1,0 +1,1235 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="">
+<head>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>Python修养4 | 码艺Blog</title>
+
+<meta name="description" content="flowwalker 的编程学习与实践笔记">
+
+
+<meta name="author" content="flowwalker">
+<link rel="alternate" href="/coding-notes-blog/atom.xml" title="码艺Blog" type="application/atom+xml">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="/coding-notes-blog/css/style.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+
+
+<link rel="icon" href="/coding-notes-blog/img/favicon.png">
+
+<script>
+(function() {
+  var saved = localStorage.getItem('dawn-theme');
+  if (saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+    document.documentElement.classList.add('dark');
+  }
+})();
+</script>
+
+
+<meta name="generator" content="Hexo 8.1.2"></head>
+<body>
+  <div class="site-wrapper">
+    <aside class="site-sidebar" id="sidebar">
+  <button class="sidebar-collapse-btn" id="sidebar-collapse-btn" title="折叠侧边栏" aria-label="折叠侧边栏">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+  </button>
+  <div class="sidebar-inner">
+    
+    
+    <div class="sidebar-toc sidebar-toc--full">
+      <div class="sidebar-toc-header">
+        <h3 class="sidebar-toc-title">目录</h3>
+        <button class="toc-expand-all-btn" id="toc-expand-all-btn" title="展开全部目录" aria-label="展开全部目录">
+          <svg class="toc-expand-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+      </div>
+      <div class="sidebar-toc-content">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Python%E4%BF%AE%E5%85%BB4"><span class="toc-text">Python修养4</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9B%AE%E5%BD%95"><span class="toc-text">目录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1"><span class="toc-text">函数式程序设计</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%9D%E6%83%B3"><span class="toc-text">思想</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%97%AD%E5%8C%85-closure"><span class="toc-text">闭包(closure)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%81%8F%E5%BA%94%E7%94%A8%E5%87%BD%E6%95%B0-Partical-Application"><span class="toc-text">偏应用函数(Partical Application)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%AD%E4%BB%A3%E5%99%A8"><span class="toc-text">迭代器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="toc-text">基本概念</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%93%8D%E4%BD%9C"><span class="toc-text">操作</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96%E4%B8%8E%E7%A7%BB%E5%8A%A8"><span class="toc-text">获取与移动</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%AE%BE%E7%BD%AE%E7%B1%BB%E8%BF%AD%E4%BB%A3%E5%99%A8"><span class="toc-text">设置类迭代器</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%AD%E4%BB%A3%E9%87%8D%E8%BD%BD"><span class="toc-text">迭代重载</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%9F%E6%88%90%E5%99%A8-generator"><span class="toc-text">生成器(generator)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A6%82%E5%BF%B5"><span class="toc-text">概念</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#yield%E5%85%B3%E9%94%AE%E5%AD%97%E5%AE%9A%E4%B9%89%E7%94%9F%E6%88%90%E5%99%A8"><span class="toc-text">yield关键字定义生成器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#send%E8%AF%AD%E5%8F%A5"><span class="toc-text">send语句</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B6%E4%BB%96%E8%AF%AD%E6%B3%95%E7%89%B9%E6%80%A7"><span class="toc-text">其他语法特性</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#eval%E5%87%BD%E6%95%B0"><span class="toc-text">eval函数</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%A6%82%E5%BF%B5-1"><span class="toc-text">概念</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#compile%E5%92%8Cexec%E5%87%BD%E6%95%B0"><span class="toc-text">compile和exec函数</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%8C%87%E5%AE%9A%E4%BD%9C%E7%94%A8%E5%9F%9F"><span class="toc-text">指定作用域</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%8D%E5%B0%84-reflection"><span class="toc-text">反射(reflection)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%A6%82%E5%BF%B5-2"><span class="toc-text">概念</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86"><span class="toc-text">异常处理</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#try-%E2%80%A6-except"><span class="toc-text">try … except</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#try-%E2%80%A6-finally"><span class="toc-text">try … finally</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A3%85%E9%A5%B0%E5%99%A8"><span class="toc-text">装饰器</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5-1"><span class="toc-text">基本概念</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E8%A3%85%E9%A5%B0%E5%99%A8"><span class="toc-text">自定义装饰器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B8%A6%E5%8F%82%E6%95%B0%E7%9A%84%E8%A3%85%E9%A5%B0%E5%99%A8"><span class="toc-text">带参数的装饰器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%94%A8%E5%AF%B9%E8%B1%A1%E5%81%9A%E8%A3%85%E9%A5%B0%E5%99%A8"><span class="toc-text">用对象做装饰器</span></a></li></ol></li></ol></li></ol></li></ol>
+      </div>
+    </div>
+    
+  </div>
+</aside>
+
+    <main class="main-content">
+      <header class="site-header">
+  <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+  <nav class="header-nav animate-stagger-50">
+    
+      <a href="/coding-notes-blog/" class="nav-item animate-entry">首页</a>
+    
+      <a href="/coding-notes-blog/about/" class="nav-item animate-entry">此地一二</a>
+    
+      <a href="/coding-notes-blog/archives/" class="nav-item animate-entry">时光长河</a>
+    
+      <a href="/coding-notes-blog/categories/" class="nav-item animate-entry">卷宗总览</a>
+    
+      <a href="/coding-notes-blog/tags/" class="nav-item animate-entry">签注归集</a>
+    
+      <a href="/coding-notes-blog/links/" class="nav-item animate-entry">四处仙山</a>
+    
+      <a href="https://flowwalker.top" class="nav-item animate-entry">归返本山</a>
+    
+  </nav>
+</header>
+
+      <div class="content-area">
+        <article class="post-full">
+  <header class="post-header">
+    <h1 class="post-title animate-entry animate-delay-0">Python修养4</h1>
+    <div class="post-meta animate-entry animate-delay-80">
+      
+      <span class="meta-item">
+        <i class="fa fa-calendar"></i>
+        <time datetime="2026-05-23">发布于 2026-05-23</time>
+      </span>
+      
+      
+      <span class="meta-item">
+        <i class="fa fa-edit"></i>
+        <time datetime="2026-07-20">更新于 2026-07-20</time>
+      </span>
+      
+      
+      <span class="meta-item">
+        <i class="fa fa-folder"></i>
+        
+          <a href="/coding-notes-blog/categories/%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%AC%94%E8%AE%B0-Python/">程序设计笔记--Python</a>
+        
+      </span>
+      
+    </div>
+    
+    <div class="post-tags animate-entry animate-delay-80">
+      
+        <a href="/coding-notes-blog/tags/OOP/" class="tag-badge">#OOP</a>
+      
+        <a href="/coding-notes-blog/tags/Python/" class="tag-badge">#Python</a>
+      
+        <a href="/coding-notes-blog/tags/%E7%A8%8B%E8%AE%BE/" class="tag-badge">#程设</a>
+      
+    </div>
+    
+  </header>
+
+  
+  <div class="post-cover animate-entry animate-delay-80">
+    <img src="https://gcore.jsdelivr.net/gh/flowwalker/PicGo-based-image-host@main/da1027148c363d37230f81f18fb82a6f.jpg" alt="Python修养4">
+  </div>
+  
+
+  <div class="post-content">
+    <h1 id="Python修养4"><a href="#Python修养4" class="headerlink" title="Python修养4"></a>Python修养4</h1><h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><p>[TOC]</p>
+<h2 id="函数式程序设计"><a href="#函数式程序设计" class="headerlink" title="函数式程序设计"></a>函数式程序设计</h2><h3 id="思想"><a href="#思想" class="headerlink" title="思想"></a>思想</h3><ul>
+<li><p>函数可以用来<strong>给变量赋值</strong></p>
+<blockquote>
+<p>python中的函数是<strong>对象</strong>, 可像普通变量一样赋值,传值,返回</p>
+</blockquote>
+</li>
+<li><p>函数可作为<strong>函数的参数</strong></p>
+<blockquote>
+<p>python中的可调用对象( 即可以用<code>()</code>调用 ) 包括普通函数和<strong>实现了<code>__call__</code>方法的类实例</strong></p>
+<pre><code class="hljs python"><span class="hljs-keyword">class</span> <span class="hljs-title class_">A</span>:
+	<span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self,n</span>):
+		<span class="hljs-variable language_">self</span>.n = n
+	<span class="hljs-keyword">def</span> <span class="hljs-title function_">__call__</span>(<span class="hljs-params">self,x</span>):
+		<span class="hljs-keyword">return</span> <span class="hljs-variable language_">self</span>.n + x
+	<span class="hljs-keyword">def</span> <span class="hljs-title function_">add</span>(<span class="hljs-params">x, y, f</span>):
+		<span class="hljs-keyword">return</span> f(x) + f(y)
+<span class="hljs-built_in">print</span>(add(<span class="hljs-number">1</span>,<span class="hljs-number">10</span>,<span class="hljs-built_in">abs</span>)) <span class="hljs-comment">#=&gt; 11</span>
+<span class="hljs-built_in">print</span>(add(<span class="hljs-number">1</span>,<span class="hljs-number">10</span>,A(<span class="hljs-number">5</span>))) <span class="hljs-comment">#=&gt; 21</span></code></pre>
+
+</blockquote>
+</li>
+<li><p>lambda表达式可以被赋值给变量, 也可作为函数的返回值和参数</p>
+<blockquote>
+<p>回顾<code>filter(function,iterable)</code> 挑选出可迭代对象**中每一个满足function的元素返回一个迭代器</p>
+</blockquote>
+<blockquote>
+<p>trick:</p>
+<pre><code class="hljs python">b=<span class="hljs-keyword">lambda</span> x:<span class="hljs-keyword">lambda</span> y:x+y
+<span class="hljs-comment">#b是一个lambda表达式, 返回值是一个lambda表达式</span>
+a=b(<span class="hljs-number">3</span>) <span class="hljs-comment">#暂时存放3</span>
+<span class="hljs-built_in">print</span>(a(<span class="hljs-number">2</span>)) <span class="hljs-comment"># 5</span></code></pre>
+
+</blockquote>
+</li>
+<li><p>⚠️函数<strong>内部声明</strong>的变量<strong>自动视为局部变量</strong></p>
+</li>
+<li><p>⚠️可以直接<strong>读取外部全局变量</strong>, 但是若要<strong>修改</strong>🌊需要<code>global x</code>的声明</p>
+</li>
+</ul>
+<h3 id="闭包-closure"><a href="#闭包-closure" class="headerlink" title="闭包(closure)"></a>闭包(closure)</h3><ul>
+<li><p>能够维持外部变量值的函数</p>
+</li>
+<li><p>⚠️修改维持的变量要使用<code>nonlocal x</code>声明</p>
+<blockquote>
+<p>告诉python不要创建局部变量, 要去外围func函数中查找x并修改</p>
+</blockquote>
+</li>
+</ul>
+<pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">func</span>(<span class="hljs-params">x</span>):
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">g</span>(<span class="hljs-params">y</span>):
+        <span class="hljs-keyword">nonlocal</span> x
+        x+=<span class="hljs-number">1</span>
+        <span class="hljs-keyword">return</span> x+y <span class="hljs-comment">#g是一个闭包,即能够维持外部变量值的函数</span>
+    <span class="hljs-keyword">return</span> g
+f=func(<span class="hljs-number">10</span>)
+<span class="hljs-built_in">print</span>(f(<span class="hljs-number">4</span>))
+f=func(<span class="hljs-number">20</span>)
+<span class="hljs-built_in">print</span>(f(<span class="hljs-number">4</span>))
+<span class="hljs-built_in">print</span>(f(<span class="hljs-number">5</span>))</code></pre>
+
+<p><strong>闭包的作用</strong></p>
+<p>调用&#x2F;补充别人的库函数而<strong>不修改别人的库</strong></p>
+<blockquote>
+<pre><code class="hljs python"><span class="hljs-comment"># ========== 原始库（dummy_network.py）==========</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">DummyNet</span>():
+ <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self, weight, bias</span>):
+     <span class="hljs-variable language_">self</span>.weight = weight
+     <span class="hljs-variable language_">self</span>.bias = bias
+
+ <span class="hljs-keyword">def</span> <span class="hljs-title function_">forward</span>(<span class="hljs-params">self, <span class="hljs-built_in">input</span></span>):
+     <span class="hljs-keyword">return</span> <span class="hljs-built_in">input</span> * <span class="hljs-variable language_">self</span>.weight + <span class="hljs-variable language_">self</span>.bias
+
+ <span class="hljs-keyword">def</span> <span class="hljs-title function_">__call__</span>(<span class="hljs-params">self, <span class="hljs-built_in">input</span></span>):
+     <span class="hljs-keyword">return</span> <span class="hljs-variable language_">self</span>.forward(<span class="hljs-built_in">input</span>)
+
+<span class="hljs-comment"># 使用方式</span>
+<span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np
+data = np.array([-<span class="hljs-number">1.</span>, <span class="hljs-number">0.</span>, <span class="hljs-number">1.</span>, <span class="hljs-number">2.</span>])
+mynet = DummyNet(weight=<span class="hljs-number">2.0</span>, bias=-<span class="hljs-number">1.0</span>)
+<span class="hljs-built_in">print</span>(mynet(data))        <span class="hljs-comment"># array([-3., -1.,  1.,  3.])</span></code></pre></blockquote>
+<ol>
+<li>场景</li>
+</ol>
+<ul>
+<li>别人写好了库（如 <code>DummyNet</code>），<strong>不能改源码</strong></li>
+<li>但需要<strong>修改运行流程</strong>（如给线性层加 ReLU 激活）</li>
+</ul>
+<ol start="2">
+<li>闭包写法</li>
+</ol>
+<pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">my_forward</span>(<span class="hljs-params">self</span>):               <span class="hljs-comment"># 外层函数接收 mynet 实例</span>
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">forward</span>(<span class="hljs-params"><span class="hljs-built_in">input</span></span>):             <span class="hljs-comment"># 内层函数才是真正的 forward</span>
+        tmp = <span class="hljs-built_in">input</span> * <span class="hljs-variable language_">self</span>.weight + <span class="hljs-variable language_">self</span>.bias
+        tmp = np.maximum(<span class="hljs-number">0</span>, tmp)    <span class="hljs-comment"># 加上 ReLU 非线性激活</span>
+        <span class="hljs-keyword">return</span> tmp
+    <span class="hljs-keyword">return</span> forward                  <span class="hljs-comment"># 返回内层函数（闭包）</span>
+
+<span class="hljs-comment"># 关键：把闭包绑定到实例上</span>
+mynet.forward = my_forward(mynet)   <span class="hljs-comment"># 不修改类，只改这个实例的 forward</span></code></pre>
+
+<p>内层 <code>forward</code> 函数<strong>捕获了外层 <code>self</code> 变量</strong>（即 <code>mynet</code> 实例），即使外层函数执行完毕，<code>self</code> 仍然被内层函数”关”在里面，随时可用。</p>
+<pre><code class="hljs python"><span class="hljs-built_in">print</span>(mynet(data))        <span class="hljs-comment"># array([0., 0., 1., 3.])</span>
+<span class="hljs-comment"># 负数被 ReLU 截断为 0</span></code></pre>
+
+<blockquote>
+<p>等价于:</p>
+<pre><code class="hljs python"><span class="hljs-comment"># my_forward(mynet) 执行后：</span>
+<span class="hljs-comment">#   self = mynet</span>
+<span class="hljs-comment">#   返回一个绑定了 self 的 forward 函数</span>
+<span class="hljs-comment"># 等价于：</span>
+mynet.forward = <span class="hljs-keyword">lambda</span> <span class="hljs-built_in">input</span>: np.maximum(<span class="hljs-number">0</span>, <span class="hljs-built_in">input</span> * mynet.weight + mynet.bias)</code></pre></blockquote>
+<h3 id="偏应用函数-Partical-Application"><a href="#偏应用函数-Partical-Application" class="headerlink" title="偏应用函数(Partical Application)"></a>偏应用函数(Partical Application)</h3><p>用于固定函数中的某些参数</p>
+<pre><code class="hljs python"><span class="hljs-keyword">from</span> functools <span class="hljs-keyword">import</span> partical
+add=<span class="hljs-keyword">lambda</span> a,b:a+b
+add1024=partical(add,<span class="hljs-number">1024</span>)<span class="hljs-comment">#固定a</span>
+<span class="hljs-built_in">print</span>(add1024(<span class="hljs-number">1</span>))
+<span class="hljs-built_in">print</span>(add1024(<span class="hljs-number">10</span>))</code></pre>
+
+
+
+<h2 id="迭代器"><a href="#迭代器" class="headerlink" title="迭代器"></a>迭代器</h2><h3 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h3><ul>
+<li><p>能用<code>for i in x</code>形式遍历的对象x称为<strong>可迭代对象(iterable)</strong></p>
+</li>
+<li><p>可迭代对象<strong>必须实现迭代器协议</strong>, 即<code>__iter__()</code>和<code>__next__()</code>方法</p>
+<ul>
+<li>前者方法返回<strong>对象本身</strong></li>
+<li>后者方法返回<strong>下一元素</strong></li>
+</ul>
+</li>
+<li><p><code>for i in x</code>循环中python会<strong>自动调用</strong><code>x.__iter__()</code>方法获得迭代器p, 并自动调用<code>next(p)</code>获取元素, 并<strong>自动检查StopIteration异常, 碰到即结束(否则无限循环)</strong></p>
+<blockquote>
+<pre><code class="hljs python">x = [<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>,<span class="hljs-number">4</span>]
+<span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> x:
+	<span class="hljs-built_in">print</span>(i)
+<span class="hljs-comment">#→ 等价于</span>
+it = <span class="hljs-built_in">iter</span>(x)
+<span class="hljs-keyword">while</span> <span class="hljs-literal">True</span>:
+	<span class="hljs-keyword">try</span>:
+		<span class="hljs-built_in">print</span>(<span class="hljs-built_in">next</span>(it))
+	<span class="hljs-keyword">except</span> StopIteration:
+		<span class="hljs-keyword">break</span> <span class="hljs-comment">#空语句，什么都不做</span></code></pre></blockquote>
+</li>
+</ul>
+<h3 id="操作"><a href="#操作" class="headerlink" title="操作"></a>操作</h3><h4 id="获取与移动"><a href="#获取与移动" class="headerlink" title="获取与移动"></a>获取与移动</h4><pre><code class="hljs python">x=[<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>,<span class="hljs-number">4</span>]
+it=<span class="hljs-built_in">iter</span>(x) <span class="hljs-comment">#获取迭代器</span>
+<span class="hljs-built_in">print</span>(<span class="hljs-built_in">next</span>(it))
+<span class="hljs-built_in">print</span>(<span class="hljs-built_in">next</span>(it)) <span class="hljs-comment">#操作迭代器移向下一位</span></code></pre>
+
+<p>若到达末尾, 执行next将抛出异常</p>
+<h4 id="设置类迭代器"><a href="#设置类迭代器" class="headerlink" title="设置类迭代器"></a>设置类迭代器</h4><pre><code class="hljs python"><span class="hljs-keyword">class</span> <span class="hljs-title class_">MyRange</span>:
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self,n</span>):
+        <span class="hljs-variable language_">self</span>.idx=<span class="hljs-number">0</span>
+        <span class="hljs-variable language_">self</span>.n=n
+	<span class="hljs-keyword">def</span> <span class="hljs-title function_">__iter__</span>(<span class="hljs-params">self</span>):
+        <span class="hljs-keyword">return</span> <span class="hljs-variable language_">self</span>
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__next__</span>(<span class="hljs-params">self</span>):
+        <span class="hljs-keyword">if</span> <span class="hljs-variable language_">self</span>.idx&lt;<span class="hljs-variable language_">self</span>.n:
+            val=<span class="hljs-variable language_">self</span>.idx
+            <span class="hljs-variable language_">self</span>.idx+=<span class="hljs-number">1</span>
+            <span class="hljs-keyword">return</span> val
+        <span class="hljs-keyword">else</span>:
+            <span class="hljs-comment">#self.idx=0 #不加这行无法进行多次迭代</span>
+            <span class="hljs-keyword">raise</span> StopIteration()
+<span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> MyRange(<span class="hljs-number">5</span>):
+    <span class="hljs-built_in">print</span>(i)
+<span class="hljs-built_in">print</span>([i <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> MyRange(<span class="hljs-number">5</span>)])</code></pre>
+
+<blockquote>
+<p>更佳的复用方式</p>
+<pre><code class="hljs python"><span class="hljs-keyword">class</span> <span class="hljs-title class_">MyRange</span>:              <span class="hljs-comment"># 容器：只存数据，不存迭代状态</span>
+ <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self, n</span>):
+     <span class="hljs-variable language_">self</span>.n = n
+
+ <span class="hljs-keyword">def</span> <span class="hljs-title function_">__iter__</span>(<span class="hljs-params">self</span>):
+     <span class="hljs-keyword">return</span> MyRangeIterator(<span class="hljs-variable language_">self</span>.n)   <span class="hljs-comment"># 每次新建迭代器！</span>
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">MyRangeIterator</span>:      <span class="hljs-comment"># 迭代器：存状态（i, n）</span>
+ <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self, n</span>):
+     <span class="hljs-variable language_">self</span>.i = <span class="hljs-number">0</span>
+     <span class="hljs-variable language_">self</span>.n = n
+
+ <span class="hljs-keyword">def</span> <span class="hljs-title function_">__iter__</span>(<span class="hljs-params">self</span>):
+     <span class="hljs-keyword">return</span> <span class="hljs-variable language_">self</span> <span class="hljs-comment">#可不写</span>
+
+ <span class="hljs-keyword">def</span> <span class="hljs-title function_">__next__</span>(<span class="hljs-params">self</span>):
+     <span class="hljs-keyword">if</span> <span class="hljs-variable language_">self</span>.i &lt; <span class="hljs-variable language_">self</span>.n:
+         val = <span class="hljs-variable language_">self</span>.i
+         <span class="hljs-variable language_">self</span>.i += <span class="hljs-number">1</span>
+         <span class="hljs-keyword">return</span> val
+     <span class="hljs-keyword">raise</span> StopIteration()
+
+x = MyRange(<span class="hljs-number">5</span>)
+<span class="hljs-built_in">print</span>([i*i <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> x])
+<span class="hljs-built_in">print</span>([i <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> x])
+it=<span class="hljs-built_in">iter</span>(x)
+<span class="hljs-built_in">print</span>(<span class="hljs-built_in">next</span>(it))
+<span class="hljs-built_in">print</span>(<span class="hljs-built_in">next</span>(it))
+<span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> x:
+ <span class="hljs-built_in">print</span>(i) <span class="hljs-comment">#才不会阶段输出</span>
+
+<span class="hljs-comment"># [0, 1, 4, 9, 16]</span>
+<span class="hljs-comment"># [0, 1, 2, 3, 4]</span>
+<span class="hljs-comment"># 0</span>
+<span class="hljs-comment"># 1</span>
+<span class="hljs-comment"># 0</span>
+<span class="hljs-comment"># 1</span>
+<span class="hljs-comment"># 2</span>
+<span class="hljs-comment"># 3</span>
+<span class="hljs-comment"># 4</span></code></pre></blockquote>
+<h3 id="迭代重载"><a href="#迭代重载" class="headerlink" title="迭代重载"></a>迭代重载</h3><p>只写 <code>__getitem__</code>，不写 <code>__iter__</code>，<code>for</code> 循环<strong>照样能跑</strong>。</p>
+<pre><code class="hljs python"><span class="hljs-keyword">class</span> <span class="hljs-title class_">stepper</span>:
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__getitem__</span>(<span class="hljs-params">self, i</span>):
+        <span class="hljs-keyword">return</span> <span class="hljs-variable language_">self</span>.data[i]
+
+X = stepper()
+X.data = <span class="hljs-string">&#x27;Spam&#x27;</span> <span class="hljs-comment">#临时创建一个</span>
+
+<span class="hljs-keyword">for</span> item <span class="hljs-keyword">in</span> X:      <span class="hljs-comment"># 没写 __iter__ 也能 for 循环！</span>
+    <span class="hljs-built_in">print</span>(item)     <span class="hljs-comment"># S p a m</span></code></pre>
+
+<p>Python 的 <code>for</code> 循环有<strong>回退机制</strong>：</p>
+<pre><code class="hljs python"><span class="hljs-keyword">for</span> item <span class="hljs-keyword">in</span> X:
+    ...</code></pre>
+
+<p>实际执行逻辑：</p>
+<pre><code class="hljs python"><span class="hljs-comment"># 第1步：找 __iter__</span>
+<span class="hljs-keyword">try</span>:
+    iterator = <span class="hljs-built_in">iter</span>(X)      <span class="hljs-comment"># 调用 X.__iter__()</span>
+<span class="hljs-keyword">except</span> TypeError:
+    <span class="hljs-comment"># 第2步：没有 __iter__，就用 __getitem__ 硬凑</span>
+    iterator = 内部迭代器(X)   <span class="hljs-comment"># Python 自动创建一个临时迭代器</span>
+
+<span class="hljs-comment"># 内部迭代器的行为：</span>
+i = <span class="hljs-number">0</span>
+<span class="hljs-keyword">while</span> <span class="hljs-literal">True</span>:
+    <span class="hljs-keyword">try</span>:
+        item = X[i]         <span class="hljs-comment"># 调用 X.__getitem__(i)</span>
+        i += <span class="hljs-number">1</span>
+    <span class="hljs-keyword">except</span> (IndexError, StopIteration):
+        <span class="hljs-keyword">break</span>               <span class="hljs-comment"># 越界就停</span></code></pre>
+
+<p>过程拆解</p>
+<pre><code class="hljs stylus">X<span class="hljs-selector-class">.data</span> = <span class="hljs-string">&#x27;Spam&#x27;</span>
+
+<span class="hljs-keyword">for</span> 调用 <span class="hljs-built_in">iter</span>(X):
+    └─ 发现没有 __iter__
+    └─ Python 新建临时迭代器，<span class="hljs-selector-tag">i</span> = <span class="hljs-number">0</span>
+        ├─ X<span class="hljs-selector-attr">[0]</span> = <span class="hljs-string">&#x27;S&#x27;</span>   → 输出 S
+        ├─ X<span class="hljs-selector-attr">[1]</span> = <span class="hljs-string">&#x27;p&#x27;</span>   → 输出 <span class="hljs-selector-tag">p</span>
+        ├─ X<span class="hljs-selector-attr">[2]</span> = <span class="hljs-string">&#x27;a&#x27;</span>   → 输出 <span class="hljs-selector-tag">a</span>
+        ├─ X<span class="hljs-selector-attr">[3]</span> = <span class="hljs-string">&#x27;m&#x27;</span>   → 输出 m
+        └─ X<span class="hljs-selector-attr">[4]</span>         → IndexError → <span class="hljs-keyword">for</span> 捕获 → 结束</code></pre>
+
+<p><code>stepper</code> 本身<strong>没有状态</strong>。每次 <code>for</code> 循环，Python 都<strong>新建一个临时迭代器</strong>（从零开始计数），所以：</p>
+<pre><code class="hljs python"><span class="hljs-built_in">print</span>(<span class="hljs-built_in">list</span>(X))   <span class="hljs-comment"># [&#x27;S&#x27;, &#x27;p&#x27;, &#x27;a&#x27;, &#x27;m&#x27;]</span>
+<span class="hljs-built_in">print</span>(<span class="hljs-built_in">list</span>(X))   <span class="hljs-comment"># [&#x27;S&#x27;, &#x27;p&#x27;, &#x27;a&#x27;, &#x27;m&#x27;]  ✅ 还能用！</span></code></pre>
+
+
+
+<h2 id="生成器-generator"><a href="#生成器-generator" class="headerlink" title="生成器(generator)"></a>生成器(generator)</h2><h3 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h3><ul>
+<li>一种<strong>延时求值对象</strong>, 内部包含计算过程, 真正需要时才完成计算</li>
+</ul>
+<blockquote>
+<p>例子:</p>
+<pre><code class="hljs python">a=(i*i <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">5</span>)) <span class="hljs-comment">#a为生成器,其内容并未生成</span>
+<span class="hljs-built_in">print</span>(a) <span class="hljs-comment">#&lt;generator object &lt;genexpr&gt; at 0x105b27b90&gt;</span>
+
+<span class="hljs-keyword">for</span> x <span class="hljs-keyword">in</span> a:
+ <span class="hljs-built_in">print</span>(x,end=<span class="hljs-string">&#x27; &#x27;</span>)
+<span class="hljs-comment">#0 1 4 9 16 </span>
+<span class="hljs-comment">#后面就迭代不了了</span></code></pre>
+
+<pre><code class="hljs python">matrix = ((i*<span class="hljs-number">3</span>+j <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">3</span>)) <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">3</span>))
+<span class="hljs-comment"># matrix 是生成器，其元素也是生成器</span>
+<span class="hljs-keyword">for</span> x <span class="hljs-keyword">in</span> matrix:
+	<span class="hljs-keyword">for</span> y <span class="hljs-keyword">in</span> x:
+		<span class="hljs-built_in">print</span>(y,end=<span class="hljs-string">&quot; &quot;</span>) <span class="hljs-comment"># 0 1 2 3 4 5 6 7 8</span>
+
+<span class="hljs-comment">#区别于写法二</span>
+<span class="hljs-comment"># matrix = ([i*3+j for j in range(3)] for i in range(3))</span>
+<span class="hljs-comment"># # matrix 是生成器，其元素也是生成器</span>
+<span class="hljs-comment"># for x in matrix:</span>
+<span class="hljs-comment">#     for y in x:</span>
+<span class="hljs-comment">#         print(y,end=&quot; &quot;) # 0 1 2 3 4 5 6 7 8</span>
+</code></pre>
+
+<blockquote>
+<p>延迟绑定Late Binding</p>
+<p><strong>写法1</strong>如果先全部取出再遍历，<strong>结果会错</strong>：</p>
+<pre><code class="hljs python">matrix = ((i*<span class="hljs-number">3</span>+j <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">3</span>)) <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">3</span>))
+
+rows = <span class="hljs-built_in">list</span>(matrix)        <span class="hljs-comment"># ❌ 先全部取出来</span>
+<span class="hljs-keyword">for</span> row <span class="hljs-keyword">in</span> rows:
+ <span class="hljs-built_in">print</span>(<span class="hljs-built_in">list</span>(row))       
+<span class="hljs-comment"># [6, 7, 8]</span>
+<span class="hljs-comment"># [6, 7, 8]</span>
+<span class="hljs-comment"># [6, 7, 8]   ← 全是 i=2 的结果！</span></code></pre>
+
+<p><strong>为什么？</strong></p>
+<p>内层生成器 <code>(i*3+j for j in range(3))</code> <strong>没有立刻算</strong>，它只记住了”以后要用 <code>i</code>“。</p>
+<p>当 <code>list(matrix)</code> 把外层迭代完后，<code>i</code> 的最终值是 <code>2</code>。之后你再遍历内层生成器，它们才想起来去查 <code>i</code>，但此时 <code>i</code> 已经是 <code>2</code> 了。</p>
+<pre><code class="hljs autoit"><span class="hljs-meta"># 内层生成器实际上存的是：</span>
+<span class="hljs-meta"># gen0: <span class="hljs-string">&quot;等我运行时，去看看 i 是多少&quot;</span>  → 运行时 i=2</span>
+<span class="hljs-meta"># gen1: <span class="hljs-string">&quot;等我运行时，去看看 i 是多少&quot;</span>  → 运行时 i=2</span>
+<span class="hljs-meta"># gen2: <span class="hljs-string">&quot;等我运行时，去看看 i 是多少&quot;</span>  → 运行时 i=2</span></code></pre>
+
+<p><strong>写法2</strong>没问题，因为内层列表推导式<strong>立即计算</strong>：</p>
+<pre><code class="hljs stan"><span class="hljs-type">matrix</span> = ([i*<span class="hljs-number">3</span>+j <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> range(<span class="hljs-number">3</span>)] <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> range(<span class="hljs-number">3</span>))
+
+<span class="hljs-built_in">rows</span> = list(<span class="hljs-type">matrix</span>)
+<span class="hljs-keyword">for</span> <span class="hljs-built_in">row</span> <span class="hljs-keyword">in</span> <span class="hljs-built_in">rows</span>:
+ <span class="hljs-built_in">print</span>(<span class="hljs-built_in">row</span>)
+<span class="hljs-comment"># [0, 1, 2]</span>
+<span class="hljs-comment"># [3, 4, 5]</span>
+<span class="hljs-comment"># [6, 7, 8]   ✅ 正确！</span></code></pre>
+
+<p>列表推导式在 <code>i=0,1,2</code> 的当下就把值算好存进列表了，不会受后续 <code>i</code> 变化的影响。</p>
+<hr>
+<p>写法1什么时候是对的</p>
+<p><strong>边取边用</strong>，在内层生成器被消费时，外层还没跑完：</p>
+<pre><code class="hljs python">matrix = ((i*<span class="hljs-number">3</span>+j <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">3</span>)) <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">3</span>))
+
+<span class="hljs-keyword">for</span> row <span class="hljs-keyword">in</span> matrix:          <span class="hljs-comment"># 外层取一个</span>
+ <span class="hljs-built_in">print</span>(<span class="hljs-built_in">list</span>(row))        <span class="hljs-comment"># 内层立刻消费 ✅</span>
+<span class="hljs-comment"># [0, 1, 2]</span>
+<span class="hljs-comment"># [3, 4, 5]</span>
+<span class="hljs-comment"># [6, 7, 8]</span></code></pre></blockquote>
+</blockquote>
+<ul>
+<li>与列表解析式(即列表推导式list comprehension)区别:<ul>
+<li><code>i=(x+1 for x in lst)</code> 生成器表达式, <strong>不需要生成结果列表</strong>, 延时求值</li>
+<li><code>print([x+1 for x in lst])</code> 列表解析, <strong>生成了结果列表</strong></li>
+</ul>
+</li>
+</ul>
+<h3 id="yield关键字定义生成器"><a href="#yield关键字定义生成器" class="headerlink" title="yield关键字定义生成器"></a>yield关键字定义生成器</h3><p><strong>使用了yield的函数</strong>称为<strong>生成器</strong></p>
+<pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">test_yield</span>():
+    <span class="hljs-keyword">yield</span> <span class="hljs-number">1</span>
+    <span class="hljs-keyword">yield</span> <span class="hljs-number">2</span>
+    <span class="hljs-keyword">yield</span> (<span class="hljs-number">1</span>,<span class="hljs-number">2</span>)
+a=test_yield()
+<span class="hljs-keyword">while</span> <span class="hljs-literal">True</span>:
+    <span class="hljs-keyword">try</span>:
+        <span class="hljs-built_in">print</span>(<span class="hljs-built_in">next</span>(a))
+    <span class="hljs-keyword">except</span> StopIteration:
+        <span class="hljs-keyword">break</span>
+        
+<span class="hljs-keyword">def</span> <span class="hljs-title function_">h</span>(): 
+	<span class="hljs-built_in">print</span> (<span class="hljs-string">&#x27;To be brave&#x27;</span>)
+	<span class="hljs-keyword">yield</span> <span class="hljs-number">5</span> 
+x = h() <span class="hljs-comment">#无输出</span>
+<span class="hljs-built_in">print</span>(<span class="hljs-built_in">next</span>(x))  <span class="hljs-comment">#To be brave #5</span>
+<span class="hljs-built_in">next</span>(x) <span class="hljs-comment">#引发异常</span></code></pre>
+
+<blockquote>
+<p>使用 yield 实现斐波那契数列：</p>
+<pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">fibonacci</span>(<span class="hljs-params">n</span>): <span class="hljs-comment"># 生成器函数 – 用于求斐波那契数列前n项</span>
+	a, b, counter = <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>
+	<span class="hljs-keyword">while</span> counter &lt;= n:
+		<span class="hljs-keyword">yield</span> a
+		a, b = b, a + b
+		counter += <span class="hljs-number">1</span>
+
+f = fibonacci(<span class="hljs-number">10</span>) <span class="hljs-comment"># f 是一个迭代器，由生成器返回生成</span>
+<span class="hljs-keyword">while</span> <span class="hljs-literal">True</span>:
+	<span class="hljs-keyword">try</span>:
+		<span class="hljs-built_in">print</span> (<span class="hljs-built_in">next</span>(f), end=<span class="hljs-string">&quot; &quot;</span>)
+	<span class="hljs-keyword">except</span> StopIteration:
+		<span class="hljs-keyword">break</span>
+<span class="hljs-comment">#或</span>
+<span class="hljs-comment">#for i in f:</span>
+<span class="hljs-comment">#	print (i, end=&quot; &quot;)</span></code></pre>
+
+<p>好处是:不用事先准备过程需要的所有元素, <strong>仅仅迭代到该元素时才计算</strong>, 可以处理♾️</p>
+<p>称之为<strong>延迟计算</strong> 或 <strong>惰性求值(lazy evaluation)</strong></p>
+<p><img src="https://gcore.jsdelivr.net/gh/flowwalker/PicGo-based-image-host@main/image-20260523221745092.png" alt="image-20260523221745092"></p>
+</blockquote>
+<h3 id="send语句"><a href="#send语句" class="headerlink" title="send语句"></a>send语句</h3><p><strong>特点</strong></p>
+<ul>
+<li>带 <code>yield</code> 的函数，调用时返回生成器对象（迭代器）</li>
+<li>执行到 <code>yield</code> 暂停，下次从断点恢复</li>
+<li>遍历完即耗尽，不能复用</li>
+<li><code>yield</code> 右边产出值给外部，左边接收 <code>send()</code> 的值</li>
+</ul>
+<p><strong>示例</strong></p>
+<pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">h</span>(): 
+    <span class="hljs-built_in">print</span> (<span class="hljs-string">&#x27;hello&#x27;</span>) 
+    m = <span class="hljs-keyword">yield</span> <span class="hljs-number">5</span> <span class="hljs-comment">#m的值要从外部获得</span>
+    <span class="hljs-built_in">print</span> (<span class="hljs-string">&quot;m=&quot;</span>, m) 
+    d = <span class="hljs-keyword">yield</span> <span class="hljs-number">12</span> 
+    <span class="hljs-built_in">print</span> (<span class="hljs-string">&#x27;d=&#x27;</span> ,d )
+    <span class="hljs-keyword">yield</span> <span class="hljs-number">13</span>
+c = h() <span class="hljs-comment">#无输出</span>
+x = <span class="hljs-built_in">next</span>(c) 
+<span class="hljs-comment">#默认等价于多了一句c.send(None)</span>
+<span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;x=&quot;</span>,x)
+y = <span class="hljs-built_in">next</span>(c) <span class="hljs-comment">#此时m赋值为了None</span>
+<span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;y=&quot;</span>,y)
+z = c.send(<span class="hljs-string">&quot;good&quot;</span>)
+<span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;z=&quot;</span>,z)
+
+<span class="hljs-comment"># hello</span>
+<span class="hljs-comment"># x= 5</span>
+<span class="hljs-comment"># m= None</span>
+<span class="hljs-comment"># y= 12</span>
+<span class="hljs-comment"># d= good</span>
+<span class="hljs-comment"># z= 13</span></code></pre>
+
+<p><strong>应用</strong>⚠️⚠️⚠️</p>
+<pre><code class="hljs python"><span class="hljs-comment"># ========== 1. 生成器做任务控制器（协程/状态机）==========</span>
+
+<span class="hljs-keyword">def</span> <span class="hljs-title function_">task_controller</span>():
+    task_id = <span class="hljs-number">1</span>
+    <span class="hljs-keyword">while</span> <span class="hljs-literal">True</span>:
+        action = <span class="hljs-keyword">yield</span> <span class="hljs-string">f&quot;任务<span class="hljs-subst">&#123;task_id&#125;</span> 等待指令&quot;</span>
+        
+        <span class="hljs-keyword">if</span> action == <span class="hljs-string">&quot;start&quot;</span>:
+            <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;任务<span class="hljs-subst">&#123;task_id&#125;</span> 开始执行...&quot;</span>)
+        <span class="hljs-keyword">elif</span> action == <span class="hljs-string">&quot;pause&quot;</span>:
+            <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;任务<span class="hljs-subst">&#123;task_id&#125;</span> 已暂停&quot;</span>)
+        <span class="hljs-keyword">elif</span> action == <span class="hljs-string">&quot;stop&quot;</span>:
+            <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;任务<span class="hljs-subst">&#123;task_id&#125;</span> 已停止&quot;</span>)
+            task_id += <span class="hljs-number">1</span>
+        <span class="hljs-keyword">elif</span> action <span class="hljs-keyword">is</span> <span class="hljs-literal">None</span>:
+            <span class="hljs-keyword">break</span>
+
+controller = task_controller()
+<span class="hljs-built_in">next</span>(controller)                    <span class="hljs-comment"># 启动</span>
+
+<span class="hljs-built_in">print</span>(controller.send(<span class="hljs-string">&quot;start&quot;</span>))     <span class="hljs-comment"># 任务1开始 → 产出&quot;任务2等待指令&quot;</span>
+<span class="hljs-built_in">print</span>(controller.send(<span class="hljs-string">&quot;pause&quot;</span>))     <span class="hljs-comment"># 任务2暂停 → 产出&quot;任务3等待指令&quot;</span>
+<span class="hljs-built_in">print</span>(controller.send(<span class="hljs-string">&quot;stop&quot;</span>))      <span class="hljs-comment"># 任务3停止 → task_id=2 → 产出&quot;任务4等待指令&quot;</span>
+
+
+<span class="hljs-comment"># ========== 2. 用生成器实现 map（惰性求值）==========</span>
+
+<span class="hljs-keyword">def</span> <span class="hljs-title function_">myMap</span>(<span class="hljs-params">func, iterable</span>):
+    <span class="hljs-keyword">for</span> arg <span class="hljs-keyword">in</span> iterable:
+        <span class="hljs-keyword">yield</span> func(arg)
+
+names = [<span class="hljs-string">&quot;ana&quot;</span>, <span class="hljs-string">&quot;bob&quot;</span>, <span class="hljs-string">&quot;dogge&quot;</span>]
+x = myMap(<span class="hljs-keyword">lambda</span> x: x.capitalize(), names)
+
+<span class="hljs-built_in">print</span>(x)           <span class="hljs-comment"># &lt;generator object ...&gt;</span>
+<span class="hljs-built_in">print</span>(<span class="hljs-built_in">list</span>(x))     <span class="hljs-comment"># [&#x27;Ana&#x27;, &#x27;Bob&#x27;, &#x27;Dogge&#x27;]</span>
+<span class="hljs-keyword">for</span> name <span class="hljs-keyword">in</span> x:     <span class="hljs-comment"># ❌ 无输出，已耗尽</span>
+
+
+<span class="hljs-comment"># ========== 3. 用生成器求全排列（递归回溯）==========</span>
+
+<span class="hljs-keyword">def</span> <span class="hljs-title function_">perm</span>(<span class="hljs-params">items</span>):
+    n = <span class="hljs-built_in">len</span>(items)
+    <span class="hljs-keyword">if</span> n == <span class="hljs-number">1</span>:
+        <span class="hljs-keyword">yield</span> items
+    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(n):
+        v = items[i:i+<span class="hljs-number">1</span>]
+        rest = items[:i] + items[i+<span class="hljs-number">1</span>:]
+        <span class="hljs-keyword">for</span> p <span class="hljs-keyword">in</span> perm(rest):
+            <span class="hljs-keyword">yield</span> v + p
+
+a = perm(<span class="hljs-string">&#x27;abc&#x27;</span>)
+<span class="hljs-built_in">print</span>(<span class="hljs-built_in">next</span>(a))     <span class="hljs-comment"># abc</span>
+<span class="hljs-built_in">print</span>(<span class="hljs-built_in">next</span>(a))     <span class="hljs-comment"># acb</span>
+<span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;****&quot;</span>)
+<span class="hljs-keyword">for</span> b <span class="hljs-keyword">in</span> a:        <span class="hljs-comment"># 从剩余继续</span>
+    <span class="hljs-built_in">print</span>(b)       <span class="hljs-comment"># bac, bca, cab, cba</span></code></pre>
+
+<blockquote>
+<p> 双向通信：任务控制器（协程）</p>
+ <pre><code class="hljs python">action = <span class="hljs-keyword">yield</span> msg      <span class="hljs-comment"># 产出 msg 给外部；恢复后 action = send 的值</span></code></pre>
+
+<table>
+<thead>
+<tr>
+<th>调用</th>
+<th>生成器内部</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>next(controller)</code></td>
+<td>启动，跑到 <code>yield</code>，产出状态</td>
+</tr>
+<tr>
+<td><code>send(&quot;start&quot;)</code></td>
+<td>恢复，<code>action=&quot;start&quot;</code>，执行逻辑，再 <code>yield</code> 暂停</td>
+</tr>
+</tbody></table>
+<p> 惰性计算：自定义 map</p>
+<table>
+<thead>
+<tr>
+<th>对比</th>
+<th>列表推导式</th>
+<th>生成器版</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>内存</td>
+<td>全部存列表</td>
+<td>用到一个算一个</td>
+</tr>
+<tr>
+<td>返回</td>
+<td>列表</td>
+<td>生成器对象</td>
+</tr>
+<tr>
+<td>多次遍历</td>
+<td>✅</td>
+<td>❌ 只能一次</td>
+</tr>
+</tbody></table>
+ <pre><code class="hljs python"><span class="hljs-comment"># 惰性 map：遍历时才计算</span>
+<span class="hljs-keyword">def</span> <span class="hljs-title function_">myMap</span>(<span class="hljs-params">func, iterable</span>):
+ <span class="hljs-keyword">for</span> arg <span class="hljs-keyword">in</span> iterable:
+     <span class="hljs-keyword">yield</span> func(arg)
+
+<span class="hljs-comment"># 等价于</span>
+<span class="hljs-built_in">map</span>(func, iterable)   <span class="hljs-comment"># 内置 map 也是返回迭代器</span></code></pre>
+
+<p> <strong>陷阱</strong>：<code>list(x)</code> 或 <code>for</code> 遍历完后，生成器耗尽，再次遍历为空。</p>
+<p> 递归回溯：全排列</p>
+ <pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">perm</span>(<span class="hljs-params">items</span>):
+ <span class="hljs-keyword">if</span> <span class="hljs-built_in">len</span>(items) == <span class="hljs-number">1</span>:
+     <span class="hljs-keyword">yield</span> items
+ <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-built_in">len</span>(items)):
+     v = items[i:i+<span class="hljs-number">1</span>]
+     rest = items[:i] + items[i+<span class="hljs-number">1</span>:]
+     <span class="hljs-keyword">for</span> p <span class="hljs-keyword">in</span> perm(rest):    <span class="hljs-comment"># 递归子问题</span>
+         <span class="hljs-keyword">yield</span> v + p          <span class="hljs-comment"># 拼接产出</span></code></pre>
+
+<p> <strong>执行流程</strong>（<code>perm(&#39;abc&#39;)</code>）：</p>
+ <pre><code class="hljs stylus"><span class="hljs-function"><span class="hljs-title">perm</span><span class="hljs-params">(<span class="hljs-string">&#x27;abc&#x27;</span>)</span></span>
+├─ 固定 <span class="hljs-string">&#x27;a&#x27;</span> + <span class="hljs-built_in">perm</span>(<span class="hljs-string">&#x27;bc&#x27;</span>) → abc, acb
+├─ 固定 <span class="hljs-string">&#x27;b&#x27;</span> + <span class="hljs-built_in">perm</span>(<span class="hljs-string">&#x27;ac&#x27;</span>) → bac, bca
+└─ 固定 <span class="hljs-string">&#x27;c&#x27;</span> + <span class="hljs-built_in">perm</span>(<span class="hljs-string">&#x27;ab&#x27;</span>) → cab, cba</code></pre>
+
+<p> <strong>特点</strong>：</p>
+<ul>
+<li>深度优先遍历解空间</li>
+<li>遇到完整解就 <code>yield</code>，不用等全部算完</li>
+<li><code>next()</code> 和 <code>for</code> 可混用，共用迭代状态</li>
+</ul>
+<p> 易错点</p>
+<table>
+<thead>
+<tr>
+<th>错误</th>
+<th>原因</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>生成器遍历为空</td>
+<td>迭代器已耗尽，需重新创建</td>
+</tr>
+<tr>
+<td><code>send(非None)</code> 启动</td>
+<td>未启动的生成器只能用 <code>next()</code> 或 <code>send(None)</code></td>
+</tr>
+<tr>
+<td>递归生成器没 <code>yield from</code></td>
+<td>子生成器的结果需要用 <code>for ... yield</code> 或 <code>yield from</code> 传递</td>
+</tr>
+</tbody></table>
+ <pre><code class="hljs python"><span class="hljs-comment"># 3.3+ 可用 yield from 简化</span>
+<span class="hljs-keyword">def</span> <span class="hljs-title function_">perm</span>(<span class="hljs-params">items</span>):
+   <span class="hljs-keyword">if</span> <span class="hljs-built_in">len</span>(items) == <span class="hljs-number">1</span>:
+       <span class="hljs-keyword">yield</span> items
+   <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-built_in">len</span>(items)):
+       rest = items[:i] + items[i+<span class="hljs-number">1</span>:]
+       <span class="hljs-keyword">yield</span> <span class="hljs-keyword">from</span> (items[i:i+<span class="hljs-number">1</span>] + p <span class="hljs-keyword">for</span> p <span class="hljs-keyword">in</span> perm(rest))</code></pre>
+</blockquote>
+<h2 id="其他语法特性"><a href="#其他语法特性" class="headerlink" title="其他语法特性"></a>其他语法特性</h2><h3 id="eval函数"><a href="#eval函数" class="headerlink" title="eval函数"></a>eval函数</h3><h4 id="概念-1"><a href="#概念-1" class="headerlink" title="概念"></a>概念</h4><p><strong>把字符串看作python表达式请求其值, 返回其值</strong></p>
+<pre><code class="hljs python">expression=<span class="hljs-built_in">input</span>(<span class="hljs-string">&quot;请输入算式&quot;</span>)
+result=<span class="hljs-built_in">eval</span>(expression)
+<span class="hljs-built_in">print</span>(result)</code></pre>
+
+<h4 id="compile和exec函数"><a href="#compile和exec函数" class="headerlink" title="compile和exec函数"></a>compile和exec函数</h4><table>
+<thead>
+<tr>
+<th>函数</th>
+<th>作用</th>
+<th>返回值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>eval</code></td>
+<td>将字符串看作Python表达式求值</td>
+<td>✅ 有返回值</td>
+</tr>
+<tr>
+<td><code>exec</code></td>
+<td>执行字符串中的Python语句</td>
+<td>❌ 无返回值(None)</td>
+</tr>
+<tr>
+<td><code>compile</code></td>
+<td>编译字符串为代码对象，供eval&#x2F;exec使用</td>
+<td>代码对象</td>
+</tr>
+</tbody></table>
+<pre><code class="hljs python"><span class="hljs-comment"># eval有返回值</span>
+result = <span class="hljs-built_in">eval</span>(<span class="hljs-string">&quot;3*4+5&quot;</span>)  <span class="hljs-comment"># 17</span>
+
+<span class="hljs-comment"># exec无返回值</span>
+<span class="hljs-built_in">exec</span>(<span class="hljs-string">&#x27;a=10&#x27;</span>)
+<span class="hljs-built_in">print</span>(a)  <span class="hljs-comment"># 10</span>
+
+result = <span class="hljs-built_in">exec</span>(<span class="hljs-string">&quot;x = 10&quot;</span>)
+<span class="hljs-built_in">print</span>(result)  <span class="hljs-comment"># None</span></code></pre>
+
+<p><strong><code>exec</code>可执行多行代码:</strong></p>
+<pre><code class="hljs python"><span class="hljs-built_in">exec</span>(<span class="hljs-string">&quot;&quot;&quot;</span>
+<span class="hljs-string">a = 10</span>
+<span class="hljs-string">b = 20</span>
+<span class="hljs-string">result = a + b</span>
+<span class="hljs-string">print(result)</span>
+<span class="hljs-string">&quot;&quot;&quot;</span>)  <span class="hljs-comment"># 输出: 30</span></code></pre>
+
+<p><strong><code>compile</code>提高多次运行效率:</strong></p>
+<pre><code class="hljs python"><span class="hljs-built_in">str</span> = <span class="hljs-string">&quot;for i in range(0,10): print (i,end = &#x27; &#x27;)&quot;</span>
+c = <span class="hljs-built_in">compile</span>(<span class="hljs-built_in">str</span>,<span class="hljs-string">&#x27;&#x27;</span>,<span class="hljs-string">&#x27;exec&#x27;</span>)      <span class="hljs-comment"># 编译</span>
+<span class="hljs-built_in">exec</span>(c)     <span class="hljs-comment">#=&gt; 0 1 2 3 4 5 6 7 8 9</span>
+
+x=<span class="hljs-number">4</span>
+y=<span class="hljs-number">5</span>
+str2 = <span class="hljs-string">&quot;3*x + 4*y&quot;</span>
+c2 = <span class="hljs-built_in">compile</span>(str2, <span class="hljs-string">&#x27;&#x27;</span>, <span class="hljs-string">&#x27;eval&#x27;</span>)  <span class="hljs-comment"># compile过运行更快,适合多次调用</span>
+result = <span class="hljs-built_in">eval</span>(c2)
+<span class="hljs-built_in">print</span>(result)  <span class="hljs-comment"># 32</span></code></pre>
+
+<p><strong>动态导入模块:</strong></p>
+<pre><code class="hljs python">module_name = <span class="hljs-string">&quot;math&quot;</span>
+<span class="hljs-built_in">exec</span>(<span class="hljs-string">f&quot;import <span class="hljs-subst">&#123;module_name&#125;</span>&quot;</span>)
+<span class="hljs-built_in">print</span>(sqrt(<span class="hljs-number">16</span>))  <span class="hljs-comment"># 4.0</span></code></pre>
+
+<h5 id="指定作用域"><a href="#指定作用域" class="headerlink" title="指定作用域"></a>指定作用域</h5><p><code>eval</code>和<code>exec</code>可以通过字典指定作用域:</p>
+<pre><code class="hljs python">a = <span class="hljs-number">10</span>
+b = <span class="hljs-number">20</span>
+<span class="hljs-keyword">def</span> <span class="hljs-title function_">func</span>(<span class="hljs-params">x</span>):
+    <span class="hljs-keyword">return</span> x+<span class="hljs-number">1</span>
+
+scope=&#123;&#125; <span class="hljs-comment">#用字典当作用域</span>
+scope[<span class="hljs-string">&#x27;a&#x27;</span>] = <span class="hljs-number">3</span>
+scope[<span class="hljs-string">&#x27;b&#x27;</span>] = <span class="hljs-number">4</span>
+scope[<span class="hljs-string">&#x27;func&#x27;</span>] = <span class="hljs-keyword">lambda</span> x:x*x
+
+<span class="hljs-built_in">print</span>(<span class="hljs-built_in">eval</span>(<span class="hljs-string">&quot;a+b&quot;</span>))          <span class="hljs-comment">#=&gt; 30  (使用全局作用域)</span>
+<span class="hljs-built_in">print</span>(<span class="hljs-built_in">eval</span>(<span class="hljs-string">&quot;a+b&quot;</span>,scope))    <span class="hljs-comment">#=&gt; 7   (使用自定义作用域)</span>
+<span class="hljs-comment"># print(eval(&quot;a+b+c&quot;,scope))  # error, c无定义</span>
+
+<span class="hljs-built_in">print</span>(<span class="hljs-built_in">eval</span>(<span class="hljs-string">&quot;func(7)&quot;</span>))          <span class="hljs-comment">#=&gt; 8   (调用全局func)</span>
+<span class="hljs-built_in">print</span>(<span class="hljs-built_in">eval</span>(<span class="hljs-string">&quot;func(7)&quot;</span>,scope))    <span class="hljs-comment">#=&gt; 49  (调用scope中的lambda)</span>
+
+<span class="hljs-built_in">exec</span>(<span class="hljs-string">&quot;print(a)&quot;</span>)          <span class="hljs-comment">#=&gt; 10</span>
+<span class="hljs-built_in">exec</span>(<span class="hljs-string">&quot;print(a)&quot;</span>,scope)    <span class="hljs-comment">#=&gt; 3</span></code></pre>
+
+<blockquote>
+<p>⚠️ 作用域查找规则:</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>不提供scope</td>
+<td>使用当前全局&#x2F;局部作用域</td>
+</tr>
+<tr>
+<td>提供<code>scope</code>字典</td>
+<td>从字典中查找变量</td>
+</tr>
+<tr>
+<td>变量不存在</td>
+<td>抛出<code>NameError</code></td>
+</tr>
+</tbody></table>
+</blockquote>
+<h3 id="反射-reflection"><a href="#反射-reflection" class="headerlink" title="反射(reflection)"></a>反射(reflection)</h3><h4 id="概念-2"><a href="#概念-2" class="headerlink" title="概念"></a>概念</h4><p><strong>获取并使用对象的信息</strong></p>
+<p>反射的核心是<strong>在运行时动态获取对象的属性和方法</strong>，并对其进行操作。</p>
+<pre><code class="hljs python"><span class="hljs-keyword">class</span> <span class="hljs-title class_">A</span>():
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self,x</span>):
+        <span class="hljs-variable language_">self</span>.x = x
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">func</span>(<span class="hljs-params">self</span>):
+        <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;x=&quot;</span>,<span class="hljs-variable language_">self</span>.x)
+
+a = A(<span class="hljs-number">12</span>)</code></pre>
+
+<p><strong>四大反射函数:</strong></p>
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>作用</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>dir(obj)</code></td>
+<td>列出对象的所有属性和方法</td>
+<td><code>dir(a)</code></td>
+</tr>
+<tr>
+<td><code>hasattr(obj, name)</code></td>
+<td>判断对象是否有指定属性&#x2F;方法</td>
+<td><code>hasattr(a, &#39;x&#39;)</code></td>
+</tr>
+<tr>
+<td><code>getattr(obj, name)</code></td>
+<td>获取对象的属性值或方法</td>
+<td><code>getattr(a, &#39;x&#39;)</code></td>
+</tr>
+<tr>
+<td><code>setattr(obj, name, value)</code></td>
+<td>设置对象的属性值</td>
+<td><code>setattr(a, &#39;x&#39;, 100)</code></td>
+</tr>
+</tbody></table>
+<pre><code class="hljs python">a = A(<span class="hljs-number">12</span>)
+
+<span class="hljs-comment"># dir: 列出所有属性和方法</span>
+<span class="hljs-built_in">print</span>(<span class="hljs-built_in">dir</span>(a))
+<span class="hljs-comment"># [&#x27;__class__&#x27;, &#x27;__delattr__&#x27;, &#x27;__dict__&#x27;, &#x27;__dir__&#x27;, &#x27;__doc__&#x27;, </span>
+<span class="hljs-comment">#  &#x27;__eq__&#x27;, &#x27;__format__&#x27;, &#x27;__ge__&#x27;, &#x27;__getattribute__&#x27;, &#x27;__gt__&#x27;, </span>
+<span class="hljs-comment">#  &#x27;__hash__&#x27;, &#x27;__init__&#x27;, &#x27;__le__&#x27;, &#x27;__lt__&#x27;, &#x27;__module__&#x27;, &#x27;__ne__&#x27;, </span>
+<span class="hljs-comment">#  &#x27;__new__&#x27;, &#x27;__reduce__&#x27;, &#x27;__reduce_ex__&#x27;, &#x27;__repr__&#x27;, &#x27;__setattr__&#x27;, </span>
+<span class="hljs-comment">#  &#x27;__sizeof__&#x27;, &#x27;__str__&#x27;, &#x27;__subclasshook__&#x27;, &#x27;__weakref__&#x27;, </span>
+<span class="hljs-comment">#  &#x27;func&#x27;, &#x27;x&#x27;]</span>
+
+<span class="hljs-comment"># hasattr: 判断是否存在</span>
+<span class="hljs-keyword">if</span> <span class="hljs-built_in">hasattr</span>(a,<span class="hljs-string">&#x27;x&#x27;</span>):           <span class="hljs-comment"># True</span>
+    <span class="hljs-built_in">setattr</span>(a,<span class="hljs-string">&#x27;x&#x27;</span>,<span class="hljs-string">&#x27;hello,world&#x27;</span>)  <span class="hljs-comment"># 修改属性值</span>
+    <span class="hljs-built_in">print</span>(<span class="hljs-built_in">getattr</span>(a,<span class="hljs-string">&#x27;x&#x27;</span>))    <span class="hljs-comment"># hello,world</span>
+
+<span class="hljs-comment"># getattr获取方法并调用</span>
+<span class="hljs-keyword">if</span> <span class="hljs-built_in">hasattr</span>(a,<span class="hljs-string">&#x27;func&#x27;</span>):
+    <span class="hljs-built_in">getattr</span>(a,<span class="hljs-string">&#x27;func&#x27;</span>)()      <span class="hljs-comment"># x= hello,world</span>
+    <span class="hljs-comment"># 等价于 a.func()</span></code></pre>
+
+<blockquote>
+<p>反射的应用场景:</p>
+<ul>
+<li><strong>动态调用方法</strong>: 根据字符串名称调用对象方法</li>
+<li><strong>动态配置</strong>: 通过配置文件指定要操作的属性名</li>
+<li><strong>调试 introspection</strong>: 查看对象内部结构</li>
+<li><strong>插件系统</strong>: 动态加载和调用模块中的功能</li>
+</ul>
+</blockquote>
+<h3 id="异常处理"><a href="#异常处理" class="headerlink" title="异常处理"></a>异常处理</h3><h4 id="try-…-except"><a href="#try-…-except" class="headerlink" title="try … except"></a>try … except</h4><p>捕获异常，防止程序崩溃:</p>
+<pre><code class="hljs python"><span class="hljs-comment"># 捕获所有异常</span>
+<span class="hljs-keyword">try</span>:
+    f = <span class="hljs-built_in">open</span>(<span class="hljs-string">&quot;ssr.txt&quot;</span>,<span class="hljs-string">&quot;r&quot;</span>)
+<span class="hljs-keyword">except</span>:
+    <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;error&quot;</span>)
+
+<span class="hljs-comment"># 捕获特定异常并获取错误信息</span>
+<span class="hljs-keyword">try</span>:
+    <span class="hljs-built_in">print</span>(aa)
+<span class="hljs-keyword">except</span> Exception <span class="hljs-keyword">as</span> e:
+    <span class="hljs-built_in">print</span>(e)
+<span class="hljs-comment"># name aa is not defined</span></code></pre>
+
+<p><strong>多分支捕获:</strong></p>
+<pre><code class="hljs python"><span class="hljs-keyword">try</span>:
+    <span class="hljs-built_in">print</span>(aa)
+<span class="hljs-keyword">except</span> IOError <span class="hljs-keyword">as</span> e:
+    <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;IO错误: <span class="hljs-subst">&#123;e&#125;</span>&quot;</span>)
+<span class="hljs-keyword">except</span> NameError <span class="hljs-keyword">as</span> e:
+    <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;名称错误: <span class="hljs-subst">&#123;e&#125;</span>&quot;</span>)
+<span class="hljs-comment"># name &#x27;aa&#x27; is not defined</span>
+
+<span class="hljs-comment"># 兜底捕获</span>
+<span class="hljs-keyword">try</span>:
+    可能出错的代码
+<span class="hljs-keyword">except</span> 特定异常 <span class="hljs-keyword">as</span> e:
+    处理特定错误
+<span class="hljs-keyword">except</span> Exception <span class="hljs-keyword">as</span> e:   <span class="hljs-comment"># 捕获一切错误</span>
+    <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;其他错误: <span class="hljs-subst">&#123;e&#125;</span>&quot;</span>)</code></pre>
+
+<h4 id="try-…-finally"><a href="#try-…-finally" class="headerlink" title="try … finally"></a>try … finally</h4><p>无论有无异常，<code>finally</code>块都会执行:</p>
+<pre><code class="hljs python"><span class="hljs-keyword">try</span>:
+    <span class="hljs-built_in">print</span>(aa)
+<span class="hljs-keyword">except</span>:
+    <span class="hljs-keyword">pass</span>           <span class="hljs-comment"># 空操作，忽略异常</span>
+<span class="hljs-keyword">finally</span>:
+    <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;done&quot;</span>)  <span class="hljs-comment"># 不论有无异常都会执行</span></code></pre>
+
+<blockquote>
+<p>异常处理最佳实践:</p>
+<table>
+<thead>
+<tr>
+<th>写法</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>except:</code></td>
+<td>捕获所有异常（过于宽泛，不推荐）</td>
+</tr>
+<tr>
+<td><code>except SpecificError:</code></td>
+<td>捕获特定异常 ✅</td>
+</tr>
+<tr>
+<td><code>except Exception as e:</code></td>
+<td>捕获所有异常并获取信息</td>
+</tr>
+<tr>
+<td><code>try...finally:</code></td>
+<td>用于资源释放（如关闭文件）</td>
+</tr>
+<tr>
+<td><code>pass</code></td>
+<td>空语句，什么都不做</td>
+</tr>
+</tbody></table>
+</blockquote>
+<h3 id="装饰器"><a href="#装饰器" class="headerlink" title="装饰器"></a>装饰器</h3><h4 id="基本概念-1"><a href="#基本概念-1" class="headerlink" title="基本概念"></a>基本概念</h4><p><strong>在不改变原有函数代码的情况下扩展函数功能</strong></p>
+<p>也许你已经在深度学习中见过装饰器:</p>
+<pre><code class="hljs python"><span class="hljs-keyword">import</span> torch
+x = torch.tensor([<span class="hljs-number">1.0</span>, <span class="hljs-number">2.0</span>, <span class="hljs-number">3.0</span>], requires_grad=<span class="hljs-literal">True</span>)
+
+<span class="hljs-meta">@torch.no_grad()     </span><span class="hljs-comment"># 装饰器语法</span>
+<span class="hljs-keyword">def</span> <span class="hljs-title function_">double</span>(<span class="hljs-params">tensor</span>):
+    <span class="hljs-keyword">return</span> tensor * <span class="hljs-number">2</span>
+
+result = double(x)
+<span class="hljs-built_in">print</span>(result)
+<span class="hljs-comment"># tensor([2., 4., 6.])</span>
+
+<span class="hljs-comment"># 对比：不用装饰器</span>
+<span class="hljs-keyword">def</span> <span class="hljs-title function_">double</span>(<span class="hljs-params">tensor</span>):
+    <span class="hljs-keyword">return</span> tensor * <span class="hljs-number">2</span>
+result = double(x)
+<span class="hljs-built_in">print</span>(result)
+<span class="hljs-comment"># tensor([2., 4., 6.], grad_fn=&lt;MulBackward0&gt;)</span></code></pre>
+
+<h4 id="自定义装饰器"><a href="#自定义装饰器" class="headerlink" title="自定义装饰器"></a>自定义装饰器</h4><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">good</span>(<span class="hljs-params">func</span>):
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">wrapper</span>(<span class="hljs-params">*args</span>):
+        <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;%s called&quot;</span> % func.__name__)
+        <span class="hljs-keyword">return</span> func(*args)+<span class="hljs-number">5</span>
+    <span class="hljs-keyword">return</span> wrapper
+
+<span class="hljs-meta">@good       </span><span class="hljs-comment"># good是一个装饰器</span>
+<span class="hljs-keyword">def</span> <span class="hljs-title function_">mysum</span>(<span class="hljs-params">a,b,c</span>):
+    <span class="hljs-keyword">return</span> a + b + c
+
+<span class="hljs-built_in">print</span>(mysum(<span class="hljs-number">3</span>,<span class="hljs-number">4</span>,<span class="hljs-number">5</span>))
+<span class="hljs-comment"># mysum called</span>
+<span class="hljs-comment"># 17</span>
+
+<span class="hljs-comment"># @good 等价于 mysum = good(mysum)</span>
+<span class="hljs-comment"># mysum(3,4,5) 等价于 good(mysum)(3,4,5)</span></code></pre>
+
+<h4 id="带参数的装饰器"><a href="#带参数的装饰器" class="headerlink" title="带参数的装饰器"></a>带参数的装饰器</h4><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">good2</span>(<span class="hljs-params">var1</span>):
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">decorator</span>(<span class="hljs-params">func</span>):
+        <span class="hljs-keyword">def</span> <span class="hljs-title function_">wrapper</span>(<span class="hljs-params">*args</span>):
+            <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;%s called&quot;</span> % func.__name__)
+            <span class="hljs-keyword">return</span> func(*args) + var1
+        <span class="hljs-keyword">return</span> wrapper
+    <span class="hljs-keyword">return</span> decorator
+
+<span class="hljs-meta">@good2(<span class="hljs-params"><span class="hljs-number">10</span></span>)</span>
+<span class="hljs-keyword">def</span> <span class="hljs-title function_">f</span>(<span class="hljs-params">x,y</span>):
+    <span class="hljs-keyword">return</span> x * y
+
+<span class="hljs-meta">@good2(<span class="hljs-params"><span class="hljs-number">100</span></span>)</span>
+<span class="hljs-keyword">def</span> <span class="hljs-title function_">f2</span>(<span class="hljs-params">x,y</span>):
+    <span class="hljs-keyword">return</span> x * y
+
+<span class="hljs-built_in">print</span>(f(<span class="hljs-number">1</span>,<span class="hljs-number">2</span>))    <span class="hljs-comment"># f called  12   (1*2+10)</span>
+<span class="hljs-built_in">print</span>(f2(<span class="hljs-number">1</span>,<span class="hljs-number">2</span>))   <span class="hljs-comment"># f2 called 102  (1*2+100)</span>
+<span class="hljs-comment"># @good2(10) 等价于 good2(10)(f)(1,2)</span></code></pre>
+
+<h4 id="用对象做装饰器"><a href="#用对象做装饰器" class="headerlink" title="用对象做装饰器"></a>用对象做装饰器</h4><pre><code class="hljs python"><span class="hljs-keyword">class</span> <span class="hljs-title class_">decorator</span>:
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self,x</span>):
+        <span class="hljs-variable language_">self</span>.x = x
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">de</span>(<span class="hljs-params">self,func</span>):
+        <span class="hljs-keyword">def</span> <span class="hljs-title function_">wrapper</span>(<span class="hljs-params">*args</span>):
+            <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;%s called&quot;</span> % func.__name__)
+            <span class="hljs-keyword">return</span> func(*args) + <span class="hljs-variable language_">self</span>.x
+        <span class="hljs-keyword">return</span> wrapper
+
+myobj = decorator(<span class="hljs-number">100</span>)
+
+<span class="hljs-meta">@myobj.de</span>
+<span class="hljs-keyword">def</span> <span class="hljs-title function_">f3</span>(<span class="hljs-params">x,y,z</span>):
+    <span class="hljs-keyword">return</span> x + y + z
+
+<span class="hljs-built_in">print</span>(f3(<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>))    <span class="hljs-comment"># f3 called  106  (1+2+3+100)</span>
+
+myobj.x = <span class="hljs-number">7</span>         <span class="hljs-comment"># 修改装饰器的参数</span>
+<span class="hljs-built_in">print</span>(f3(<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>))    <span class="hljs-comment"># f3 called  13   (1+2+3+7)</span></code></pre>
+
+<blockquote>
+<p>装饰器执行时机:</p>
+<table>
+<thead>
+<tr>
+<th>阶段</th>
+<th>行为</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>定义时</td>
+<td><code>@decorator</code> 立即执行，原函数被替换为wrapper</td>
+</tr>
+<tr>
+<td>调用时</td>
+<td>执行的是wrapper函数，其中再调用原函数</td>
+</tr>
+</tbody></table>
+<p>三层嵌套解析（带参数装饰器）:</p>
+<pre><code class="hljs pgsql">@good2(<span class="hljs-number">10</span>)
+def f(x,y): <span class="hljs-keyword">return</span> x*y
+
+# 执行步骤:
+# <span class="hljs-number">1.</span> good2(<span class="hljs-number">10</span>) → 返回 decorator 函数
+# <span class="hljs-number">2.</span> decorator(f) → 返回 <span class="hljs-keyword">wrapper</span> 函数
+# <span class="hljs-number">3.</span> f = <span class="hljs-keyword">wrapper</span>  (原f被包装)</code></pre></blockquote>
+
+  </div>
+
+  
+  <div class="post-copyright animate-entry animate-delay-300">
+    <p><strong>本文作者：</strong>flowwalker</p>
+    <p><strong>本文链接：</strong><a href="/coding-notes-blog/posts/1bcc/">/coding-notes-blog/posts/1bcc/</a></p>
+    <p><strong>版权声明：</strong>本文采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> 许可协议</p>
+  </div>
+  
+</article>
+
+
+<nav class="post-navigation animate-entry animate-delay-300">
+  
+    <a href="/coding-notes-blog/posts/d98d/" class="post-nav-item prev" title="Python修养3">
+      <span class="nav-arrow">←</span>
+      <span class="nav-text">Python修养3</span>
+    </a>
+  
+  
+    <a href="/coding-notes-blog/posts/194c/" class="post-nav-item next" title="Python修养2">
+      <span class="nav-text">Python修养2</span>
+      <span class="nav-arrow">→</span>
+    </a>
+  
+</nav>
+
+
+
+
+
+      </div>
+      <footer class="site-footer">
+  <div class="footer-inner">
+    
+    <div class="footer-copyright">
+      &copy; 2026–2026 flowwalker
+    </div>
+    
+    
+    <div class="footer-powered">
+      Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <span>Dawn</span>
+    </div>
+    
+  </div>
+</footer>
+
+
+    </main>
+  </div>
+  <button class="sidebar-expand-btn" id="sidebar-expand-btn" title="展开侧边栏" aria-label="展开侧边栏">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+  </button>
+  <div class="floating-actions">
+    
+    <div class="back-to-top-wrap" id="back-to-top-wrap">
+      <svg class="progress-ring" width="52" height="52" viewBox="0 0 52 52">
+        <circle class="progress-ring-bg" cx="26" cy="26" r="23"/>
+        <circle class="progress-ring-fill" id="progress-ring-fill" cx="26" cy="26" r="23"/>
+      </svg>
+      <button class="back-to-top" id="back-to-top" aria-label="回到顶部">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+      </button>
+    </div>
+    
+    <button class="search-toggle-float" id="search-toggle-btn" title="搜索" aria-label="搜索">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    </button>
+    
+    <a href="/coding-notes-blog/" class="floating-home" aria-label="回到主页" title="回到主页">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    </a>
+    
+    
+    <button class="dark-toggle-float" id="dark-toggle-btn" title="暗色模式" aria-label="暗色模式">
+      <svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    </button>
+    
+    
+    <button class="immersive-toggle" id="immersive-toggle-btn" title="沉浸式阅读" aria-label="沉浸式阅读">
+      <svg class="icon-enter" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
+      <svg class="icon-exit" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 8 3 3 8 3"/><polyline points="20 16 21 21 16 21"/><line x1="14" y1="14" x2="21" y2="21"/><line x1="3" y1="3" x2="10" y2="10"/></svg>
+    </button>
+    
+  </div>
+  <div class="search-overlay" id="search-overlay">
+    <div class="search-modal">
+      <div class="search-modal-header">
+        <input type="text" id="search-input" class="search-input" placeholder="输入关键词搜索文章..." autocomplete="off">
+        <button class="search-close-btn" id="search-close-btn" aria-label="关闭搜索">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="search-results" id="search-results"></div>
+    </div>
+  </div>
+  <script>
+(function() {
+  var STORAGE_KEY = 'dawn-theme';
+  var html = document.documentElement;
+
+  function getLabel(dark) {
+    return dark ? '亮色模式' : '暗色模式';
+  }
+
+  function updateUI(dark) {
+    var btn = document.getElementById('dark-toggle-btn');
+    if (!btn) return;
+    btn.setAttribute('title', getLabel(dark));
+    btn.setAttribute('aria-label', getLabel(dark));
+  }
+
+  var saved = localStorage.getItem(STORAGE_KEY);
+  if (saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+    html.classList.add('dark');
+    updateUI(true);
+  } else {
+    html.classList.remove('dark');
+    updateUI(false);
+  }
+
+  function setTheme(dark) {
+    if (dark) {
+      html.classList.add('dark');
+    } else {
+      html.classList.remove('dark');
+    }
+    localStorage.setItem(STORAGE_KEY, dark ? 'dark' : 'light');
+    updateUI(dark);
+    updateGiscus(dark);
+  }
+
+  function updateGiscus(dark) {
+    var frame = document.querySelector('.giscus-frame');
+    if (frame) {
+      frame.contentWindow.postMessage({
+        giscus: { setConfig: { theme: dark ? 'dark' : 'light' } }
+      }, 'https://giscus.app');
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    var btn = document.getElementById('dark-toggle-btn');
+    if (btn) {
+      btn.addEventListener('click', function() {
+        setTheme(!html.classList.contains('dark'));
+      });
+    }
+  });
+
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
+    if (localStorage.getItem(STORAGE_KEY) === null) {
+      setTheme(e.matches);
+    }
+  });
+})();
+</script>
+
+  <script src="/coding-notes-blog/js/main.js"></script>
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        processEscapes: true
+      },
+      options: {
+        ignoreHtmlClass: 'no-mathjax',
+        processHtmlClass: 'mathjax-process'
+      }
+    };
+  }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+
+
+
+</body>
+</html>
