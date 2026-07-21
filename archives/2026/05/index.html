@@ -54,12 +54,16 @@
   </div>
   <script>
   (function(){
+    var start = Date.now(), minShow = 1500;
     function endLoading() {
-      var box = document.getElementById('loading-box');
-      if (box) box.classList.add('loaded');
+      var remain = minShow - (Date.now() - start);
+      setTimeout(function() {
+        var box = document.getElementById('loading-box');
+        if (box) box.classList.add('loaded');
+      }, Math.max(0, remain));
     }
     window.addEventListener('load', endLoading);
-    setTimeout(endLoading, 2500);
+    setTimeout(endLoading, 3000);
   })();
   </script>
   <div class="site-wrapper">
@@ -249,14 +253,14 @@
       
       <div class="archive-item animate-entry">
         <time class="archive-date" datetime="2026-05-23">05-23</time>
-        <a href="/coding-notes-blog/posts/1bcc/" class="archive-title">Python修养4</a>
+        <a href="/coding-notes-blog/posts/d98d/" class="archive-title">Python修养3</a>
       </div>
     
       
       
       <div class="archive-item animate-entry">
         <time class="archive-date" datetime="2026-05-23">05-23</time>
-        <a href="/coding-notes-blog/posts/d98d/" class="archive-title">Python修养3</a>
+        <a href="/coding-notes-blog/posts/1bcc/" class="archive-title">Python修养4</a>
       </div>
     
       

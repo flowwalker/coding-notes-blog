@@ -54,12 +54,16 @@
   </div>
   <script>
   (function(){
+    var start = Date.now(), minShow = 1500;
     function endLoading() {
-      var box = document.getElementById('loading-box');
-      if (box) box.classList.add('loaded');
+      var remain = minShow - (Date.now() - start);
+      setTimeout(function() {
+        var box = document.getElementById('loading-box');
+        if (box) box.classList.add('loaded');
+      }, Math.max(0, remain));
     }
     window.addEventListener('load', endLoading);
-    setTimeout(endLoading, 2500);
+    setTimeout(endLoading, 3000);
   })();
   </script>
   <div class="site-wrapper">
@@ -1089,14 +1093,14 @@ def f(x,y): <span class="hljs-keyword">return</span> x*y
 
 <nav class="post-navigation animate-entry animate-delay-300">
   
-    <a href="/coding-notes-blog/posts/3b26/" class="post-nav-item prev" title="编程博客开张">
+    <a href="/coding-notes-blog/posts/d98d/" class="post-nav-item prev" title="Python修养3">
       <span class="nav-arrow">←</span>
-      <span class="nav-text">编程博客开张</span>
+      <span class="nav-text">Python修养3</span>
     </a>
   
   
-    <a href="/coding-notes-blog/posts/d98d/" class="post-nav-item next" title="Python修养3">
-      <span class="nav-text">Python修养3</span>
+    <a href="/coding-notes-blog/posts/194c/" class="post-nav-item next" title="Python修养2">
+      <span class="nav-text">Python修养2</span>
       <span class="nav-arrow">→</span>
     </a>
   
