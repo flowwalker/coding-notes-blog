@@ -10,7 +10,23 @@
   <rights>All rights reserved 2026, flowwalker之码艺Blog</rights>
   <subtitle>fingers flutter like butterflies over keys</subtitle>
   <title>码艺Blog</title>
-  <updated>2026-07-20T11:25:14.738Z</updated>
+  <updated>2026-07-21T03:41:14.046Z</updated>
+  <entry>
+    <author>
+      <name>flowwalker之码艺Blog</name>
+    </author>
+    <category term="站务" scheme="https://flowwalker.github.io/coding-notes-blog/categories/%E7%AB%99%E5%8A%A1/"/>
+    <category term="开篇" scheme="https://flowwalker.github.io/coding-notes-blog/tags/%E5%BC%80%E7%AF%87/"/>
+    <content>
+      <![CDATA[<p>这里是我的编程学习与实践笔记博客。</p><p>公式用 MathJax 渲染：</p><p>$$X(f) = \int_{-\infty}^{\infty} x(t)\, e^{-j2\pi f t}\, dt$$</p><p>在这个时代的潮流中，虽然手搓已经失去了效率一说，权威也被解构，那么——</p><p>似乎一切的自我陶醉都是一种自作多情，但</p><p>又何妨呢？</p><p>心中拥有美好，荒岛也能耕种出繁花～</p><p>孤芳自赏者，毋为世事倾侧。</p><p>主博客请访问 <a href="https://flowwalker.top/">flowwalker.top</a>。</p>]]>
+    </content>
+    <id>https://flowwalker.github.io/coding-notes-blog/posts/3b26/</id>
+    <link href="https://flowwalker.github.io/coding-notes-blog/posts/3b26/"/>
+    <published>2026-07-19T15:30:00.000Z</published>
+    <summary>曾经翻飞双手，键盘中流声声震。</summary>
+    <title>编程博客开张</title>
+    <updated>2026-07-21T03:41:14.046Z</updated>
+  </entry>
   <entry>
     <author>
       <name>flowwalker之码艺Blog</name>
