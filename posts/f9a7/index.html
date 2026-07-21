@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <title>c++11特性 | 码艺Blog</title>
 
-<meta name="description" content="flowwalker 的编程学习与实践笔记">
+<meta name="description" content="C++11常用特性速查：Lambda、auto、智能指针">
 
 
 <meta name="author" content="flowwalker之码艺Blog">
@@ -107,7 +107,7 @@
       
       <span class="meta-item">
         <i class="fa fa-edit"></i>
-        <time datetime="2026-07-20">更新于 2026-07-20</time>
+        <time datetime="2026-07-21">更新于 2026-07-21</time>
       </span>
       
       
@@ -132,10 +132,6 @@
     
   </header>
 
-  
-  <div class="post-cover animate-entry animate-delay-80">
-    <img src="https://gcore.jsdelivr.net/gh/flowwalker/PicGo-based-image-host@main/da1027148c363d37230f81f18fb82a6f.jpg" alt="c++11特性">
-  </div>
   
 
   <div class="post-content">
@@ -197,7 +193,7 @@ vector&lt;<span class="hljs-type">int</span>&gt; v2 = <span class="hljs-built_in
 
 <h2 id="shared-ptr（共享智能指针）"><a href="#shared-ptr（共享智能指针）" class="headerlink" title="shared_ptr（共享智能指针）"></a>shared_ptr（共享智能指针）</h2><pre><code class="hljs cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;memory&gt;</span></span>
 <span class="hljs-keyword">auto</span> sp = <span class="hljs-built_in">make_shared</span>&lt;<span class="hljs-type">int</span>&gt;(<span class="hljs-number">42</span>);      <span class="hljs-comment">// 推荐写法</span>
-<span class="hljs-keyword">auto</span> sp2 = sp;                        <span class="hljs-comment">// 引用计数 +1</span>
+<span class="hljs-keyword">auto</span> sp2 = sp;                        <span class="hljs-comment">// 引用计数</span>
 <span class="hljs-comment">// 计数归零自动 delete。注意循环引用导致泄漏。</span></code></pre>
 
 <blockquote>
