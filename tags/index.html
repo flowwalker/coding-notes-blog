@@ -44,10 +44,14 @@
 </script>
 
 
+  <link rel="stylesheet" href="https://cdn.cbd.int/anzhiyu-theme-static@1.1.10/progress_bar/progress_bar.css">
+  <style>
+    .pace .pace-progress { background: #555; }
+  </style>
+  <script async src="https://cdn.cbd.int/pace-js@1.2.4/pace.min.js" data-pace-options='{ "restartOnRequestAfter":false,"eventLag":false}'></script>
 <meta name="generator" content="Hexo 8.1.2"></head>
 <body>
   <div id="loading-box" onclick="document.getElementById('loading-box').classList.add('loaded')">
-    <div class="loading-bar"></div>
     <div class="loading-bg">
       <img class="loading-img" alt="加载中" src="/coding-notes-blog/img/avar.png">
       <div class="loading-image-dot"></div>
@@ -55,12 +59,17 @@
   </div>
   <script>
   (function(){
-    if (sessionStorage.getItem('preloaderShown')) {
-      var box = document.getElementById('loading-box');
-      if (box) box.classList.add('loaded');
-      return;
+    var blogRoot = '/coding-notes-blog/';
+    if (document.referrer) {
+      try {
+        var refUrl = new URL(document.referrer);
+        if (refUrl.origin === window.location.origin && refUrl.pathname.startsWith(blogRoot)) {
+          var box = document.getElementById('loading-box');
+          if (box) box.classList.add('loaded');
+          return;
+        }
+      } catch(e) {}
     }
-    sessionStorage.setItem('preloaderShown', 'true');
     var start = Date.now(), minShow = 1500;
     function endLoading() {
       var remain = minShow - (Date.now() - start);
@@ -274,10 +283,6 @@
           STL<sup>2</sup>
         </a>
       
-        <a href="/coding-notes-blog/tags/%E7%B1%BB%E5%87%BD%E6%95%B0%E4%B8%8E%E5%87%BD%E6%95%B0%E6%A8%A1%E6%9D%BF/" class="tag-cloud-item animate-entry" style="font-size: 18px">
-          类函数与函数模板<sup>1</sup>
-        </a>
-      
         <a href="/coding-notes-blog/tags/string/" class="tag-cloud-item animate-entry" style="font-size: 18px">
           string<sup>1</sup>
         </a>
@@ -290,6 +295,14 @@
           虚函数<sup>1</sup>
         </a>
       
+        <a href="/coding-notes-blog/tags/%E7%BB%A7%E6%89%BF/" class="tag-cloud-item animate-entry" style="font-size: 18px">
+          继承<sup>1</sup>
+        </a>
+      
+        <a href="/coding-notes-blog/tags/%E6%B4%BE%E7%94%9F/" class="tag-cloud-item animate-entry" style="font-size: 18px">
+          派生<sup>1</sup>
+        </a>
+      
         <a href="/coding-notes-blog/tags/%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C/" class="tag-cloud-item animate-entry" style="font-size: 18px">
           文件操作<sup>1</sup>
         </a>
@@ -298,16 +311,12 @@
           输入输出<sup>1</sup>
         </a>
       
+        <a href="/coding-notes-blog/tags/%E7%B1%BB%E5%87%BD%E6%95%B0%E4%B8%8E%E5%87%BD%E6%95%B0%E6%A8%A1%E6%9D%BF/" class="tag-cloud-item animate-entry" style="font-size: 18px">
+          类函数与函数模板<sup>1</sup>
+        </a>
+      
         <a href="/coding-notes-blog/tags/%E8%BF%90%E7%AE%97%E7%AC%A6%E9%87%8D%E8%BD%BD/" class="tag-cloud-item animate-entry" style="font-size: 18px">
           运算符重载<sup>1</sup>
-        </a>
-      
-        <a href="/coding-notes-blog/tags/%E7%BB%A7%E6%89%BF/" class="tag-cloud-item animate-entry" style="font-size: 18px">
-          继承<sup>1</sup>
-        </a>
-      
-        <a href="/coding-notes-blog/tags/%E6%B4%BE%E7%94%9F/" class="tag-cloud-item animate-entry" style="font-size: 18px">
-          派生<sup>1</sup>
         </a>
       
     </div>
