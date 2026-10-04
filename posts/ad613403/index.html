@@ -176,99 +176,99 @@
     <span class="hljs-keyword">struct</span> <span class="hljs-title class_">Node</span> &#123;
         T data;
         Node* next;
-        <span class="hljs-built_in">Node</span>(<span class="hljs-type">const</span> T&amp; x, Node* n = <span class="hljs-literal">nullptr</span>) : <span class="hljs-built_in">data</span>(x), <span class="hljs-built_in">next</span>(n) &#123;&#125;
+        <span class="hljs-built_in">Node</span>(<span class="hljs-type">const</span> T&amp; x,Node* p=<span class="hljs-literal">nullptr</span>)&#123; data=x; next=p; &#125;
     &#125;;
 
-    Node* head_ = <span class="hljs-literal">nullptr</span>;
-    <span class="hljs-type">size_t</span> size_ = <span class="hljs-number">0</span>;
+    Node* head;
+    <span class="hljs-type">int</span> n;
 
-    <span class="hljs-function">Node* <span class="hljs-title">node_at</span><span class="hljs-params">(<span class="hljs-type">size_t</span> pos)</span> <span class="hljs-type">const</span> </span>&#123;
-        Node* p = head_;
-        <span class="hljs-keyword">while</span> (pos--) p = p-&gt;next;
+    <span class="hljs-function">Node* <span class="hljs-title">nodeAt</span><span class="hljs-params">(<span class="hljs-type">int</span> pos)</span> <span class="hljs-type">const</span></span>&#123;
+        Node* p=head;
+        <span class="hljs-keyword">while</span>(pos--) p=p-&gt;next;
         <span class="hljs-keyword">return</span> p;
     &#125;
 
 <span class="hljs-keyword">public</span>:
-    <span class="hljs-built_in">SinglyList</span>() = <span class="hljs-keyword">default</span>;
-    ~<span class="hljs-built_in">SinglyList</span>() &#123; <span class="hljs-built_in">clear</span>(); &#125;
+    <span class="hljs-built_in">SinglyList</span>()&#123; head=<span class="hljs-literal">nullptr</span>; n=<span class="hljs-number">0</span>; &#125;
+    ~<span class="hljs-built_in">SinglyList</span>()&#123; <span class="hljs-built_in">clear</span>(); &#125;
 
-    <span class="hljs-built_in">SinglyList</span>(<span class="hljs-type">const</span> SinglyList&amp;) = <span class="hljs-keyword">delete</span>;
-    SinglyList&amp; <span class="hljs-keyword">operator</span>=(<span class="hljs-type">const</span> SinglyList&amp;) = <span class="hljs-keyword">delete</span>;
+    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">empty</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>&#123; <span class="hljs-keyword">return</span> head==<span class="hljs-literal">nullptr</span>; &#125;
+    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">size</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>&#123; <span class="hljs-keyword">return</span> n; &#125;
 
-    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">empty</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>&#123; <span class="hljs-keyword">return</span> head_ == <span class="hljs-literal">nullptr</span>; &#125;
-    <span class="hljs-function"><span class="hljs-type">size_t</span> <span class="hljs-title">size</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>&#123; <span class="hljs-keyword">return</span> size_; &#125;
-
-    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">push_front</span><span class="hljs-params">(<span class="hljs-type">const</span> T&amp; x)</span> </span>&#123;
-        head_ = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Node</span>(x, head_);
-        ++size_;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">push_front</span><span class="hljs-params">(<span class="hljs-type">const</span> T&amp; x)</span></span>&#123;
+        head=<span class="hljs-keyword">new</span> <span class="hljs-built_in">Node</span>(x,head);
+        n++;
     &#125;
 
-    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">push_back</span><span class="hljs-params">(<span class="hljs-type">const</span> T&amp; x)</span> </span>&#123;
-        Node* q = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Node</span>(x);
-        <span class="hljs-keyword">if</span> (!head_) head_ = q;
-        <span class="hljs-keyword">else</span> &#123;
-            Node* p = head_;
-            <span class="hljs-keyword">while</span> (p-&gt;next) p = p-&gt;next;
-            p-&gt;next = q;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">push_back</span><span class="hljs-params">(<span class="hljs-type">const</span> T&amp; x)</span></span>&#123;
+        Node* q=<span class="hljs-keyword">new</span> <span class="hljs-built_in">Node</span>(x);
+        <span class="hljs-keyword">if</span>(head==<span class="hljs-literal">nullptr</span>) head=q;
+        <span class="hljs-keyword">else</span>&#123;
+            Node* p=head;
+            <span class="hljs-keyword">while</span>(p-&gt;next!=<span class="hljs-literal">nullptr</span>) p=p-&gt;next;
+            p-&gt;next=q;
         &#125;
-        ++size_;
+        n++;
     &#125;
 
-    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">insert</span><span class="hljs-params">(<span class="hljs-type">size_t</span> pos, <span class="hljs-type">const</span> T&amp; x)</span> </span>&#123;
-        <span class="hljs-keyword">if</span> (pos &gt; size_) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
-        <span class="hljs-keyword">if</span> (pos == <span class="hljs-number">0</span>) &#123;
-            <span class="hljs-built_in">push_front</span>(x);
-            <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
-        &#125;
-        Node* p = <span class="hljs-built_in">node_at</span>(pos - <span class="hljs-number">1</span>);
-        p-&gt;next = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Node</span>(x, p-&gt;next);
-        ++size_;
+    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">insert</span><span class="hljs-params">(<span class="hljs-type">int</span> pos,<span class="hljs-type">const</span> T&amp; x)</span></span>&#123;
+        <span class="hljs-keyword">if</span>(pos&lt;<span class="hljs-number">0</span> || pos&gt;n) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+        <span class="hljs-keyword">if</span>(pos==<span class="hljs-number">0</span>)&#123; <span class="hljs-built_in">push_front</span>(x); <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>; &#125;
+
+        Node* p=<span class="hljs-built_in">nodeAt</span>(pos<span class="hljs-number">-1</span>);
+        p-&gt;next=<span class="hljs-keyword">new</span> <span class="hljs-built_in">Node</span>(x,p-&gt;next);
+        n++;
         <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
     &#125;
 
-    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">erase</span><span class="hljs-params">(<span class="hljs-type">size_t</span> pos)</span> </span>&#123;
-        <span class="hljs-keyword">if</span> (pos &gt;= size_) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
-        <span class="hljs-keyword">if</span> (pos == <span class="hljs-number">0</span>) &#123;
-            Node* q = head_;
-            head_ = head_-&gt;next;
+    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">erase</span><span class="hljs-params">(<span class="hljs-type">int</span> pos)</span></span>&#123;
+        <span class="hljs-keyword">if</span>(pos&lt;<span class="hljs-number">0</span> || pos&gt;=n) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+
+        <span class="hljs-keyword">if</span>(pos==<span class="hljs-number">0</span>)&#123;
+            Node* q=head;
+            head=head-&gt;next;
             <span class="hljs-keyword">delete</span> q;
-        &#125; <span class="hljs-keyword">else</span> &#123;
-            Node* p = <span class="hljs-built_in">node_at</span>(pos - <span class="hljs-number">1</span>);
-            Node* q = p-&gt;next;
-            p-&gt;next = q-&gt;next;
+        &#125;<span class="hljs-keyword">else</span>&#123;
+            Node* p=<span class="hljs-built_in">nodeAt</span>(pos<span class="hljs-number">-1</span>);
+            Node* q=p-&gt;next;
+            p-&gt;next=q-&gt;next;
             <span class="hljs-keyword">delete</span> q;
         &#125;
-        --size_;
+
+        n--;
         <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
     &#125;
 
-    <span class="hljs-function"><span class="hljs-type">ptrdiff_t</span> <span class="hljs-title">find</span><span class="hljs-params">(<span class="hljs-type">const</span> T&amp; x)</span> <span class="hljs-type">const</span> </span>&#123;
-        <span class="hljs-type">size_t</span> i = <span class="hljs-number">0</span>;
-        <span class="hljs-keyword">for</span> (Node* p = head_; p; p = p-&gt;next, ++i)
-            <span class="hljs-keyword">if</span> (p-&gt;data == x) <span class="hljs-keyword">return</span> <span class="hljs-built_in">static_cast</span>&lt;<span class="hljs-type">ptrdiff_t</span>&gt;(i);
+    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">find</span><span class="hljs-params">(<span class="hljs-type">const</span> T&amp; x)</span> <span class="hljs-type">const</span></span>&#123;
+        Node* p=head;
+        <span class="hljs-type">int</span> i=<span class="hljs-number">0</span>;
+        <span class="hljs-keyword">while</span>(p!=<span class="hljs-literal">nullptr</span>)&#123;
+            <span class="hljs-keyword">if</span>(p-&gt;data==x) <span class="hljs-keyword">return</span> i;
+            p=p-&gt;next; i++;
+        &#125;
         <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;
     &#125;
 
-    <span class="hljs-function">T&amp; <span class="hljs-title">at</span><span class="hljs-params">(<span class="hljs-type">size_t</span> pos)</span> </span>&#123;
-        <span class="hljs-keyword">if</span> (pos &gt;= size_) <span class="hljs-keyword">throw</span> <span class="hljs-built_in">out_of_range</span>(<span class="hljs-string">&quot;SinglyList::at&quot;</span>);
-        <span class="hljs-keyword">return</span> <span class="hljs-built_in">node_at</span>(pos)-&gt;data;
+    <span class="hljs-function">T&amp; <span class="hljs-title">at</span><span class="hljs-params">(<span class="hljs-type">int</span> pos)</span></span>&#123;
+        <span class="hljs-keyword">if</span>(pos&lt;<span class="hljs-number">0</span> || pos&gt;=n) <span class="hljs-keyword">throw</span> <span class="hljs-built_in">out_of_range</span>(<span class="hljs-string">&quot;SinglyList::at&quot;</span>);
+        <span class="hljs-keyword">return</span> <span class="hljs-built_in">nodeAt</span>(pos)-&gt;data;
     &#125;
 
-    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">clear</span><span class="hljs-params">()</span> </span>&#123;
-        <span class="hljs-keyword">while</span> (head_) &#123;
-            Node* q = head_;
-            head_ = head_-&gt;next;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">clear</span><span class="hljs-params">()</span></span>&#123;
+        <span class="hljs-keyword">while</span>(head!=<span class="hljs-literal">nullptr</span>)&#123;
+            Node* q=head;
+            head=head-&gt;next;
             <span class="hljs-keyword">delete</span> q;
         &#125;
-        size_ = <span class="hljs-number">0</span>;
+        n=<span class="hljs-number">0</span>;
     &#125;
 &#125;;</code></pre>
 
 <h2 id="工程细节"><a href="#工程细节" class="headerlink" title="工程细节"></a>工程细节</h2><ul>
-<li><code>head_</code> 直接指向第一个数据结点，空表时为 <code>nullptr</code>。首结点没有前驱，位置 <code>0</code> 的插删需要单独处理。</li>
+<li><code>head</code> 直接指向第一个数据结点，空表时为 <code>nullptr</code>。首结点没有前驱，位置 <code>0</code> 的插删需要单独处理。</li>
 <li>删除时先保存待删结点，再接好后继，最后 <code>delete</code>；释放后不能继续读取该结点的 <code>next</code>。</li>
-<li>仅有头指针，尾插需要遍历，时间为 <code>O(n)</code>。清空后恢复 <code>head_ == nullptr</code> 和 <code>size_ == 0</code>。</li>
-<li>链表持有结点所有权，禁止复制构造与复制赋值，避免默认浅拷贝导致重复释放。</li>
+<li>仅有头指针，尾插需要遍历，时间为 <code>O(n)</code>。清空后恢复 <code>head == nullptr</code> 和 <code>n == 0</code>。</li>
+<li>链表持有结点所有权，未实现深拷贝，不要直接复制对象，避免默认浅拷贝导致重复释放。</li>
 </ul>
 <h2 id="跳转"><a href="#跳转" class="headerlink" title="跳转"></a>跳转</h2><p><a href="/coding-notes-blog/posts/3dde2992/">下一个：带头结点单链表</a></p>
 <p><a href="/coding-notes-blog/posts/da660495/">上一个：顺序串</a></p>

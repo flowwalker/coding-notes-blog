@@ -171,105 +171,98 @@
   
 
   <div class="post-content">
-    <h1 id="顺序串（SeqString）"><a href="#顺序串（SeqString）" class="headerlink" title="顺序串（SeqString）"></a>顺序串（SeqString）</h1><pre><code class="hljs cpp"><span class="hljs-keyword">template</span>&lt;<span class="hljs-type">size_t</span> N&gt;
+    <h1 id="顺序串（SeqString）"><a href="#顺序串（SeqString）" class="headerlink" title="顺序串（SeqString）"></a>顺序串（SeqString）</h1><pre><code class="hljs cpp"><span class="hljs-keyword">template</span>&lt;<span class="hljs-type">int</span> MAXN&gt;
 <span class="hljs-keyword">class</span> <span class="hljs-title class_">SeqString</span> &#123;
-    <span class="hljs-built_in">static_assert</span>(N &lt; numeric_limits&lt;<span class="hljs-type">size_t</span>&gt;::<span class="hljs-built_in">max</span>(), <span class="hljs-string">&quot;invalid capacity&quot;</span>);
-    <span class="hljs-type">char</span> data_[N + <span class="hljs-number">1</span>]&#123;&#125;;
-    <span class="hljs-type">size_t</span> length_ = <span class="hljs-number">0</span>;
-
+    <span class="hljs-type">char</span> data[MAXN<span class="hljs-number">+1</span>];
+    <span class="hljs-type">int</span> n;
 <span class="hljs-keyword">public</span>:
-    <span class="hljs-built_in">SeqString</span>() = <span class="hljs-keyword">default</span>;
+    <span class="hljs-built_in">SeqString</span>()&#123; n=<span class="hljs-number">0</span>; data[<span class="hljs-number">0</span>]=<span class="hljs-string">&#x27;\0&#x27;</span>; &#125;
 
-    <span class="hljs-function"><span class="hljs-keyword">explicit</span> <span class="hljs-title">SeqString</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span>* s)</span> </span>&#123;
-        <span class="hljs-keyword">while</span> (s[length_] != <span class="hljs-string">&#x27;\0&#x27;</span>) &#123;
-            <span class="hljs-keyword">if</span> (length_ == N) <span class="hljs-keyword">throw</span> <span class="hljs-built_in">length_error</span>(<span class="hljs-string">&quot;SeqString capacity exceeded&quot;</span>);
-            data_[length_] = s[length_];
-            ++length_;
+    <span class="hljs-built_in">SeqString</span>(<span class="hljs-type">const</span> <span class="hljs-type">char</span>* s)&#123;
+        n=<span class="hljs-number">0</span>;
+        <span class="hljs-keyword">while</span>(s[n]!=<span class="hljs-string">&#x27;\0&#x27;</span>)&#123;
+            <span class="hljs-keyword">if</span>(n==MAXN) <span class="hljs-keyword">throw</span> <span class="hljs-built_in">length_error</span>(<span class="hljs-string">&quot;SeqString too long&quot;</span>);
+            data[n]=s[n];
+            n++;
         &#125;
-        data_[length_] = <span class="hljs-string">&#x27;\0&#x27;</span>;
+        data[n]=<span class="hljs-string">&#x27;\0&#x27;</span>;
     &#125;
 
-    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">empty</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>&#123; <span class="hljs-keyword">return</span> length_ == <span class="hljs-number">0</span>; &#125;
-    <span class="hljs-function"><span class="hljs-type">size_t</span> <span class="hljs-title">size</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>&#123; <span class="hljs-keyword">return</span> length_; &#125;
-    <span class="hljs-function"><span class="hljs-type">size_t</span> <span class="hljs-title">length</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>&#123; <span class="hljs-keyword">return</span> length_; &#125;
-    <span class="hljs-function"><span class="hljs-keyword">constexpr</span> <span class="hljs-type">size_t</span> <span class="hljs-title">capacity</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>&#123; <span class="hljs-keyword">return</span> N; &#125;
-    <span class="hljs-function"><span class="hljs-type">const</span> <span class="hljs-type">char</span>* <span class="hljs-title">c_str</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>&#123; <span class="hljs-keyword">return</span> data_; &#125;
+    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">empty</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>&#123; <span class="hljs-keyword">return</span> n==<span class="hljs-number">0</span>; &#125;
+    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">size</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>&#123; <span class="hljs-keyword">return</span> n; &#125;
+    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">length</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>&#123; <span class="hljs-keyword">return</span> n; &#125;
+    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">capacity</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>&#123; <span class="hljs-keyword">return</span> MAXN; &#125;
+    <span class="hljs-function"><span class="hljs-type">const</span> <span class="hljs-type">char</span>* <span class="hljs-title">c_str</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>&#123; <span class="hljs-keyword">return</span> data; &#125;
 
-    <span class="hljs-type">char</span>&amp; <span class="hljs-keyword">operator</span>[](<span class="hljs-type">size_t</span> i) &#123; <span class="hljs-keyword">return</span> data_[i]; &#125;
-    <span class="hljs-type">const</span> <span class="hljs-type">char</span>&amp; <span class="hljs-keyword">operator</span>[](<span class="hljs-type">size_t</span> i) <span class="hljs-type">const</span> &#123; <span class="hljs-keyword">return</span> data_[i]; &#125;
+    <span class="hljs-type">char</span>&amp; <span class="hljs-keyword">operator</span>[](<span class="hljs-type">int</span> i)&#123; <span class="hljs-keyword">return</span> data[i]; &#125;
+    <span class="hljs-type">const</span> <span class="hljs-type">char</span>&amp; <span class="hljs-keyword">operator</span>[](<span class="hljs-type">int</span> i) <span class="hljs-type">const</span> &#123; <span class="hljs-keyword">return</span> data[i]; &#125;
 
-    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">append</span><span class="hljs-params">(<span class="hljs-type">const</span> SeqString&amp; other)</span> </span>&#123;
-        <span class="hljs-keyword">if</span> (other.length_ &gt; N - length_) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
-        <span class="hljs-keyword">for</span> (<span class="hljs-type">size_t</span> i = <span class="hljs-number">0</span>; i &lt; other.length_; ++i)
-            data_[length_ + i] = other.data_[i];
-        length_ += other.length_;
-        data_[length_] = <span class="hljs-string">&#x27;\0&#x27;</span>;
+    <span class="hljs-function"><span class="hljs-type">char</span>&amp; <span class="hljs-title">at</span><span class="hljs-params">(<span class="hljs-type">int</span> i)</span></span>&#123;
+        <span class="hljs-keyword">if</span>(i&lt;<span class="hljs-number">0</span> || i&gt;=n) <span class="hljs-keyword">throw</span> <span class="hljs-built_in">out_of_range</span>(<span class="hljs-string">&quot;SeqString::at&quot;</span>);
+        <span class="hljs-keyword">return</span> data[i];
+    &#125;
+
+    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">append</span><span class="hljs-params">(<span class="hljs-type">const</span> SeqString&amp; other)</span></span>&#123;
+        <span class="hljs-keyword">if</span>(n+other.n&gt;MAXN) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">0</span>;i&lt;other.n;i++) data[n+i]=other.data[i];
+        n+=other.n;
+        data[n]=<span class="hljs-string">&#x27;\0&#x27;</span>;
         <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
     &#125;
 
-    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">insert</span><span class="hljs-params">(<span class="hljs-type">size_t</span> pos, <span class="hljs-type">const</span> SeqString&amp; other)</span> </span>&#123;
-        <span class="hljs-keyword">if</span> (pos &gt; length_ || other.length_ &gt; N - length_) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
-        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span> == &amp;other) &#123;
-            <span class="hljs-function">SeqString <span class="hljs-title">snapshot</span><span class="hljs-params">(other)</span></span>;
-            <span class="hljs-keyword">return</span> <span class="hljs-built_in">insert</span>(pos, snapshot);
-        &#125;
-        <span class="hljs-keyword">for</span> (<span class="hljs-type">size_t</span> i = length_; i &gt; pos; --i)
-            data_[i + other.length_ - <span class="hljs-number">1</span>] = data_[i - <span class="hljs-number">1</span>];
-        <span class="hljs-keyword">for</span> (<span class="hljs-type">size_t</span> i = <span class="hljs-number">0</span>; i &lt; other.length_; ++i)
-            data_[pos + i] = other.data_[i];
-        length_ += other.length_;
-        data_[length_] = <span class="hljs-string">&#x27;\0&#x27;</span>;
+    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">insert</span><span class="hljs-params">(<span class="hljs-type">int</span> pos,<span class="hljs-type">const</span> SeqString&amp; other)</span></span>&#123;
+        <span class="hljs-keyword">if</span>(pos&lt;<span class="hljs-number">0</span> || pos&gt;n || n+other.n&gt;MAXN) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=n<span class="hljs-number">-1</span>;i&gt;=pos;i--) data[i+other.n]=data[i];
+        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">0</span>;i&lt;other.n;i++) data[pos+i]=other.data[i];
+        n+=other.n;
+        data[n]=<span class="hljs-string">&#x27;\0&#x27;</span>;
         <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
     &#125;
 
-    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">erase</span><span class="hljs-params">(<span class="hljs-type">size_t</span> pos, <span class="hljs-type">size_t</span> count)</span> </span>&#123;
-        <span class="hljs-keyword">if</span> (pos &gt; length_) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
-        <span class="hljs-keyword">if</span> (count &gt; length_ - pos) count = length_ - pos;
-        <span class="hljs-keyword">for</span> (<span class="hljs-type">size_t</span> i = pos; i + count &lt; length_; ++i)
-            data_[i] = data_[i + count];
-        length_ -= count;
-        data_[length_] = <span class="hljs-string">&#x27;\0&#x27;</span>;
+    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">erase</span><span class="hljs-params">(<span class="hljs-type">int</span> pos,<span class="hljs-type">int</span> len)</span></span>&#123;
+        <span class="hljs-keyword">if</span>(pos&lt;<span class="hljs-number">0</span> || pos&gt;n || len&lt;<span class="hljs-number">0</span>) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+        <span class="hljs-keyword">if</span>(pos+len&gt;n) len=n-pos;
+        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=pos;i+len&lt;n;i++) data[i]=data[i+len];
+        n-=len;
+        data[n]=<span class="hljs-string">&#x27;\0&#x27;</span>;
         <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
     &#125;
 
-    <span class="hljs-function">SeqString <span class="hljs-title">substr</span><span class="hljs-params">(<span class="hljs-type">size_t</span> pos, <span class="hljs-type">size_t</span> count)</span> <span class="hljs-type">const</span> </span>&#123;
-        <span class="hljs-keyword">if</span> (pos &gt; length_) <span class="hljs-keyword">throw</span> <span class="hljs-built_in">out_of_range</span>(<span class="hljs-string">&quot;SeqString::substr&quot;</span>);
-        <span class="hljs-keyword">if</span> (count &gt; length_ - pos) count = length_ - pos;
-        SeqString out;
-        <span class="hljs-keyword">for</span> (<span class="hljs-type">size_t</span> i = <span class="hljs-number">0</span>; i &lt; count; ++i) out.data_[i] = data_[pos + i];
-        out.length_ = count;
-        out.data_[count] = <span class="hljs-string">&#x27;\0&#x27;</span>;
-        <span class="hljs-keyword">return</span> out;
+    <span class="hljs-function">SeqString <span class="hljs-title">substr</span><span class="hljs-params">(<span class="hljs-type">int</span> pos,<span class="hljs-type">int</span> len)</span> <span class="hljs-type">const</span></span>&#123;
+        <span class="hljs-keyword">if</span>(pos&lt;<span class="hljs-number">0</span> || pos&gt;n || len&lt;<span class="hljs-number">0</span>) <span class="hljs-keyword">throw</span> <span class="hljs-built_in">out_of_range</span>(<span class="hljs-string">&quot;SeqString::substr&quot;</span>);
+        <span class="hljs-keyword">if</span>(pos+len&gt;n) len=n-pos;
+        SeqString ans;
+        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">0</span>;i&lt;len;i++) ans.data[i]=data[pos+i];
+        ans.n=len;
+        ans.data[len]=<span class="hljs-string">&#x27;\0&#x27;</span>;
+        <span class="hljs-keyword">return</span> ans;
     &#125;
 
-    <span class="hljs-function"><span class="hljs-type">ptrdiff_t</span> <span class="hljs-title">find</span><span class="hljs-params">(<span class="hljs-type">const</span> SeqString&amp; pat)</span> <span class="hljs-type">const</span> </span>&#123;
-        <span class="hljs-keyword">if</span> (pat.length_ == <span class="hljs-number">0</span>) <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
-        <span class="hljs-keyword">if</span> (pat.length_ &gt; length_) <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;
-        <span class="hljs-keyword">for</span> (<span class="hljs-type">size_t</span> i = <span class="hljs-number">0</span>; i + pat.length_ &lt;= length_; ++i) &#123;
-            <span class="hljs-type">size_t</span> j = <span class="hljs-number">0</span>;
-            <span class="hljs-keyword">while</span> (j &lt; pat.length_ &amp;&amp; data_[i + j] == pat.data_[j]) ++j;
-            <span class="hljs-keyword">if</span> (j == pat.length_) <span class="hljs-keyword">return</span> <span class="hljs-built_in">static_cast</span>&lt;<span class="hljs-type">ptrdiff_t</span>&gt;(i);
+    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">find</span><span class="hljs-params">(<span class="hljs-type">const</span> SeqString&amp; pat)</span> <span class="hljs-type">const</span></span>&#123;
+        <span class="hljs-keyword">if</span>(pat.n==<span class="hljs-number">0</span>) <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+        <span class="hljs-keyword">if</span>(pat.n&gt;n) <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;
+
+        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">0</span>;i+pat.n&lt;=n;i++)&#123;
+            <span class="hljs-type">int</span> j=<span class="hljs-number">0</span>;
+            <span class="hljs-keyword">while</span>(j&lt;pat.n &amp;&amp; data[i+j]==pat.data[j]) j++;
+            <span class="hljs-keyword">if</span>(j==pat.n) <span class="hljs-keyword">return</span> i;
         &#125;
         <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;
     &#125;
 
-    <span class="hljs-type">bool</span> <span class="hljs-keyword">operator</span>==(<span class="hljs-type">const</span> SeqString&amp; other) <span class="hljs-type">const</span> &#123;
-        <span class="hljs-keyword">if</span> (length_ != other.length_) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
-        <span class="hljs-keyword">for</span> (<span class="hljs-type">size_t</span> i = <span class="hljs-number">0</span>; i &lt; length_; ++i)
-            <span class="hljs-keyword">if</span> (data_[i] != other.data_[i]) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+    <span class="hljs-type">bool</span> <span class="hljs-keyword">operator</span>==(<span class="hljs-type">const</span> SeqString&amp; other) <span class="hljs-type">const</span>&#123;
+        <span class="hljs-keyword">if</span>(n!=other.n) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">0</span>;i&lt;n;i++) <span class="hljs-keyword">if</span>(data[i]!=other.data[i]) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
         <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
     &#125;
 
-    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">clear</span><span class="hljs-params">()</span> </span>&#123;
-        length_ = <span class="hljs-number">0</span>;
-        data_[<span class="hljs-number">0</span>] = <span class="hljs-string">&#x27;\0&#x27;</span>;
-    &#125;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">clear</span><span class="hljs-params">()</span></span>&#123; n=<span class="hljs-number">0</span>; data[<span class="hljs-number">0</span>]=<span class="hljs-string">&#x27;\0&#x27;</span>; &#125;
 &#125;;</code></pre>
 
 <h2 id="工程细节"><a href="#工程细节" class="headerlink" title="工程细节"></a>工程细节</h2><ul>
-<li><code>data_</code> 有 <code>N + 1</code> 个位置，额外位置留给 <code>\0</code>；<code>length_</code> 不包含终止字符。修改长度后重新写入 <code>data_[length_] = &#39;\0&#39;</code>。</li>
-<li>插入先从后往前移动原字符。插入自身时先复制快照，再按快照插入，避免原串被移动后污染来源。</li>
-<li>容量检查写成“待插入长度是否超过剩余容量”，避免长度相加溢出。删除和截取会把过大的 <code>count</code> 截断到剩余长度。</li>
+<li><code>data</code> 有 <code>MAXN + 1</code> 个位置，额外位置留给 <code>\0</code>；<code>n</code> 不包含终止字符。修改长度后重新写入 <code>data[n] = &#39;\0&#39;</code>。</li>
+<li>插入先从后往前移动原字符。这版不能直接把自身作为插入来源，应先在外部复制一份，避免原串被移动后污染来源。</li>
+<li>插入和追加前检查两串长度之和是否超过容量；删除和截取会把过大的 <code>len</code> 截断到剩余长度。</li>
 <li><code>find()</code> 为朴素匹配，空模式返回 <code>0</code>，未找到返回 <code>-1</code>。下标访问不检查边界，不能改写终止字符；构造参数必须指向有效、以 <code>\0</code> 结尾的字符序列。</li>
 </ul>
 <h2 id="跳转"><a href="#跳转" class="headerlink" title="跳转"></a>跳转</h2><p><a href="/coding-notes-blog/posts/ad613403/">下一个：无头结点单链表</a></p>

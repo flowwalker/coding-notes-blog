@@ -171,48 +171,45 @@
   
 
   <div class="post-content">
-    <h1 id="普通顺序队列（LinearQueue）"><a href="#普通顺序队列（LinearQueue）" class="headerlink" title="普通顺序队列（LinearQueue）"></a>普通顺序队列（LinearQueue）</h1><pre><code class="hljs cpp"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">T</span>, <span class="hljs-type">size_t</span> N&gt;
+    <h1 id="普通顺序队列（LinearQueue）"><a href="#普通顺序队列（LinearQueue）" class="headerlink" title="普通顺序队列（LinearQueue）"></a>普通顺序队列（LinearQueue）</h1><pre><code class="hljs cpp"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">T</span>, <span class="hljs-type">int</span> MAXN&gt;
 <span class="hljs-keyword">class</span> <span class="hljs-title class_">LinearQueue</span> &#123;
-    <span class="hljs-built_in">static_assert</span>(N &gt; <span class="hljs-number">0</span>, <span class="hljs-string">&quot;capacity must be positive&quot;</span>);
-    T data_[N];
-    <span class="hljs-type">size_t</span> front_ = <span class="hljs-number">0</span>;
-    <span class="hljs-type">size_t</span> rear_  = <span class="hljs-number">0</span>; <span class="hljs-comment">// 下一插入位置</span>
-
+    T data[MAXN];
+    <span class="hljs-type">int</span> frontIndex, rearIndex;   <span class="hljs-comment">// rearIndex = 下一插入位置</span>
 <span class="hljs-keyword">public</span>:
-    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">empty</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>&#123; <span class="hljs-keyword">return</span> front_ == rear_; &#125;
-    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">full</span><span class="hljs-params">()</span>  <span class="hljs-type">const</span> </span>&#123; <span class="hljs-keyword">return</span> rear_ == N; &#125;
-    <span class="hljs-function"><span class="hljs-type">size_t</span> <span class="hljs-title">size</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>&#123; <span class="hljs-keyword">return</span> rear_ - front_; &#125;
+    <span class="hljs-built_in">LinearQueue</span>()&#123; frontIndex=rearIndex=<span class="hljs-number">0</span>; &#125;
+    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">empty</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>&#123; <span class="hljs-keyword">return</span> frontIndex==rearIndex; &#125;
+    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">full</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>&#123; <span class="hljs-keyword">return</span> rearIndex==MAXN; &#125;
+    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">size</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>&#123; <span class="hljs-keyword">return</span> rearIndex-frontIndex; &#125;
 
-    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">enqueue</span><span class="hljs-params">(<span class="hljs-type">const</span> T&amp; x)</span> </span>&#123;
-        <span class="hljs-keyword">if</span> (<span class="hljs-built_in">full</span>()) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
-        data_[rear_] = x;
-        ++rear_;
+    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">enqueue</span><span class="hljs-params">(<span class="hljs-type">const</span> T&amp; x)</span></span>&#123;
+        <span class="hljs-keyword">if</span>(<span class="hljs-built_in">full</span>()) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+        data[rearIndex++]=x;
         <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
     &#125;
 
-    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">dequeue</span><span class="hljs-params">()</span> </span>&#123;
-        <span class="hljs-keyword">if</span> (<span class="hljs-built_in">empty</span>()) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
-        ++front_;
+    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">dequeue</span><span class="hljs-params">()</span></span>&#123;
+        <span class="hljs-keyword">if</span>(<span class="hljs-built_in">empty</span>()) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+        frontIndex++;
         <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
     &#125;
 
-    <span class="hljs-function">T&amp; <span class="hljs-title">front</span><span class="hljs-params">()</span> </span>&#123;
-        <span class="hljs-keyword">if</span> (<span class="hljs-built_in">empty</span>()) <span class="hljs-keyword">throw</span> <span class="hljs-built_in">out_of_range</span>(<span class="hljs-string">&quot;LinearQueue::front&quot;</span>);
-        <span class="hljs-keyword">return</span> data_[front_];
+    <span class="hljs-function">T&amp; <span class="hljs-title">front</span><span class="hljs-params">()</span></span>&#123;
+        <span class="hljs-keyword">if</span>(<span class="hljs-built_in">empty</span>()) <span class="hljs-keyword">throw</span> <span class="hljs-built_in">underflow_error</span>(<span class="hljs-string">&quot;LinearQueue::front on empty queue&quot;</span>);
+        <span class="hljs-keyword">return</span> data[frontIndex];
     &#125;
 
-    <span class="hljs-function">T&amp; <span class="hljs-title">back</span><span class="hljs-params">()</span> </span>&#123;
-        <span class="hljs-keyword">if</span> (<span class="hljs-built_in">empty</span>()) <span class="hljs-keyword">throw</span> <span class="hljs-built_in">out_of_range</span>(<span class="hljs-string">&quot;LinearQueue::back&quot;</span>);
-        <span class="hljs-keyword">return</span> data_[rear_ - <span class="hljs-number">1</span>];
+    <span class="hljs-function">T&amp; <span class="hljs-title">back</span><span class="hljs-params">()</span></span>&#123;
+        <span class="hljs-keyword">if</span>(<span class="hljs-built_in">empty</span>()) <span class="hljs-keyword">throw</span> <span class="hljs-built_in">underflow_error</span>(<span class="hljs-string">&quot;LinearQueue::back on empty queue&quot;</span>);
+        <span class="hljs-keyword">return</span> data[rearIndex<span class="hljs-number">-1</span>];
     &#125;
 
-    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">clear</span><span class="hljs-params">()</span> </span>&#123; front_ = rear_ = <span class="hljs-number">0</span>; &#125;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">clear</span><span class="hljs-params">()</span></span>&#123; frontIndex=rearIndex=<span class="hljs-number">0</span>; &#125;
 &#125;;</code></pre>
 
 <h2 id="工程细节"><a href="#工程细节" class="headerlink" title="工程细节"></a>工程细节</h2><ul>
-<li><code>front_</code> 指向当前队首，<code>rear_</code> 指向下一插入位置；队尾元素在 <code>rear_ - 1</code>，不是 <code>rear_</code>。</li>
-<li><code>rear_ == N</code> 就拒绝入队，即使前端已经空出位置：这就是假溢出。全部出队后仍可能同时 <code>empty()</code> 和 <code>full()</code>，调用 <code>clear()</code> 才复位。</li>
-<li>入队赋值成功后再递增 <code>rear_</code>；空队列不能访问首尾。模板容量 <code>N</code> 必须大于零。</li>
+<li><code>frontIndex</code> 指向当前队首，<code>rearIndex</code> 指向下一插入位置；队尾元素在 <code>rearIndex - 1</code>，不是 <code>rearIndex</code>。</li>
+<li><code>rearIndex == MAXN</code> 就拒绝入队，即使前端已经空出位置：这就是假溢出。全部出队后仍可能同时 <code>empty()</code> 和 <code>full()</code>，调用 <code>clear()</code> 才复位。</li>
+<li>空队列不能访问首尾。模板容量 <code>MAXN</code> 必须大于零。</li>
 </ul>
 <h2 id="跳转"><a href="#跳转" class="headerlink" title="跳转"></a>跳转</h2><p><a href="/coding-notes-blog/posts/436f552f/">下一个：循环顺序队列</a></p>
 <p><a href="/coding-notes-blog/posts/aa0cf01a/">上一个：顺序栈</a></p>

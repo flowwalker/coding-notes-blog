@@ -176,55 +176,48 @@
     <span class="hljs-keyword">struct</span> <span class="hljs-title class_">Node</span> &#123;
         T data;
         Node* next;
-        <span class="hljs-built_in">Node</span>(<span class="hljs-type">const</span> T&amp; x, Node* n) : <span class="hljs-built_in">data</span>(x), <span class="hljs-built_in">next</span>(n) &#123;&#125;
+        <span class="hljs-built_in">Node</span>(<span class="hljs-type">const</span> T&amp; x,Node* p=<span class="hljs-literal">nullptr</span>)&#123; data=x; next=p; &#125;
     &#125;;
 
-    Node* top_ = <span class="hljs-literal">nullptr</span>;
-    <span class="hljs-type">size_t</span> size_ = <span class="hljs-number">0</span>;
+    Node* topPointer;
+    <span class="hljs-type">int</span> n;
 
 <span class="hljs-keyword">public</span>:
-    <span class="hljs-built_in">LinkedStack</span>() = <span class="hljs-keyword">default</span>;
-    ~<span class="hljs-built_in">LinkedStack</span>() &#123; <span class="hljs-built_in">clear</span>(); &#125;
+    <span class="hljs-built_in">LinkedStack</span>()&#123; topPointer=<span class="hljs-literal">nullptr</span>; n=<span class="hljs-number">0</span>; &#125;
+    ~<span class="hljs-built_in">LinkedStack</span>()&#123; <span class="hljs-built_in">clear</span>(); &#125;
 
-    <span class="hljs-built_in">LinkedStack</span>(<span class="hljs-type">const</span> LinkedStack&amp;) = <span class="hljs-keyword">delete</span>;
-    LinkedStack&amp; <span class="hljs-keyword">operator</span>=(<span class="hljs-type">const</span> LinkedStack&amp;) = <span class="hljs-keyword">delete</span>;
+    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">empty</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>&#123; <span class="hljs-keyword">return</span> topPointer==<span class="hljs-literal">nullptr</span>; &#125;
+    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">size</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>&#123; <span class="hljs-keyword">return</span> n; &#125;
 
-    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">empty</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>&#123; <span class="hljs-keyword">return</span> top_ == <span class="hljs-literal">nullptr</span>; &#125;
-    <span class="hljs-function"><span class="hljs-type">size_t</span> <span class="hljs-title">size</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>&#123; <span class="hljs-keyword">return</span> size_; &#125;
-
-    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">push</span><span class="hljs-params">(<span class="hljs-type">const</span> T&amp; x)</span> </span>&#123;
-        top_ = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Node</span>(x, top_);
-        ++size_;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">push</span><span class="hljs-params">(<span class="hljs-type">const</span> T&amp; x)</span></span>&#123;
+        topPointer=<span class="hljs-keyword">new</span> <span class="hljs-built_in">Node</span>(x,topPointer);
+        n++;
     &#125;
 
-    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">pop</span><span class="hljs-params">()</span> </span>&#123;
-        <span class="hljs-keyword">if</span> (<span class="hljs-built_in">empty</span>()) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
-        Node* q = top_;
-        top_ = top_-&gt;next;
+    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">pop</span><span class="hljs-params">()</span></span>&#123;
+        <span class="hljs-keyword">if</span>(<span class="hljs-built_in">empty</span>()) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+
+        Node* q=topPointer;
+        topPointer=topPointer-&gt;next;
         <span class="hljs-keyword">delete</span> q;
-        --size_;
+        n--;
         <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
     &#125;
 
-    <span class="hljs-function">T&amp; <span class="hljs-title">top</span><span class="hljs-params">()</span> </span>&#123;
-        <span class="hljs-keyword">if</span> (<span class="hljs-built_in">empty</span>()) <span class="hljs-keyword">throw</span> <span class="hljs-built_in">out_of_range</span>(<span class="hljs-string">&quot;LinkedStack::top&quot;</span>);
-        <span class="hljs-keyword">return</span> top_-&gt;data;
+    <span class="hljs-function">T&amp; <span class="hljs-title">top</span><span class="hljs-params">()</span></span>&#123;
+        <span class="hljs-keyword">if</span>(<span class="hljs-built_in">empty</span>()) <span class="hljs-keyword">throw</span> <span class="hljs-built_in">underflow_error</span>(<span class="hljs-string">&quot;LinkedStack::top on empty stack&quot;</span>);
+        <span class="hljs-keyword">return</span> topPointer-&gt;data;
     &#125;
 
-    <span class="hljs-function"><span class="hljs-type">const</span> T&amp; <span class="hljs-title">top</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>&#123;
-        <span class="hljs-keyword">if</span> (<span class="hljs-built_in">empty</span>()) <span class="hljs-keyword">throw</span> <span class="hljs-built_in">out_of_range</span>(<span class="hljs-string">&quot;LinkedStack::top&quot;</span>);
-        <span class="hljs-keyword">return</span> top_-&gt;data;
-    &#125;
-
-    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">clear</span><span class="hljs-params">()</span> </span>&#123;
-        <span class="hljs-keyword">while</span> (<span class="hljs-built_in">pop</span>()) &#123;&#125;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">clear</span><span class="hljs-params">()</span></span>&#123;
+        <span class="hljs-keyword">while</span>(!<span class="hljs-built_in">empty</span>()) <span class="hljs-built_in">pop</span>();
     &#125;
 &#125;;</code></pre>
 
 <h2 id="工程细节"><a href="#工程细节" class="headerlink" title="工程细节"></a>工程细节</h2><ul>
 <li>栈顶指针就是链首指针；入栈头插，出栈删首，两者均为 <code>O(1)</code>。</li>
-<li>入栈时新结点先指向旧栈顶，再更新 <code>top_</code>。出栈先保存旧栈顶、更新指针，再释放旧结点。</li>
-<li>空栈不能读取 <code>top()</code>；<code>pop()</code> 在空栈返回 <code>false</code>。清空反复出栈，最后 <code>top_ == nullptr</code> 且 <code>size_ == 0</code>。</li>
+<li>入栈时新结点先指向旧栈顶，再更新 <code>topPointer</code>。出栈先保存旧栈顶、更新指针，再释放旧结点。</li>
+<li>空栈不能读取 <code>top()</code>；<code>pop()</code> 在空栈返回 <code>false</code>。清空反复出栈，最后 <code>topPointer == nullptr</code> 且 <code>n == 0</code>。</li>
 </ul>
 <h2 id="跳转"><a href="#跳转" class="headerlink" title="跳转"></a>跳转</h2><p><a href="/coding-notes-blog/posts/c37d35d4/">下一个：链式队列</a></p>
 <p><a href="/coding-notes-blog/posts/2d7354f8/">上一个：双向循环链表</a></p>

@@ -171,70 +171,54 @@
   
 
   <div class="post-content">
-    <h1 id="顺序表（SeqList）"><a href="#顺序表（SeqList）" class="headerlink" title="顺序表（SeqList）"></a>顺序表（SeqList）</h1><pre><code class="hljs cpp"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">T</span>, <span class="hljs-type">size_t</span> N&gt;
+    <h1 id="顺序表（SeqList）"><a href="#顺序表（SeqList）" class="headerlink" title="顺序表（SeqList）"></a>顺序表（SeqList）</h1><pre><code class="hljs cpp"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">T</span>, <span class="hljs-type">int</span> MAXN&gt;
 <span class="hljs-keyword">class</span> <span class="hljs-title class_">SeqList</span> &#123;
-    <span class="hljs-built_in">static_assert</span>(N &gt; <span class="hljs-number">0</span>, <span class="hljs-string">&quot;capacity must be positive&quot;</span>);
-    T data_[N];
-    <span class="hljs-type">size_t</span> size_ = <span class="hljs-number">0</span>;
-
+    T data[MAXN];
+    <span class="hljs-type">int</span> n;
 <span class="hljs-keyword">public</span>:
-    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">empty</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>&#123; <span class="hljs-keyword">return</span> size_ == <span class="hljs-number">0</span>; &#125;
-    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">full</span><span class="hljs-params">()</span>  <span class="hljs-type">const</span> </span>&#123; <span class="hljs-keyword">return</span> size_ == N; &#125;
-    <span class="hljs-function"><span class="hljs-type">size_t</span> <span class="hljs-title">size</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>&#123; <span class="hljs-keyword">return</span> size_; &#125;
-    <span class="hljs-function"><span class="hljs-keyword">constexpr</span> <span class="hljs-type">size_t</span> <span class="hljs-title">capacity</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>&#123; <span class="hljs-keyword">return</span> N; &#125;
+    <span class="hljs-built_in">SeqList</span>(): <span class="hljs-built_in">n</span>(<span class="hljs-number">0</span>) &#123;&#125;
+    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">empty</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>&#123; <span class="hljs-keyword">return</span> n==<span class="hljs-number">0</span>; &#125;
+    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">full</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>&#123; <span class="hljs-keyword">return</span> n==MAXN; &#125;
+    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">size</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>&#123; <span class="hljs-keyword">return</span> n; &#125;
+    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">capacity</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>&#123; <span class="hljs-keyword">return</span> MAXN; &#125;
 
-    T&amp; <span class="hljs-keyword">operator</span>[](<span class="hljs-type">size_t</span> i) &#123; <span class="hljs-keyword">return</span> data_[i]; &#125;
-    <span class="hljs-type">const</span> T&amp; <span class="hljs-keyword">operator</span>[](<span class="hljs-type">size_t</span> i) <span class="hljs-type">const</span> &#123; <span class="hljs-keyword">return</span> data_[i]; &#125;
+    T&amp; <span class="hljs-keyword">operator</span>[](<span class="hljs-type">int</span> i)&#123; <span class="hljs-keyword">return</span> data[i]; &#125;
+    <span class="hljs-type">const</span> T&amp; <span class="hljs-keyword">operator</span>[](<span class="hljs-type">int</span> i) <span class="hljs-type">const</span> &#123; <span class="hljs-keyword">return</span> data[i]; &#125;
 
-    <span class="hljs-function">T&amp; <span class="hljs-title">at</span><span class="hljs-params">(<span class="hljs-type">size_t</span> i)</span> </span>&#123;
-        <span class="hljs-keyword">if</span> (i &gt;= size_) <span class="hljs-keyword">throw</span> <span class="hljs-built_in">out_of_range</span>(<span class="hljs-string">&quot;SeqList::at&quot;</span>);
-        <span class="hljs-keyword">return</span> data_[i];
-    &#125;
-    <span class="hljs-function"><span class="hljs-type">const</span> T&amp; <span class="hljs-title">at</span><span class="hljs-params">(<span class="hljs-type">size_t</span> i)</span> <span class="hljs-type">const</span> </span>&#123;
-        <span class="hljs-keyword">if</span> (i &gt;= size_) <span class="hljs-keyword">throw</span> <span class="hljs-built_in">out_of_range</span>(<span class="hljs-string">&quot;SeqList::at&quot;</span>);
-        <span class="hljs-keyword">return</span> data_[i];
+    <span class="hljs-function">T&amp; <span class="hljs-title">at</span><span class="hljs-params">(<span class="hljs-type">int</span> i)</span></span>&#123;
+        <span class="hljs-keyword">if</span>(i&lt;<span class="hljs-number">0</span> || i&gt;=n) <span class="hljs-keyword">throw</span> <span class="hljs-built_in">out_of_range</span>(<span class="hljs-string">&quot;SeqList::at&quot;</span>);
+        <span class="hljs-keyword">return</span> data[i];
     &#125;
 
-    <span class="hljs-function"><span class="hljs-type">ptrdiff_t</span> <span class="hljs-title">find</span><span class="hljs-params">(<span class="hljs-type">const</span> T&amp; x)</span> <span class="hljs-type">const</span> </span>&#123;
-        <span class="hljs-keyword">for</span> (<span class="hljs-type">size_t</span> i = <span class="hljs-number">0</span>; i &lt; size_; ++i)
-            <span class="hljs-keyword">if</span> (data_[i] == x) <span class="hljs-keyword">return</span> <span class="hljs-built_in">static_cast</span>&lt;<span class="hljs-type">ptrdiff_t</span>&gt;(i);
+    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">find</span><span class="hljs-params">(<span class="hljs-type">const</span> T&amp; x)</span> <span class="hljs-type">const</span> </span>&#123;
+        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">0</span>;i&lt;n;i++) <span class="hljs-keyword">if</span>(data[i]==x) <span class="hljs-keyword">return</span> i;
         <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;
     &#125;
 
-    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">insert</span><span class="hljs-params">(<span class="hljs-type">size_t</span> pos, <span class="hljs-type">const</span> T&amp; x)</span> </span>&#123;
-        <span class="hljs-keyword">if</span> (<span class="hljs-built_in">full</span>() || pos &gt; size_) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
-        <span class="hljs-function">T <span class="hljs-title">value</span><span class="hljs-params">(x)</span></span>;
-        <span class="hljs-keyword">for</span> (<span class="hljs-type">size_t</span> i = size_; i &gt; pos; --i)
-            data_[i] = data_[i - <span class="hljs-number">1</span>];
-        data_[pos] = value;
-        ++size_;
+    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">insert</span><span class="hljs-params">(<span class="hljs-type">int</span> pos,<span class="hljs-type">const</span> T&amp; x)</span></span>&#123;
+        <span class="hljs-keyword">if</span>(<span class="hljs-built_in">full</span>() || pos&lt;<span class="hljs-number">0</span> || pos&gt;n) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=n;i&gt;pos;i--) data[i]=data[i<span class="hljs-number">-1</span>];
+        data[pos]=x; n++;
         <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
     &#125;
 
-    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">erase</span><span class="hljs-params">(<span class="hljs-type">size_t</span> pos)</span> </span>&#123;
-        <span class="hljs-keyword">if</span> (pos &gt;= size_) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
-        <span class="hljs-keyword">for</span> (<span class="hljs-type">size_t</span> i = pos; i + <span class="hljs-number">1</span> &lt; size_; ++i)
-            data_[i] = data_[i + <span class="hljs-number">1</span>];
-        --size_;
+    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">erase</span><span class="hljs-params">(<span class="hljs-type">int</span> pos)</span></span>&#123;
+        <span class="hljs-keyword">if</span>(pos&lt;<span class="hljs-number">0</span> || pos&gt;=n) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=pos;i&lt;n<span class="hljs-number">-1</span>;i++) data[i]=data[i<span class="hljs-number">+1</span>];
+        n--;
         <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
     &#125;
 
-    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">push_back</span><span class="hljs-params">(<span class="hljs-type">const</span> T&amp; x)</span> </span>&#123; <span class="hljs-keyword">return</span> <span class="hljs-built_in">insert</span>(size_, x); &#125;
-
-    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">pop_back</span><span class="hljs-params">()</span> </span>&#123;
-        <span class="hljs-keyword">if</span> (<span class="hljs-built_in">empty</span>()) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
-        --size_;
-        <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
-    &#125;
-
-    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">clear</span><span class="hljs-params">()</span> </span>&#123; size_ = <span class="hljs-number">0</span>; &#125;
+    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">push_back</span><span class="hljs-params">(<span class="hljs-type">const</span> T&amp; x)</span></span>&#123; <span class="hljs-keyword">return</span> <span class="hljs-built_in">insert</span>(n,x); &#125;
+    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">pop_back</span><span class="hljs-params">()</span></span>&#123; <span class="hljs-keyword">if</span>(<span class="hljs-built_in">empty</span>()) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>; n--; <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>; &#125;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">clear</span><span class="hljs-params">()</span></span>&#123; n=<span class="hljs-number">0</span>; &#125;
 &#125;;</code></pre>
 
 <h2 id="工程细节"><a href="#工程细节" class="headerlink" title="工程细节"></a>工程细节</h2><ul>
-<li>有效元素始终位于 <code>[0, size_)</code>。插入允许 <code>pos == size_</code>，删除要求 <code>pos &lt; size_</code>。</li>
-<li>插入从后向前搬，删除从前向后填坑。先保存待插入值，避免它引用表内元素时被搬移覆盖。</li>
+<li>有效元素始终位于 <code>[0, n)</code>。插入允许 <code>pos == n</code>，删除要求 <code>pos &lt; n</code>。</li>
+<li>插入从后向前搬，删除从前向后填坑。待插入值如果来自表内被搬动的元素，应先在外部保存副本，避免搬移时覆盖它。</li>
 <li><code>clear()</code>、<code>pop_back()</code> 和 <code>erase()</code> 只调整逻辑长度，不清零，也不立即析构数组槽位中的对象。</li>
-<li>模板容量 <code>N</code> 必须大于零；本实现直接声明数组，因此 <code>T</code> 需要能默认构造、复制构造和复制赋值。</li>
+<li>模板容量 <code>MAXN</code> 必须大于零；本实现直接声明数组，因此 <code>T</code> 需要能默认构造和复制赋值。</li>
 </ul>
 <h2 id="跳转"><a href="#跳转" class="headerlink" title="跳转"></a>跳转</h2><p><a href="/coding-notes-blog/posts/dd0bc08c/">下一个：动长数组</a></p>
 <p><a href="/coding-notes-blog/posts/3305a1a0/">上一个：前言与目录</a></p>

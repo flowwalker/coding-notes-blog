@@ -171,54 +171,52 @@
   
 
   <div class="post-content">
-    <h1 id="循环顺序队列（CircularQueue）"><a href="#循环顺序队列（CircularQueue）" class="headerlink" title="循环顺序队列（CircularQueue）"></a>循环顺序队列（CircularQueue）</h1><pre><code class="hljs cpp"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">T</span>, <span class="hljs-type">size_t</span> N&gt;
+    <h1 id="循环顺序队列（CircularQueue）"><a href="#循环顺序队列（CircularQueue）" class="headerlink" title="循环顺序队列（CircularQueue）"></a>循环顺序队列（CircularQueue）</h1><pre><code class="hljs cpp"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">T</span>, <span class="hljs-type">int</span> MAXN&gt;
 <span class="hljs-keyword">class</span> <span class="hljs-title class_">CircularQueue</span> &#123;
-    <span class="hljs-built_in">static_assert</span>(N &gt; <span class="hljs-number">0</span> &amp;&amp; N &lt; numeric_limits&lt;<span class="hljs-type">size_t</span>&gt;::<span class="hljs-built_in">max</span>(),
-                  <span class="hljs-string">&quot;invalid capacity&quot;</span>);
-    <span class="hljs-type">static</span> <span class="hljs-keyword">constexpr</span> <span class="hljs-type">size_t</span> BUF = N + <span class="hljs-number">1</span>;
-    T data_[BUF];
-    <span class="hljs-type">size_t</span> front_ = <span class="hljs-number">0</span>;
-    <span class="hljs-type">size_t</span> rear_  = <span class="hljs-number">0</span>; <span class="hljs-comment">// 下一插入位置</span>
+    T data[MAXN<span class="hljs-number">+1</span>];              <span class="hljs-comment">// 多一个槽，实际容量仍是 MAXN</span>
+    <span class="hljs-type">int</span> frontIndex, rearIndex;   <span class="hljs-comment">// rearIndex = 下一插入位置</span>
 
-    <span class="hljs-function"><span class="hljs-type">static</span> <span class="hljs-keyword">constexpr</span> <span class="hljs-type">size_t</span> <span class="hljs-title">next</span><span class="hljs-params">(<span class="hljs-type">size_t</span> i)</span> </span>&#123; <span class="hljs-keyword">return</span> (i + <span class="hljs-number">1</span>) % BUF; &#125;
+    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">next</span><span class="hljs-params">(<span class="hljs-type">int</span> i)</span> <span class="hljs-type">const</span> </span>&#123; <span class="hljs-keyword">return</span> (i<span class="hljs-number">+1</span>)%(MAXN<span class="hljs-number">+1</span>); &#125;
 
 <span class="hljs-keyword">public</span>:
-    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">empty</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>&#123; <span class="hljs-keyword">return</span> front_ == rear_; &#125;
-    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">full</span><span class="hljs-params">()</span>  <span class="hljs-type">const</span> </span>&#123; <span class="hljs-keyword">return</span> <span class="hljs-built_in">next</span>(rear_) == front_; &#125;
-    <span class="hljs-function"><span class="hljs-type">size_t</span> <span class="hljs-title">size</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>&#123; <span class="hljs-keyword">return</span> rear_ &gt;= front_ ? rear_ - front_ : BUF - (front_ - rear_); &#125;
-    <span class="hljs-function"><span class="hljs-keyword">constexpr</span> <span class="hljs-type">size_t</span> <span class="hljs-title">capacity</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>&#123; <span class="hljs-keyword">return</span> N; &#125;
+    <span class="hljs-built_in">CircularQueue</span>()&#123; frontIndex=rearIndex=<span class="hljs-number">0</span>; &#125;
+    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">empty</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>&#123; <span class="hljs-keyword">return</span> frontIndex==rearIndex; &#125;
+    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">full</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>&#123; <span class="hljs-keyword">return</span> <span class="hljs-built_in">next</span>(rearIndex)==frontIndex; &#125;
+    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">size</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>&#123; <span class="hljs-keyword">return</span> (rearIndex-frontIndex+MAXN<span class="hljs-number">+1</span>)%(MAXN<span class="hljs-number">+1</span>); &#125;
+    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">capacity</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>&#123; <span class="hljs-keyword">return</span> MAXN; &#125;
 
-    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">enqueue</span><span class="hljs-params">(<span class="hljs-type">const</span> T&amp; x)</span> </span>&#123;
-        <span class="hljs-keyword">if</span> (<span class="hljs-built_in">full</span>()) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
-        data_[rear_] = x;
-        rear_ = <span class="hljs-built_in">next</span>(rear_);
+    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">enqueue</span><span class="hljs-params">(<span class="hljs-type">const</span> T&amp; x)</span></span>&#123;
+        <span class="hljs-keyword">if</span>(<span class="hljs-built_in">full</span>()) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+        data[rearIndex]=x;
+        rearIndex=<span class="hljs-built_in">next</span>(rearIndex);
         <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
     &#125;
 
-    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">dequeue</span><span class="hljs-params">()</span> </span>&#123;
-        <span class="hljs-keyword">if</span> (<span class="hljs-built_in">empty</span>()) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
-        front_ = <span class="hljs-built_in">next</span>(front_);
+    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">dequeue</span><span class="hljs-params">()</span></span>&#123;
+        <span class="hljs-keyword">if</span>(<span class="hljs-built_in">empty</span>()) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+        frontIndex=<span class="hljs-built_in">next</span>(frontIndex);
         <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
     &#125;
 
-    <span class="hljs-function">T&amp; <span class="hljs-title">front</span><span class="hljs-params">()</span> </span>&#123;
-        <span class="hljs-keyword">if</span> (<span class="hljs-built_in">empty</span>()) <span class="hljs-keyword">throw</span> <span class="hljs-built_in">out_of_range</span>(<span class="hljs-string">&quot;CircularQueue::front&quot;</span>);
-        <span class="hljs-keyword">return</span> data_[front_];
+    <span class="hljs-function">T&amp; <span class="hljs-title">front</span><span class="hljs-params">()</span></span>&#123;
+        <span class="hljs-keyword">if</span>(<span class="hljs-built_in">empty</span>()) <span class="hljs-keyword">throw</span> <span class="hljs-built_in">underflow_error</span>(<span class="hljs-string">&quot;CircularQueue::front on empty queue&quot;</span>);
+        <span class="hljs-keyword">return</span> data[frontIndex];
     &#125;
 
-    <span class="hljs-function">T&amp; <span class="hljs-title">back</span><span class="hljs-params">()</span> </span>&#123;
-        <span class="hljs-keyword">if</span> (<span class="hljs-built_in">empty</span>()) <span class="hljs-keyword">throw</span> <span class="hljs-built_in">out_of_range</span>(<span class="hljs-string">&quot;CircularQueue::back&quot;</span>);
-        <span class="hljs-keyword">return</span> data_[rear_ == <span class="hljs-number">0</span> ? BUF - <span class="hljs-number">1</span> : rear_ - <span class="hljs-number">1</span>];
+    <span class="hljs-function">T&amp; <span class="hljs-title">back</span><span class="hljs-params">()</span></span>&#123;
+        <span class="hljs-keyword">if</span>(<span class="hljs-built_in">empty</span>()) <span class="hljs-keyword">throw</span> <span class="hljs-built_in">underflow_error</span>(<span class="hljs-string">&quot;CircularQueue::back on empty queue&quot;</span>);
+        <span class="hljs-type">int</span> pos=(rearIndex<span class="hljs-number">-1</span>+MAXN<span class="hljs-number">+1</span>)%(MAXN<span class="hljs-number">+1</span>);
+        <span class="hljs-keyword">return</span> data[pos];
     &#125;
 
-    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">clear</span><span class="hljs-params">()</span> </span>&#123; front_ = rear_ = <span class="hljs-number">0</span>; &#125;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">clear</span><span class="hljs-params">()</span></span>&#123; frontIndex=rearIndex=<span class="hljs-number">0</span>; &#125;
 &#125;;</code></pre>
 
 <h2 id="工程细节"><a href="#工程细节" class="headerlink" title="工程细节"></a>工程细节</h2><ul>
-<li><code>front_</code> 是当前队首，<code>rear_</code> 是下一插入位置，所有指针推进都对缓冲区大小 <code>BUF</code> 取模。</li>
-<li>内部保留一个空槽：<code>front_ == rear_</code> 判空，<code>next(rear_) == front_</code> 判满。实际分配 <code>N + 1</code> 个槽，因此可用容量仍是 <code>N</code>。</li>
-<li><code>back()</code> 要取 <code>rear_</code> 的前一个槽，并处理回绕；长度也要按环形距离计算。不要只写 <code>rear_ - front_</code>。</li>
-<li>容量必须大于零，且 <code>N + 1</code> 不能溢出。出队不搬动元素；清空只把首尾下标归零。</li>
+<li><code>frontIndex</code> 是当前队首，<code>rearIndex</code> 是下一插入位置，所有指针推进都对缓冲区大小 <code>(MAXN + 1)</code> 取模。</li>
+<li>内部保留一个空槽：<code>frontIndex == rearIndex</code> 判空，<code>next(rearIndex) == frontIndex</code> 判满。实际分配 <code>MAXN + 1</code> 个槽，因此可用容量仍是 <code>MAXN</code>。</li>
+<li><code>back()</code> 要取 <code>rearIndex</code> 的前一个槽，并处理回绕；长度也要按环形距离计算。不要只写 <code>rearIndex - frontIndex</code>。</li>
+<li>容量必须大于零，且 <code>MAXN + 1</code> 不能溢出。出队不搬动元素；清空只把首尾下标归零。</li>
 </ul>
 <h2 id="跳转"><a href="#跳转" class="headerlink" title="跳转"></a>跳转</h2><p><a href="/coding-notes-blog/posts/da660495/">下一个：顺序串</a></p>
 <p><a href="/coding-notes-blog/posts/346865b9/">上一个：普通顺序队列</a></p>

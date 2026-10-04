@@ -173,131 +173,97 @@
   <div class="post-content">
     <h1 id="动长数组（Vector）"><a href="#动长数组（Vector）" class="headerlink" title="动长数组（Vector）"></a>动长数组（Vector）</h1><pre><code class="hljs cpp"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">T</span>&gt;
 <span class="hljs-keyword">class</span> <span class="hljs-title class_">Vector</span> &#123;
-    T* data_ = <span class="hljs-literal">nullptr</span>;
-    <span class="hljs-type">size_t</span> size_ = <span class="hljs-number">0</span>;
-    <span class="hljs-type">size_t</span> capacity_ = <span class="hljs-number">0</span>;
+    T* data;
+    <span class="hljs-type">int</span> n, cap;
 
-    <span class="hljs-function"><span class="hljs-type">static</span> <span class="hljs-keyword">constexpr</span> <span class="hljs-type">size_t</span> <span class="hljs-title">max_capacity</span><span class="hljs-params">()</span> </span>&#123;
-        <span class="hljs-keyword">return</span> numeric_limits&lt;<span class="hljs-type">size_t</span>&gt;::<span class="hljs-built_in">max</span>() / <span class="hljs-built_in">sizeof</span>(T);
-    &#125;
-
-    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">grow</span><span class="hljs-params">()</span> </span>&#123;
-        <span class="hljs-type">const</span> <span class="hljs-type">size_t</span> limit = <span class="hljs-built_in">max_capacity</span>();
-        <span class="hljs-keyword">if</span> (capacity_ == limit) <span class="hljs-keyword">throw</span> <span class="hljs-built_in">length_error</span>(<span class="hljs-string">&quot;Vector capacity exceeded&quot;</span>);
-        <span class="hljs-built_in">reserve</span>(capacity_ == <span class="hljs-number">0</span> ? <span class="hljs-number">1</span> :
-                (capacity_ &gt; limit / <span class="hljs-number">2</span> ? limit : capacity_ * <span class="hljs-number">2</span>));
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">expand</span><span class="hljs-params">()</span></span>&#123;
+        <span class="hljs-type">int</span> newCap = (cap==<span class="hljs-number">0</span> ? <span class="hljs-number">1</span> : cap*<span class="hljs-number">2</span>);
+        T* tmp = <span class="hljs-keyword">new</span> T[newCap];
+        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">0</span>;i&lt;n;i++) tmp[i]=data[i];
+        <span class="hljs-keyword">delete</span>[] data;
+        data=tmp; cap=newCap;
     &#125;
 
 <span class="hljs-keyword">public</span>:
-    <span class="hljs-built_in">Vector</span>() = <span class="hljs-keyword">default</span>;
-
-    <span class="hljs-function"><span class="hljs-keyword">explicit</span> <span class="hljs-title">Vector</span><span class="hljs-params">(<span class="hljs-type">size_t</span> capacity)</span> </span>&#123;
-        <span class="hljs-built_in">reserve</span>(capacity);
+    <span class="hljs-built_in">Vector</span>(<span class="hljs-type">int</span> capacity=<span class="hljs-number">10</span>)&#123;
+        <span class="hljs-keyword">if</span>(capacity&lt;<span class="hljs-number">0</span>) <span class="hljs-keyword">throw</span> <span class="hljs-built_in">invalid_argument</span>(<span class="hljs-string">&quot;Vector capacity &lt; 0&quot;</span>);
+        cap=capacity; n=<span class="hljs-number">0</span>;
+        data = (cap==<span class="hljs-number">0</span> ? <span class="hljs-literal">nullptr</span> : <span class="hljs-keyword">new</span> T[cap]);
     &#125;
 
-    ~<span class="hljs-built_in">Vector</span>() &#123; <span class="hljs-keyword">delete</span>[] data_; &#125;
+    ~<span class="hljs-built_in">Vector</span>()&#123; <span class="hljs-keyword">delete</span>[] data; &#125;
 
-    <span class="hljs-built_in">Vector</span>(<span class="hljs-type">const</span> Vector&amp; other) &#123;
-        <span class="hljs-function">unique_ptr&lt;T[]&gt; <span class="hljs-title">next</span><span class="hljs-params">(other.capacity_ ? <span class="hljs-keyword">new</span> T[other.capacity_] : <span class="hljs-literal">nullptr</span>)</span></span>;
-        <span class="hljs-keyword">for</span> (<span class="hljs-type">size_t</span> i = <span class="hljs-number">0</span>; i &lt; other.size_; ++i) next[i] = other.data_[i];
-        data_ = next.<span class="hljs-built_in">release</span>();
-        size_ = other.size_;
-        capacity_ = other.capacity_;
+    <span class="hljs-built_in">Vector</span>(<span class="hljs-type">const</span> Vector&amp; other)&#123;
+        n=other.n; cap=other.cap;
+        data = (cap==<span class="hljs-number">0</span> ? <span class="hljs-literal">nullptr</span> : <span class="hljs-keyword">new</span> T[cap]);
+        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">0</span>;i&lt;n;i++) data[i]=other.data[i];
     &#125;
 
-    <span class="hljs-built_in">Vector</span>(Vector&amp;&amp; other) <span class="hljs-keyword">noexcept</span>
-        : <span class="hljs-built_in">data_</span>(other.data_), <span class="hljs-built_in">size_</span>(other.size_), <span class="hljs-built_in">capacity_</span>(other.capacity_) &#123;
-        other.data_ = <span class="hljs-literal">nullptr</span>;
-        other.size_ = <span class="hljs-number">0</span>;
-        other.capacity_ = <span class="hljs-number">0</span>;
-    &#125;
-
-    Vector&amp; <span class="hljs-keyword">operator</span>=(Vector other) &#123;
-        <span class="hljs-built_in">swap</span>(other);
+    Vector&amp; <span class="hljs-keyword">operator</span>=(<span class="hljs-type">const</span> Vector&amp; other)&#123;
+        <span class="hljs-keyword">if</span>(<span class="hljs-keyword">this</span>==&amp;other) <span class="hljs-keyword">return</span> *<span class="hljs-keyword">this</span>;
+        T* tmp = (other.cap==<span class="hljs-number">0</span> ? <span class="hljs-literal">nullptr</span> : <span class="hljs-keyword">new</span> T[other.cap]);
+        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">0</span>;i&lt;other.n;i++) tmp[i]=other.data[i];
+        <span class="hljs-keyword">delete</span>[] data;
+        data=tmp; n=other.n; cap=other.cap;
         <span class="hljs-keyword">return</span> *<span class="hljs-keyword">this</span>;
     &#125;
 
-    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">swap</span><span class="hljs-params">(Vector&amp; other)</span> <span class="hljs-keyword">noexcept</span> </span>&#123;
-        std::<span class="hljs-built_in">swap</span>(data_, other.data_);
-        std::<span class="hljs-built_in">swap</span>(size_, other.size_);
-        std::<span class="hljs-built_in">swap</span>(capacity_, other.capacity_);
+    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">empty</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>&#123; <span class="hljs-keyword">return</span> n==<span class="hljs-number">0</span>; &#125;
+    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">size</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>&#123; <span class="hljs-keyword">return</span> n; &#125;
+    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">capacity</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>&#123; <span class="hljs-keyword">return</span> cap; &#125;
+
+    T&amp; <span class="hljs-keyword">operator</span>[](<span class="hljs-type">int</span> i)&#123; <span class="hljs-keyword">return</span> data[i]; &#125;
+    <span class="hljs-type">const</span> T&amp; <span class="hljs-keyword">operator</span>[](<span class="hljs-type">int</span> i) <span class="hljs-type">const</span> &#123; <span class="hljs-keyword">return</span> data[i]; &#125;
+
+    <span class="hljs-function">T&amp; <span class="hljs-title">at</span><span class="hljs-params">(<span class="hljs-type">int</span> i)</span></span>&#123;
+        <span class="hljs-keyword">if</span>(i&lt;<span class="hljs-number">0</span> || i&gt;=n) <span class="hljs-keyword">throw</span> <span class="hljs-built_in">out_of_range</span>(<span class="hljs-string">&quot;Vector::at&quot;</span>);
+        <span class="hljs-keyword">return</span> data[i];
     &#125;
 
-    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">empty</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>&#123; <span class="hljs-keyword">return</span> size_ == <span class="hljs-number">0</span>; &#125;
-    <span class="hljs-function"><span class="hljs-type">size_t</span> <span class="hljs-title">size</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>&#123; <span class="hljs-keyword">return</span> size_; &#125;
-    <span class="hljs-function"><span class="hljs-type">size_t</span> <span class="hljs-title">capacity</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>&#123; <span class="hljs-keyword">return</span> capacity_; &#125;
-
-    T&amp; <span class="hljs-keyword">operator</span>[](<span class="hljs-type">size_t</span> i) &#123; <span class="hljs-keyword">return</span> data_[i]; &#125;
-    <span class="hljs-type">const</span> T&amp; <span class="hljs-keyword">operator</span>[](<span class="hljs-type">size_t</span> i) <span class="hljs-type">const</span> &#123; <span class="hljs-keyword">return</span> data_[i]; &#125;
-
-    <span class="hljs-function">T&amp; <span class="hljs-title">at</span><span class="hljs-params">(<span class="hljs-type">size_t</span> i)</span> </span>&#123;
-        <span class="hljs-keyword">if</span> (i &gt;= size_) <span class="hljs-keyword">throw</span> <span class="hljs-built_in">out_of_range</span>(<span class="hljs-string">&quot;Vector::at&quot;</span>);
-        <span class="hljs-keyword">return</span> data_[i];
-    &#125;
-    <span class="hljs-function"><span class="hljs-type">const</span> T&amp; <span class="hljs-title">at</span><span class="hljs-params">(<span class="hljs-type">size_t</span> i)</span> <span class="hljs-type">const</span> </span>&#123;
-        <span class="hljs-keyword">if</span> (i &gt;= size_) <span class="hljs-keyword">throw</span> <span class="hljs-built_in">out_of_range</span>(<span class="hljs-string">&quot;Vector::at&quot;</span>);
-        <span class="hljs-keyword">return</span> data_[i];
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">reserve</span><span class="hljs-params">(<span class="hljs-type">int</span> newCap)</span></span>&#123;
+        <span class="hljs-keyword">if</span>(newCap&lt;=cap) <span class="hljs-keyword">return</span>;
+        T* tmp = <span class="hljs-keyword">new</span> T[newCap];
+        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">0</span>;i&lt;n;i++) tmp[i]=data[i];
+        <span class="hljs-keyword">delete</span>[] data;
+        data=tmp; cap=newCap;
     &#125;
 
-    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">reserve</span><span class="hljs-params">(<span class="hljs-type">size_t</span> new_capacity)</span> </span>&#123;
-        <span class="hljs-keyword">if</span> (new_capacity &lt;= capacity_) <span class="hljs-keyword">return</span>;
-        <span class="hljs-keyword">if</span> (new_capacity &gt; <span class="hljs-built_in">max_capacity</span>())
-            <span class="hljs-keyword">throw</span> <span class="hljs-built_in">length_error</span>(<span class="hljs-string">&quot;Vector capacity exceeded&quot;</span>);
-        <span class="hljs-function">unique_ptr&lt;T[]&gt; <span class="hljs-title">next</span><span class="hljs-params">(<span class="hljs-keyword">new</span> T[new_capacity])</span></span>;
-        <span class="hljs-keyword">for</span> (<span class="hljs-type">size_t</span> i = <span class="hljs-number">0</span>; i &lt; size_; ++i) next[i] = data_[i];
-        <span class="hljs-keyword">delete</span>[] data_;
-        data_ = next.<span class="hljs-built_in">release</span>();
-        capacity_ = new_capacity;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">push_back</span><span class="hljs-params">(<span class="hljs-type">const</span> T&amp; x)</span></span>&#123;
+        <span class="hljs-keyword">if</span>(n==cap) <span class="hljs-built_in">expand</span>();
+        data[n++]=x;
     &#125;
 
-    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">push_back</span><span class="hljs-params">(<span class="hljs-type">const</span> T&amp; x)</span> </span>&#123;
-        <span class="hljs-function">T <span class="hljs-title">value</span><span class="hljs-params">(x)</span></span>; <span class="hljs-comment">// 扩容前保存参数，避免自身引用失效。</span>
-        <span class="hljs-keyword">if</span> (size_ == capacity_) <span class="hljs-built_in">grow</span>();
-        data_[size_] = std::<span class="hljs-built_in">move</span>(value);
-        ++size_;
-    &#125;
+    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">pop_back</span><span class="hljs-params">()</span></span>&#123; <span class="hljs-keyword">if</span>(<span class="hljs-built_in">empty</span>()) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>; n--; <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>; &#125;
 
-    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">push_back</span><span class="hljs-params">(T&amp;&amp; x)</span> </span>&#123;
-        <span class="hljs-function">T <span class="hljs-title">value</span><span class="hljs-params">(std::move(x))</span></span>;
-        <span class="hljs-keyword">if</span> (size_ == capacity_) <span class="hljs-built_in">grow</span>();
-        data_[size_] = std::<span class="hljs-built_in">move</span>(value);
-        ++size_;
-    &#125;
-
-    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">pop_back</span><span class="hljs-params">()</span> </span>&#123;
-        <span class="hljs-keyword">if</span> (<span class="hljs-built_in">empty</span>()) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
-        --size_;
+    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">insert</span><span class="hljs-params">(<span class="hljs-type">int</span> pos,<span class="hljs-type">const</span> T&amp; x)</span></span>&#123;
+        <span class="hljs-keyword">if</span>(pos&lt;<span class="hljs-number">0</span> || pos&gt;n) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+        <span class="hljs-keyword">if</span>(n==cap) <span class="hljs-built_in">expand</span>();
+        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=n;i&gt;pos;i--) data[i]=data[i<span class="hljs-number">-1</span>];
+        data[pos]=x; n++;
         <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
     &#125;
 
-    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">insert</span><span class="hljs-params">(<span class="hljs-type">size_t</span> pos, <span class="hljs-type">const</span> T&amp; x)</span> </span>&#123;
-        <span class="hljs-keyword">if</span> (pos &gt; size_) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
-        <span class="hljs-function">T <span class="hljs-title">value</span><span class="hljs-params">(x)</span></span>; <span class="hljs-comment">// 搬移或扩容前保存参数。</span>
-        <span class="hljs-keyword">if</span> (size_ == capacity_) <span class="hljs-built_in">grow</span>();
-        <span class="hljs-keyword">for</span> (<span class="hljs-type">size_t</span> i = size_; i &gt; pos; --i)
-            data_[i] = std::<span class="hljs-built_in">move</span>(data_[i - <span class="hljs-number">1</span>]);
-        data_[pos] = std::<span class="hljs-built_in">move</span>(value);
-        ++size_;
+    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">erase</span><span class="hljs-params">(<span class="hljs-type">int</span> pos)</span></span>&#123;
+        <span class="hljs-keyword">if</span>(pos&lt;<span class="hljs-number">0</span> || pos&gt;=n) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=pos;i&lt;n<span class="hljs-number">-1</span>;i++) data[i]=data[i<span class="hljs-number">+1</span>];
+        n--;
         <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
     &#125;
 
-    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">erase</span><span class="hljs-params">(<span class="hljs-type">size_t</span> pos)</span> </span>&#123;
-        <span class="hljs-keyword">if</span> (pos &gt;= size_) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
-        <span class="hljs-keyword">for</span> (<span class="hljs-type">size_t</span> i = pos; i + <span class="hljs-number">1</span> &lt; size_; ++i)
-            data_[i] = std::<span class="hljs-built_in">move</span>(data_[i + <span class="hljs-number">1</span>]);
-        --size_;
-        <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">find</span><span class="hljs-params">(<span class="hljs-type">const</span> T&amp; x)</span> <span class="hljs-type">const</span></span>&#123;
+        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">0</span>;i&lt;n;i++) <span class="hljs-keyword">if</span>(data[i]==x) <span class="hljs-keyword">return</span> i;
+        <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;
     &#125;
 
-    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">clear</span><span class="hljs-params">()</span> </span>&#123; size_ = <span class="hljs-number">0</span>; &#125;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">clear</span><span class="hljs-params">()</span></span>&#123; n=<span class="hljs-number">0</span>; &#125;
 &#125;;</code></pre>
 
 <h2 id="工程细节"><a href="#工程细节" class="headerlink" title="工程细节"></a>工程细节</h2><ul>
-<li><code>size_</code> 是有效元素数，<code>capacity_</code> 是已分配槽位数，始终满足 <code>size_ &lt;= capacity_</code>。满时按倍增策略扩容，并检查容量上限。</li>
-<li>扩容先分配新数组并复制有效元素，完成后再 <code>delete[]</code> 旧数组；临时数组用 <code>unique_ptr&lt;T[]&gt;</code> 管理，复制抛异常时也能释放。</li>
-<li>扩容会使旧指针和引用失效。插入、尾插先保存参数，支持参数引用自身元素；显式移动自身元素时，原元素可以进入已移动状态。</li>
-<li>复制构造执行深拷贝；移动构造转移所有权并将源对象置空；按值赋值配合 <code>swap()</code>，处理自赋值与资源释放。成员函数也叫 <code>swap</code>，交换字段时保留 <code>std::swap</code> 以避免名字遮蔽。</li>
-<li>这版使用 <code>new T[]</code>，要求 <code>T</code> 能默认构造、复制构造、复制赋值及移动赋值；没有实现标准 <code>vector</code> 的未初始化存储。删除和清空不会立即析构槽位对象。搬移赋值若抛异常，已有元素值可能部分改变。</li>
+<li><code>n</code> 是有效元素数，<code>cap</code> 是已分配槽位数，始终满足 <code>0 &lt;= n &lt;= cap</code>；两者不能混用。</li>
+<li>扩容依次分配更大的数组、复制有效元素、<code>delete[]</code> 旧数组、替换指针；数组释放不能写成 <code>delete</code>。</li>
+<li>复制构造与赋值都要复制元素，不能只复制 <code>data</code> 指针；赋值先检查 <code>this == &amp;other</code>，再分配新数组，最后释放旧数组。</li>
+<li>扩容会使旧指针和引用失效。待插入值若引用自身元素，应先在外部保存副本，避免扩容或搬移影响它。</li>
+<li><code>clear()</code>、<code>erase()</code> 和 <code>pop_back()</code> 只调整逻辑长度，不立即析构数组槽位中的对象。</li>
 </ul>
 <h2 id="跳转"><a href="#跳转" class="headerlink" title="跳转"></a>跳转</h2><p><a href="/coding-notes-blog/posts/aa0cf01a/">下一个：顺序栈</a></p>
 <p><a href="/coding-notes-blog/posts/44029136/">上一个：顺序表</a></p>

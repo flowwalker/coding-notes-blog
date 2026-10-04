@@ -171,46 +171,40 @@
   
 
   <div class="post-content">
-    <h1 id="顺序栈（ArrayStack）"><a href="#顺序栈（ArrayStack）" class="headerlink" title="顺序栈（ArrayStack）"></a>顺序栈（ArrayStack）</h1><pre><code class="hljs cpp"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">T</span>, <span class="hljs-type">size_t</span> N&gt;
+    <h1 id="顺序栈（ArrayStack）"><a href="#顺序栈（ArrayStack）" class="headerlink" title="顺序栈（ArrayStack）"></a>顺序栈（ArrayStack）</h1><pre><code class="hljs cpp"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">T</span>, <span class="hljs-type">int</span> MAXN&gt;
 <span class="hljs-keyword">class</span> <span class="hljs-title class_">ArrayStack</span> &#123;
-    <span class="hljs-built_in">static_assert</span>(N &gt; <span class="hljs-number">0</span>, <span class="hljs-string">&quot;capacity must be positive&quot;</span>);
-    T data_[N];
-    <span class="hljs-type">size_t</span> size_ = <span class="hljs-number">0</span>;
-
+    T data[MAXN];
+    <span class="hljs-type">int</span> topIndex;   <span class="hljs-comment">// 栈顶元素下标；空栈为 -1</span>
 <span class="hljs-keyword">public</span>:
-    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">empty</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>&#123; <span class="hljs-keyword">return</span> size_ == <span class="hljs-number">0</span>; &#125;
-    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">full</span><span class="hljs-params">()</span>  <span class="hljs-type">const</span> </span>&#123; <span class="hljs-keyword">return</span> size_ == N; &#125;
-    <span class="hljs-function"><span class="hljs-type">size_t</span> <span class="hljs-title">size</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>&#123; <span class="hljs-keyword">return</span> size_; &#125;
+    <span class="hljs-built_in">ArrayStack</span>(): <span class="hljs-built_in">topIndex</span>(<span class="hljs-number">-1</span>) &#123;&#125;
+    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">empty</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>&#123; <span class="hljs-keyword">return</span> topIndex==<span class="hljs-number">-1</span>; &#125;
+    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">full</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>&#123; <span class="hljs-keyword">return</span> topIndex==MAXN<span class="hljs-number">-1</span>; &#125;
+    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">size</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>&#123; <span class="hljs-keyword">return</span> topIndex<span class="hljs-number">+1</span>; &#125;
 
-    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">push</span><span class="hljs-params">(<span class="hljs-type">const</span> T&amp; x)</span> </span>&#123;
-        <span class="hljs-keyword">if</span> (<span class="hljs-built_in">full</span>()) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
-        data_[size_] = x;
-        ++size_;
+    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">push</span><span class="hljs-params">(<span class="hljs-type">const</span> T&amp; x)</span></span>&#123;
+        <span class="hljs-keyword">if</span>(<span class="hljs-built_in">full</span>()) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+        data[++topIndex]=x;
         <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
     &#125;
 
-    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">pop</span><span class="hljs-params">()</span> </span>&#123;
-        <span class="hljs-keyword">if</span> (<span class="hljs-built_in">empty</span>()) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
-        --size_;
+    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">pop</span><span class="hljs-params">()</span></span>&#123;
+        <span class="hljs-keyword">if</span>(<span class="hljs-built_in">empty</span>()) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+        topIndex--;
         <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
     &#125;
 
-    <span class="hljs-function">T&amp; <span class="hljs-title">top</span><span class="hljs-params">()</span> </span>&#123;
-        <span class="hljs-keyword">if</span> (<span class="hljs-built_in">empty</span>()) <span class="hljs-keyword">throw</span> <span class="hljs-built_in">out_of_range</span>(<span class="hljs-string">&quot;ArrayStack::top&quot;</span>);
-        <span class="hljs-keyword">return</span> data_[size_ - <span class="hljs-number">1</span>];
-    &#125;
-    <span class="hljs-function"><span class="hljs-type">const</span> T&amp; <span class="hljs-title">top</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>&#123;
-        <span class="hljs-keyword">if</span> (<span class="hljs-built_in">empty</span>()) <span class="hljs-keyword">throw</span> <span class="hljs-built_in">out_of_range</span>(<span class="hljs-string">&quot;ArrayStack::top&quot;</span>);
-        <span class="hljs-keyword">return</span> data_[size_ - <span class="hljs-number">1</span>];
+    <span class="hljs-function">T&amp; <span class="hljs-title">top</span><span class="hljs-params">()</span></span>&#123;
+        <span class="hljs-keyword">if</span>(<span class="hljs-built_in">empty</span>()) <span class="hljs-keyword">throw</span> <span class="hljs-built_in">underflow_error</span>(<span class="hljs-string">&quot;ArrayStack::top on empty stack&quot;</span>);
+        <span class="hljs-keyword">return</span> data[topIndex];
     &#125;
 
-    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">clear</span><span class="hljs-params">()</span> </span>&#123; size_ = <span class="hljs-number">0</span>; &#125;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">clear</span><span class="hljs-params">()</span></span>&#123; topIndex=<span class="hljs-number">-1</span>; &#125;
 &#125;;</code></pre>
 
 <h2 id="工程细节"><a href="#工程细节" class="headerlink" title="工程细节"></a>工程细节</h2><ul>
-<li><code>size_</code> 表示元素数，栈顶下标为 <code>size_ - 1</code>，不要混入“空栈时 top 为 -1”的另一套约定。</li>
-<li>空栈 <code>top()</code> 抛异常，空栈 <code>pop()</code> 和满栈 <code>push()</code> 返回 <code>false</code>；访问前必须先判断状态。</li>
-<li>赋值成功后才递增 <code>size_</code>。<code>clear()</code> 与 <code>pop()</code> 只改变逻辑长度，不清零数组。模板容量 <code>N</code> 必须大于零。</li>
+<li><code>topIndex</code> 表示栈顶元素下标，空栈为 <code>-1</code>，元素数为 <code>topIndex + 1</code>；不要与“栈顶指针指向下一空位”的约定混用。</li>
+<li>入栈先递增下标，再写入元素；出栈只递减下标。空栈 <code>pop()</code> 和满栈 <code>push()</code> 返回 <code>false</code>。</li>
+<li>空栈读取 <code>top()</code> 抛出 <code>underflow_error</code>；<code>clear()</code> 将 <code>topIndex</code> 恢复为 <code>-1</code>。</li>
 </ul>
 <h2 id="跳转"><a href="#跳转" class="headerlink" title="跳转"></a>跳转</h2><p><a href="/coding-notes-blog/posts/346865b9/">下一个：普通顺序队列</a></p>
 <p><a href="/coding-notes-blog/posts/dd0bc08c/">上一个：动长数组</a></p>

@@ -175,68 +175,71 @@
 <span class="hljs-keyword">class</span> <span class="hljs-title class_">LinkedQueue</span> &#123;
     <span class="hljs-keyword">struct</span> <span class="hljs-title class_">Node</span> &#123;
         T data;
-        Node* next = <span class="hljs-literal">nullptr</span>;
-        <span class="hljs-function"><span class="hljs-keyword">explicit</span> <span class="hljs-title">Node</span><span class="hljs-params">(<span class="hljs-type">const</span> T&amp; x)</span> : data(x) &#123;</span>&#125;
+        Node* next;
+        <span class="hljs-built_in">Node</span>(<span class="hljs-type">const</span> T&amp; x)&#123; data=x; next=<span class="hljs-literal">nullptr</span>; &#125;
     &#125;;
 
-    Node* front_ = <span class="hljs-literal">nullptr</span>;
-    Node* rear_ = <span class="hljs-literal">nullptr</span>;
-    <span class="hljs-type">size_t</span> size_ = <span class="hljs-number">0</span>;
+    Node* frontPointer;
+    Node* rearPointer;
+    <span class="hljs-type">int</span> n;
 
 <span class="hljs-keyword">public</span>:
-    <span class="hljs-built_in">LinkedQueue</span>() = <span class="hljs-keyword">default</span>;
-    ~<span class="hljs-built_in">LinkedQueue</span>() &#123; <span class="hljs-built_in">clear</span>(); &#125;
-
-    <span class="hljs-built_in">LinkedQueue</span>(<span class="hljs-type">const</span> LinkedQueue&amp;) = <span class="hljs-keyword">delete</span>;
-    LinkedQueue&amp; <span class="hljs-keyword">operator</span>=(<span class="hljs-type">const</span> LinkedQueue&amp;) = <span class="hljs-keyword">delete</span>;
-
-    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">empty</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>&#123; <span class="hljs-keyword">return</span> front_ == <span class="hljs-literal">nullptr</span>; &#125;
-    <span class="hljs-function"><span class="hljs-type">size_t</span> <span class="hljs-title">size</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>&#123; <span class="hljs-keyword">return</span> size_; &#125;
-
-    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">enqueue</span><span class="hljs-params">(<span class="hljs-type">const</span> T&amp; x)</span> </span>&#123;
-        Node* q = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Node</span>(x);
-        <span class="hljs-keyword">if</span> (!rear_) front_ = rear_ = q;
-        <span class="hljs-keyword">else</span> &#123;
-            rear_-&gt;next = q;
-            rear_ = q;
-        &#125;
-        ++size_;
+    <span class="hljs-built_in">LinkedQueue</span>()&#123;
+        frontPointer=rearPointer=<span class="hljs-literal">nullptr</span>;
+        n=<span class="hljs-number">0</span>;
     &#125;
 
-    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">dequeue</span><span class="hljs-params">()</span> </span>&#123;
-        <span class="hljs-keyword">if</span> (<span class="hljs-built_in">empty</span>()) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
-        Node* q = front_;
-        front_ = front_-&gt;next;
+    ~<span class="hljs-built_in">LinkedQueue</span>()&#123; <span class="hljs-built_in">clear</span>(); &#125;
+
+    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">empty</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>&#123; <span class="hljs-keyword">return</span> frontPointer==<span class="hljs-literal">nullptr</span>; &#125;
+    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">size</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>&#123; <span class="hljs-keyword">return</span> n; &#125;
+
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">enqueue</span><span class="hljs-params">(<span class="hljs-type">const</span> T&amp; x)</span></span>&#123;
+        Node* q=<span class="hljs-keyword">new</span> <span class="hljs-built_in">Node</span>(x);
+
+        <span class="hljs-keyword">if</span>(rearPointer==<span class="hljs-literal">nullptr</span>)&#123;
+            frontPointer=rearPointer=q;
+        &#125;<span class="hljs-keyword">else</span>&#123;
+            rearPointer-&gt;next=q;
+            rearPointer=q;
+        &#125;
+
+        n++;
+    &#125;
+
+    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">dequeue</span><span class="hljs-params">()</span></span>&#123;
+        <span class="hljs-keyword">if</span>(<span class="hljs-built_in">empty</span>()) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+
+        Node* q=frontPointer;
+        frontPointer=frontPointer-&gt;next;
         <span class="hljs-keyword">delete</span> q;
-        --size_;
-        <span class="hljs-keyword">if</span> (!front_) rear_ = <span class="hljs-literal">nullptr</span>;
+        n--;
+
+        <span class="hljs-keyword">if</span>(frontPointer==<span class="hljs-literal">nullptr</span>)
+            rearPointer=<span class="hljs-literal">nullptr</span>;
+
         <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
     &#125;
 
-    <span class="hljs-function">T&amp; <span class="hljs-title">front</span><span class="hljs-params">()</span> </span>&#123;
-        <span class="hljs-keyword">if</span> (<span class="hljs-built_in">empty</span>()) <span class="hljs-keyword">throw</span> <span class="hljs-built_in">out_of_range</span>(<span class="hljs-string">&quot;LinkedQueue::front&quot;</span>);
-        <span class="hljs-keyword">return</span> front_-&gt;data;
+    <span class="hljs-function">T&amp; <span class="hljs-title">front</span><span class="hljs-params">()</span></span>&#123;
+        <span class="hljs-keyword">if</span>(<span class="hljs-built_in">empty</span>()) <span class="hljs-keyword">throw</span> <span class="hljs-built_in">underflow_error</span>(<span class="hljs-string">&quot;LinkedQueue::front on empty queue&quot;</span>);
+        <span class="hljs-keyword">return</span> frontPointer-&gt;data;
     &#125;
 
-    <span class="hljs-function"><span class="hljs-type">const</span> T&amp; <span class="hljs-title">front</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>&#123;
-        <span class="hljs-keyword">if</span> (<span class="hljs-built_in">empty</span>()) <span class="hljs-keyword">throw</span> <span class="hljs-built_in">out_of_range</span>(<span class="hljs-string">&quot;LinkedQueue::front&quot;</span>);
-        <span class="hljs-keyword">return</span> front_-&gt;data;
+    <span class="hljs-function">T&amp; <span class="hljs-title">back</span><span class="hljs-params">()</span></span>&#123;
+        <span class="hljs-keyword">if</span>(<span class="hljs-built_in">empty</span>()) <span class="hljs-keyword">throw</span> <span class="hljs-built_in">underflow_error</span>(<span class="hljs-string">&quot;LinkedQueue::back on empty queue&quot;</span>);
+        <span class="hljs-keyword">return</span> rearPointer-&gt;data;
     &#125;
 
-    <span class="hljs-function">T&amp; <span class="hljs-title">back</span><span class="hljs-params">()</span> </span>&#123;
-        <span class="hljs-keyword">if</span> (<span class="hljs-built_in">empty</span>()) <span class="hljs-keyword">throw</span> <span class="hljs-built_in">out_of_range</span>(<span class="hljs-string">&quot;LinkedQueue::back&quot;</span>);
-        <span class="hljs-keyword">return</span> rear_-&gt;data;
-    &#125;
-
-    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">clear</span><span class="hljs-params">()</span> </span>&#123;
-        <span class="hljs-keyword">while</span> (<span class="hljs-built_in">dequeue</span>()) &#123;&#125;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">clear</span><span class="hljs-params">()</span></span>&#123;
+        <span class="hljs-keyword">while</span>(!<span class="hljs-built_in">empty</span>()) <span class="hljs-built_in">dequeue</span>();
     &#125;
 &#125;;</code></pre>
 
 <h2 id="工程细节"><a href="#工程细节" class="headerlink" title="工程细节"></a>工程细节</h2><ul>
-<li>从 <code>rear_</code> 接入，从 <code>front_</code> 删除，入队和出队均为 <code>O(1)</code>；队尾的 <code>next</code> 始终为空。</li>
-<li>首次入队同时设置首尾指针。删除最后一个结点后，必须把 <code>rear_</code> 也设为 <code>nullptr</code>，避免悬空指针。</li>
-<li>队列清空后再次入队应当走空队列分支；空队列读取 <code>front()</code> 或 <code>back()</code> 抛异常。</li>
+<li>入队接在 <code>rearPointer</code> 后，出队删除 <code>frontPointer</code>，两者均为 <code>O(1)</code>；队尾的 <code>next</code> 始终为空。</li>
+<li>首次入队同时设置首尾指针。删除最后一个元素后，<code>frontPointer</code> 和 <code>rearPointer</code> 必须同时为 <code>nullptr</code>，否则尾指针会悬空。</li>
+<li>清空后再次入队应走空队列分支；空队列读取 <code>front()</code> 或 <code>back()</code> 抛出 <code>underflow_error</code>。</li>
 </ul>
 <h2 id="跳转"><a href="#跳转" class="headerlink" title="跳转"></a>跳转</h2><p><a href="/coding-notes-blog/posts/b47a0542/">下一个：链式串</a></p>
 <p><a href="/coding-notes-blog/posts/5a74646e/">上一个：链式栈</a></p>
